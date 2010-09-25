@@ -1,0 +1,267 @@
+### postprocess_topology.rb ###
+#
+# The topology of the network is estimated based on 5371 Mio flows
+# 
+#--- ROUTER ID ---------------------------------------------------------------------
+# 1 Zurich IX 130.59.32.30 
+# 2 Geneva GE2 130.59.32.42 
+# 3 Basel BA2 130.59.32.51
+# 4 Geneva GE3 130.59.32.60 
+# 5 Zurich IX2 130.59.32.32 
+# 6 Kreauzlingen KR2 130.59.32.7
+#-------------------------------------------------------------------------------
+#--- TYPES ---------------------------------------------------------------------
+# TypeUnknown = 0
+# TypeInternet = 1
+# TypeCustomer = 2
+# TypeBackbone = 3
+#-------------------------------------------------------------------------------
+#--- USAGE ---------------------------------------------------------------------
+# Indicates the number of flows that left the router over this interface
+#-------------------------------------------------------------------------------
+#
+# --- Router 1 -----------------------------------------------------------------
+#
+# R:1 I:0, Types: 0, 1, 3, Prefixes: 0.0.0.0/0, 130.59.0.0/16, 194.42.48.0/24
+# Usage: IN 0.00000 % or 0 flows OUT 0.00007 % or 381187 flows 
+1, 0, 0 
+# R:1 I:2, Types: 1, Prefixes: 194.42.48.0/24
+# Usage: IN 0.00059 % or 3166669 flows OUT 0.05610 % or 301337773 flows 
+1, 2, 1
+# R:1 I:3, Types: 3, Prefixes: 130.59.0.0/16
+# Usage: IN 0.00023 % or 1250776 flows OUT 0.03482 % or 187019435 flows 
+1, 3, 3
+# R:1 I:4, Types: 3, Prefixes: 130.59.0.0/16
+# Usage: IN 0.00079 % or 4222269 flows OUT 0.11200 % or 601601603 flows 
+1, 4, 3
+# R:1 I:6, Types: 1, Prefixes: 213.248.79.188/30
+# Usage: IN 0.00069 % or 3732020 flows OUT 0.01280 % or 68742610 flows 
+1, 6, 1
+# R:1 I:7, Types: 3, Prefixes: 130.59.0.0/16
+# Usage: IN 0.00003 % or 143650 flows OUT 0.00315 % or 16905415 flows 
+1, 7, 3
+# R:1 I:21, Types: 3, Prefixes: 130.59.0.0/16
+# Usage: IN 0.00000 % or 71 flows OUT 0.00002 % or 86371 flows 
+1, 21, 3
+# R:1 I:22, Types: 3, Prefixes: 130.59.0.0/16
+# Usage: IN 0.00000 % or 15 flows OUT 0.00048 % or 2593569 flows 
+1, 22, 3
+# R:1 I:25, Types: 0, Prefixes: 0.0.0.0/0
+# Usage: IN 0.00000 % or 0 flows OUT 0.00004 % or 227634 flows 
+1, 25, 0
+# R:1 I:36, Types: 3, Prefixes: 130.59.0.0/16
+# Usage: IN 0.00000 % or 22 flows OUT 0.00000 % or 621 flows 
+1, 36, 3
+# R:1 I:69, Types: 3, Prefixes: 130.59.0.0/16
+# Usage: IN 0.00000 % or 18 flows OUT 0.00000 % or 405 flows 
+1, 69, 3
+# R:1 I:70, Types: 3, Prefixes: 130.59.0.0/16
+# Usage: IN 0.00000 % or 576 flows OUT 0.00001 % or 63598 flows 
+1, 70, 3
+# R:1 I:71, Types: 3, Prefixes: 130.59.0.0/16
+# Usage: IN 0.00000 % or 513 flows OUT 0.00001 % or 47444 flows 
+1, 71, 3
+#
+# --- Router 2 -----------------------------------------------------------------
+#
+# R:2 I:0, Types: 0, Prefixes: 0.0.0.0/0
+# Usage: IN 0.00000 % or 0 flows OUT 0.00008 % or 427578 flows 
+2, 0, 0 
+# R:2 I:1, Types: 1, Prefixes: 62.40.96.0/19
+# Usage: IN 0.00023 % or 1259824 flows OUT 0.03254 % or 174796289 flows 
+2, 1, 1
+# R:2 I:2, Types: 1, Prefixes: 192.65.184.220/30
+# Usage: IN 0.00012 % or 630942 flows OUT 0.01598 % or 85829196 flows 
+2, 2, 1
+# R:2 I:3, Types: 3, Prefixes: 130.59.0.0/16
+# Usage: IN 0.00048 % or 2576232 flows OUT 0.11497 % or 617593761 flows 
+2, 3, 3
+# R:2 I:4, Types: 3, Prefixes: 130.59.0.0/16
+# Usage: IN 0.00009 % or 502351 flows OUT 0.04398 % or 236251065 flows 
+2, 4, 3
+# R:2 I:11, Types: 1, Prefixes: 192.65.185.0/24
+# Usage: IN 0.00053 % or 2834082 flows OUT 0.01823 % or 97905792 flows 
+2, 11, 1
+# R:2 I:15, Types: 1, Prefixes: 64.214.146.100/30
+# Usage: IN 0.00044 % or 2381319 flows OUT 0.01664 % or 89378550 flows 
+2, 15, 1
+# R:2 I:16, Types: 1, Prefixes: 64.214.146.108/30
+# Usage: IN 0.00044 % or 2379619 flows OUT 0.01768 % or 94964759 flows 
+2, 16, 1
+# R:2 I:22, Types: 3, Prefixes: 130.59.0.0/16
+# Usage: IN 0.00000 % or 1205 flows OUT 0.00002 % or 133273 flows 
+2, 22, 3
+# R:2 I:24, Types: 3, Prefixes: 130.59.0.0/16
+# Usage: IN 0.00000 % or 1290 flows OUT 0.00001 % or 65239 flows 
+2, 24, 3
+# R:2 I:26, Types: 3, Prefixes: 130.59.0.0/16
+# Usage: IN 0.00001 % or 36272 flows OUT 0.00005 % or 256757 flows 
+2, 26, 3
+# R:2 I:39, Types: 3, Prefixes: 130.59.0.0/16
+# Usage: IN 0.00000 % or 39 flows OUT 0.00000 % or 4333 flows 
+2, 39, 3
+# R:2 I:77, Types: 0, Prefixes: 0.0.0.0/0
+# Usage: IN 0.00000 % or 0 flows OUT 0.00000 % or 158 flows 
+2, 77, 0
+# R:2 I:92, Types: 3, Prefixes: 130.59.0.0/16
+# Usage: IN 0.00000 % or 154 flows OUT 0.00000 % or 1772 flows 
+2, 92, 3
+# R:2 I:93, Types: 3, Prefixes: 130.59.0.0/16
+# Usage: IN 0.00000 % or 4 flows OUT 0.00000 % or 97 flows 
+2, 93, 3
+# R:2 I:110, Types: 3, Prefixes: 130.59.0.0/16
+# Usage: IN 0.00000 % or 3 flows OUT 0.00000 % or 414 flows 
+2, 110, 3
+# R:2 I:120, Types: 3, Prefixes: 130.59.0.0/16
+# Usage: IN 0.00000 % or 37 flows OUT 0.00000 % or 6087 flows 
+2, 120, 3
+#
+# --- Router 3 -----------------------------------------------------------------
+#
+# R:3 I:0, Types: 0, 2, 3, Prefixes: 0.0.0.0/0, 130.59.0.0/16, 192.43.192.0/24
+# Usage: IN 0.00000 % or 0 flows OUT 0.00003 % or 180210 flows 
+3, 0, 0 
+# R:3 I:1, Types: , Prefixes: 
+# Usage: IN 0.00000 % or 55 flows OUT 0.00000 % or 0 flows 
+3, 1, 0
+# R:3 I:3, Types: 3, Prefixes: 130.59.0.0/16
+# Usage: IN 0.00000 % or 46 flows OUT 0.00000 % or 5 flows 
+3, 3, 3
+# R:3 I:6, Types: 3, Prefixes: 130.59.0.0/16
+# Usage: IN 0.00000 % or 75 flows OUT 0.00000 % or 5 flows 
+3, 6, 3
+# R:3 I:7, Types: 3, Prefixes: 130.59.0.0/16
+# Usage: IN 0.00000 % or 64 flows OUT 0.00000 % or 5 flows 
+3, 7, 3
+# R:3 I:9, Types: 3, Prefixes: 130.59.0.0/16
+# Usage: IN 0.00000 % or 3403 flows OUT 0.00009 % or 471966 flows 
+3, 9, 3
+# R:3 I:21, Types: 0, Prefixes: 0.0.0.0/0
+# Usage: IN 0.00000 % or 0 flows OUT 0.00000 % or 1 flows 
+3, 21, 0
+# R:3 I:24, Types: 2, Prefixes: 192.43.192.0/24
+# Usage: IN 0.00005 % or 274166 flows OUT 0.01285 % or 69043164 flows 
+3, 24, 2
+# R:3 I:25, Types: 1, Prefixes: 91.206.52.103/24
+# Usage: IN 0.00000 % or 318 flows OUT 0.00000 % or 1665 flows 
+3, 25, 1
+# R:3 I:40, Types: 3, Prefixes: 130.59.0.0/16
+# Usage: IN 0.00000 % or 280 flows OUT 0.00001 % or 29108 flows 
+3, 40, 3
+# R:3 I:47, Types: 3, Prefixes: 130.59.0.0/16
+# Usage: IN 0.00006 % or 302567 flows OUT 0.01875 % or 100702097 flows 
+3, 47, 3
+# R:3 I:49, Types: 3, Prefixes: 130.59.0.0/16
+# Usage: IN 0.00018 % or 980899 flows OUT 0.00895 % or 48064342 flows 
+3, 49, 3
+#
+# --- Router 4 -----------------------------------------------------------------
+#
+# R:4 I:0, Types: 0, 2, 3, Prefixes: 0.0.0.0/0, 130.59.0.0/16, 156.135.0.0/16
+# Usage: IN 0.00000 % or 0 flows OUT 0.00013 % or 699766 flows 
+4, 0, 0 
+# R:4 I:15, Types: 0, Prefixes: 0.0.0.0/0
+# Usage: IN 0.00000 % or 0 flows OUT 0.00002 % or 110156 flows 
+4, 15, 0
+# R:4 I:20, Types: 3, Prefixes: 130.59.0.0/16
+# Usage: IN 0.00000 % or 327 flows OUT 0.00000 % or 26777 flows 
+4, 20, 3
+# R:4 I:21, Types: 3, Prefixes: 130.59.0.0/16
+# Usage: IN 0.00000 % or 237 flows OUT 0.00000 % or 24024 flows 
+4, 21, 3
+# R:4 I:31, Types: 3, Prefixes: 130.59.0.0/16
+# Usage: IN 0.00010 % or 560396 flows OUT 0.02522 % or 135481676 flows 
+4, 31, 3
+# R:4 I:32, Types: , Prefixes: 
+# Usage: IN 0.00000 % or 10 flows OUT 0.00000 % or 0 flows 
+4, 32, 0
+# R:4 I:33, Types: 3, Prefixes: 130.59.0.0/16
+# Usage: IN 0.00037 % or 1968239 flows OUT 0.06896 % or 370411054 flows 
+4, 33, 3
+# R:4 I:34, Types: 3, Prefixes: 130.59.0.0/16
+# Usage: IN 0.00035 % or 1866172 flows OUT 0.01210 % or 64989847 flows 
+4, 34, 3
+# R:4 I:39, Types: 3, Prefixes: 130.59.0.0/16
+# Usage: IN 0.00000 % or 15 flows OUT 0.00107 % or 5728138 flows 
+4, 39, 3
+# R:4 I:55, Types: 3, Prefixes: 130.59.0.0/16
+# Usage: IN 0.00000 % or 0 flows OUT 0.00000 % or 2 flows 
+4, 55, 3
+# R:4 I:76, Types: 1, Prefixes: 62.40.96.0/19
+# Usage: IN 0.00000 % or 56 flows OUT 0.00000 % or 160 flows 
+4, 76, 1
+# R:4 I:77, Types: 3, Prefixes: 130.59.0.0/16
+# Usage: IN 0.00011 % or 566335 flows OUT 0.01461 % or 78472753 flows 
+4, 77, 3
+# R:4 I:81, Types: 1, Prefixes: 195.69.144.0/23
+# Usage: IN 0.00032 % or 1731976 flows OUT 0.02921 % or 156910542 flows 
+4, 81, 1
+# R:4 I:82, Types: 3, Prefixes: 130.59.0.0/16
+# Usage: IN 0.00000 % or 125 flows OUT 0.00000 % or 26816 flows 
+4, 82, 3
+# R:4 I:84, Types: 3, Prefixes: 130.59.0.0/16
+# Usage: IN 0.00000 % or 44 flows OUT 0.00000 % or 3 flows 
+4, 84, 3
+# R:4 I:85, Types: 2, Prefixes: 156.135.0.0/16
+# Usage: IN 0.00000 % or 11780 flows OUT 0.00103 % or 5547305 flows 
+4, 85, 2
+# R:4 I:86, Types: 1, Prefixes: 164.128.20.46/30
+# Usage: IN 0.00012 % or 619240 flows OUT 0.02422 % or 130078256 flows 
+4, 86, 1
+# R:4 I:90, Types: 3, Prefixes: 130.59.0.0/16
+# Usage: IN 0.00000 % or 44 flows OUT 0.00000 % or 3 flows 
+4, 90, 3
+#
+# --- Router 5 -----------------------------------------------------------------
+#
+# R:5 I:0, Types: 0, 1, 3, Prefixes: 0.0.0.0/0, 130.59.0.0/16, 91.206.52.103/24
+# Usage: IN 0.00000 % or 0 flows OUT 0.00007 % or 392086 flows 
+5, 0, 0 
+# R:5 I:2, Types: 3, Prefixes: 130.59.0.0/16
+# Usage: IN 0.00000 % or 19214 flows OUT 0.00000 % or 17606 flows 
+5, 2, 3
+# R:5 I:3, Types: 3, Prefixes: 130.59.0.0/16
+# Usage: IN 0.00146 % or 7821205 flows OUT 0.15298 % or 821742536 flows 
+5, 3, 3
+# R:5 I:5, Types: 1, Prefixes: 164.128.22.130/30
+# Usage: IN 0.00034 % or 1822716 flows OUT 0.07295 % or 391842644 flows 
+5, 5, 1
+# R:5 I:10, Types: 0, Prefixes: 0.0.0.0/0
+# Usage: IN 0.00000 % or 0 flows OUT 0.00001 % or 60057 flows 
+5, 10, 0
+# R:5 I:21, Types: 3, Prefixes: 130.59.0.0/16
+# Usage: IN 0.00000 % or 2 flows OUT 0.00000 % or 2610 flows 
+5, 21, 3
+# R:5 I:32, Types: 3, Prefixes: 130.59.0.0/16
+# Usage: IN 0.00000 % or 15 flows OUT 0.00000 % or 9 flows 
+5, 32, 3
+# R:5 I:33, Types: 3, Prefixes: 130.59.0.0/16
+# Usage: IN 0.00000 % or 0 flows OUT 0.00000 % or 3 flows 
+5, 33, 3
+# R:5 I:36, Types: 1, Prefixes: 91.206.52.103/24
+# Usage: IN 0.00018 % or 979633 flows OUT 0.02345 % or 125986317 flows 
+5, 36, 1
+# R:5 I:38, Types: 3, Prefixes: 130.59.0.0/16
+# Usage: IN 0.00110 % or 5893211 flows OUT 0.05043 % or 270878461 flows 
+5, 38, 3
+#
+# --- Router 6 -----------------------------------------------------------------
+#
+# R:6 I:0, Types: 0, Prefixes: 0.0.0.0/0
+# Usage: IN 0.00000 % or 0 flows OUT 0.00007 % or 394591 flows 
+6, 0, 0 
+# R:6 I:3, Types: 3, Prefixes: 130.59.0.0/16
+# Usage: IN 0.00000 % or 452 flows OUT 0.00001 % or 43606 flows 
+6, 3, 3
+# R:6 I:4, Types: 2, Prefixes: 195.176.28.4/30
+# Usage: IN 0.00000 % or 6874 flows OUT 0.00022 % or 1180981 flows 
+6, 4, 2
+# R:6 I:5, Types: 3, Prefixes: 130.59.0.0/16
+# Usage: IN 0.00001 % or 63586 flows OUT 0.00151 % or 8124714 flows 
+6, 5, 3
+# R:6 I:6, Types: 1, Prefixes: 129.143.0.0/16
+# Usage: IN 0.00001 % or 51931 flows OUT 0.00137 % or 7351176 flows 
+6, 6, 1
+# R:6 I:21, Types: 0, Prefixes: 0.0.0.0/0
+# Usage: IN 0.00000 % or 0 flows OUT 0.00000 % or 18 flows 
+6, 21, 0

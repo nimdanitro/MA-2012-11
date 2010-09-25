@@ -1,0 +1,18 @@
+## Logitech Desktop Messenger 2.56.102
+# http://www.siteadvisor.com/sites/logitech.com/downloads/16093248/
+# bwhome.logitech.com, 63.251.254.131
+63.251.254.131/32, broken_update, bwsnotif01.logitech.com
+63.251.254.132/32, broken_update, bwsupdate01.logitech.com
+63.251.254.133/32, broken_update, bwsregister01.logitech.com
+63.251.254.138/32, broken_update, bwhome.logitech.com
+
+## Eudora-related servers:
+# Eudora Webserver
+# ads.eudora.com, adserver.eudora.com, eudora-survey.qualcomm.com = 192.190.109.20
+192.190.109.20/32, broken_add, ads.eudora.com
+
+
+
+## eqvamdvip1.doubleclick.net 206.65.171.167
+## linktrack.corp.yahoo.com 216.145.54.163
+## thepiratebay.org 194.71.107.15 
