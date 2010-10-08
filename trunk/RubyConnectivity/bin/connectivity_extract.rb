@@ -27,6 +27,8 @@ data_parser = DataParser.new(output_folder + '/data_parser', 300)
 ## FILTER BANK
 # filter all ipv6 traffic
 filter_ipv6 = FilterIPv6.new(output_folder + '/filter_ipv6', 300)
+# filter all ipv4 traffic
+filter_ipv4 = FilterIPv4.new(output_folder + '/filter_ipv4', 300)
 # filter all non border traffic
 filter_border =  FilterBorder.new(output_folder + '/filter_border', 300)
 filter_border.load_border_interfaces("#{config_folder}/filter_border/router_interfaces.txt")
@@ -91,7 +93,8 @@ data_parser.parse_files(input_files_a) do |cons|
 	process_monitor.data_parser_stop
 	# Filter bank
 	process_monitor.filter_start
-	filter_ipv6.filter cons
+	#filter_ipv6.filter cons
+	filter_ipv4.filter cons
 	filter_border.filter cons
 	filter_in_out.filter cons
 	filter_prefix_blacklist.filter cons

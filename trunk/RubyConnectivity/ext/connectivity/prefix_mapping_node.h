@@ -100,7 +100,7 @@ class Prefix_Mapping_Node
 		}
 
 		// we have at least one leaf 
-		// ... but wich one would be the right one
+		// ... but which one would be the right one
 		int bit;
 		Prefix_Mapping_Node* next;
 		//cout << "GET NEXT: next bit ?" << endl;

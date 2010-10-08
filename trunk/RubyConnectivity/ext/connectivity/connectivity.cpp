@@ -27,11 +27,14 @@ static VALUE rb_eExtractTopology;
 static VALUE rb_cExtractTopology;
 
 #include "filter_ipv6.h"
+#include "filter_ipv4.h"
 #include "filter_border.h"
 #include "filter_in_out.h"
 #include "filter_prefix_blacklist.h"
 static VALUE rb_eFilterIPv6;
 static VALUE rb_cFilterIPv6;
+static VALUE rb_eFilterIPv4;
+static VALUE rb_cFilterIPv4;
 static VALUE rb_eFilterBorder;
 static VALUE rb_cFilterBorder;
 static VALUE rb_eFilterInOut;
@@ -167,7 +170,24 @@ extern "C" void Init_connectivity()
 
 	// filter
 	rb_define_method(rb_cFilterIPv6, "filter__", RUBY_METHOD_FUNC(rb_filter_ipv6_filter), 1);
+//------------------------------------------------------------------------------
+// The Filter IPv4
+//------------------------------------------------------------------------------
 
+	rb_eFilterIPv4 = rb_define_class("FilterIPv4Error", rb_eStandardError);
+	rb_cFilterIPv4 = rb_define_class("FilterIPv4", rb_cObject);
+	rb_define_alloc_func(rb_cFilterIPv4, rb_filter_ipv4_alloc);
+
+	rb_define_const(rb_cFilterIPv4, "Version__", rb_str_new2(FILTER_IPV4_VERSION));
+	rb_define_const(rb_cFilterIPv4, "VersionNbr__", INT2FIX(FILTER_IPV4_VERSION_NBR));
+
+	// statistics
+	rb_define_method(rb_cFilterIPv4, "stat_get__", RUBY_METHOD_FUNC(rb_filter_ipv4_stat_get), 0);
+	rb_define_method(rb_cFilterIPv4, "stat_reset__", RUBY_METHOD_FUNC(rb_filter_ipv4_stat_reset), 0);
+	rb_define_method(rb_cFilterIPv4, "set_stat_next_export_s__", RUBY_METHOD_FUNC(rb_filter_ipv4_stat_next_export_s), 1);
+
+	// filter
+	rb_define_method(rb_cFilterIPv4, "filter__", RUBY_METHOD_FUNC(rb_filter_ipv4_filter), 1);
 //------------------------------------------------------------------------------
 // The Filter Border
 //------------------------------------------------------------------------------

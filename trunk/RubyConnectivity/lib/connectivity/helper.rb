@@ -19,6 +19,7 @@ require_relative 'ExtractTopology'
 
 # Filter Bank
 require_relative 'FilterIPv6'
+require_relative 'FilterIPv4'
 require_relative 'FilterBorder'
 require_relative 'FilterInOut'
 require_relative 'FilterPrefixBlacklist'
