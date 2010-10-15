@@ -51,12 +51,19 @@ class Prefix_Mapping
 			// get the correct root node
 			family = prefix.get_family();
 			if(family == Prefix::FAMILY_IPV4)
-					node = head_ipv4;
+			{
+				node = head_ipv4;
+			}
+			else if(family == Prefix::FAMILY_IPV6)
+			{
+				node = head_ipv6;
+			}			
 			else
 			{
 				cout << "INSERT: Addr Type is not yet supported" << endl;
 				throw "INSERT: Addr Type is not yet supported";
 			}
+			
 			last = node;
 
 			// walk down
@@ -88,12 +95,13 @@ class Prefix_Mapping
 
 			// init
 			family = prefix.get_family();
-			if(family == Prefix::FAMILY_IPV4)
-					node = head_ipv4;
-			else
-			{
-				cout << "LOOKUP: Addr Type is not yet supported" << endl;
-				throw "LOOKUP: Addr Type is not yet supported";
+			if(family == Prefix::FAMILY_IPV4){
+				node = head_ipv4;
+			}else if(familiy == Prefix::FAMILY_IPV6){
+				node = head_ipv6;
+			}else{
+				cout << "LOOKUP: Unknown Addr Type" << endl;
+				throw "LOOKUP: Unknown Addr Type";
 			}
 			node_best_match = NULL;
 

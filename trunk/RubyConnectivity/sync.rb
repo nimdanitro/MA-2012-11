@@ -12,17 +12,17 @@
 
 def sync_folder(folder, local_base, remote_base, exclude)
 	puts "Sync:: #{folder}"
-	cmd = "ssh asdaniel@cluster 'mkdir -p #{remote_base}/#{folder}'"
+	cmd = "ssh cluster 'mkdir -p #{remote_base}/#{folder}'"
 	system(cmd)
-	cmd = "rsync -avz #{exclude} #{local_base}/#{folder}/*  -e ssh asdaniel@cluster:/#{remote_base}/#{folder}";
+	cmd = "rsync -avz #{exclude} #{local_base}/#{folder}/*  -e ssh cluster:/#{remote_base}/#{folder}";
 	system(cmd)
 end
 
 def sync_files(file_regex, local_base, remote_base, exclude)
 	folder =  File.dirname(file_regex)
-	cmd = "ssh asdaniel@cluster 'mkdir -p #{remote_base}/#{folder}'"
+	cmd = "ssh cluster 'mkdir -p #{remote_base}/#{folder}'"
 	system(cmd)
-	cmd = "rsync -avz #{exclude} #{local_base}/#{file_regex}  -e ssh asdaniel@cluster:/#{remote_base}/#{folder}";
+	cmd = "rsync -avz #{exclude} #{local_base}/#{file_regex}  -e ssh cluster:/#{remote_base}/#{folder}";
 	system(cmd)
 end
 
@@ -30,7 +30,7 @@ end
 # MAIN 
 ################################################################################
 
-local_base  = "/home/asdaniel/debug_inter_net/trunk"
+local_base  = "~/debug_inter_net/trunk"
 remote_base = "/home/asdaniel/RubyConnectivity"
 
 exclude = " --exclude '*.o' --exclude '*.so' --exclude 'Makefile' "

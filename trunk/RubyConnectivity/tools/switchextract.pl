@@ -7,7 +7,6 @@
 #	find the bviewXXXXXX.gz file from the rrc00.ripe.net at RIPE NCC, Amsterdam.(Collects default free routing updates!)
 #	Author: Dani Aschwanden <asdaniel@ee.ethz.ch>
 #
-
 use 5.010;
 use Net::IP;
 my $start = time();
@@ -69,7 +68,6 @@ close(bgpdump);
 
 print "TRAVERSING FINISHED! \n";
 @msp = remove_duplicate_prefixes(@msp);
-my $msp = scalar @msp;
 @switchzeilen = (@switchzeilen,@msp);
 open (myswitch,">$ARGV[1]") || die "ERROR: CANNOT WRITE ON DIRECTORY: $!";
 
@@ -84,7 +82,6 @@ foreach $ip (@switchzeilen){
 		print $ip->short()."/" . $ip->prefixlen() . "/" . $ashash{$ip->short()."/" . $ip->prefixlen()} . "\n";
 	}
 }	
-print "LOOKING FOR MORE SPECIFIC PREFIXES DONE:" . $msp . " MORE SPECIFIC PREFIXES FOUND!\n";
 
 close(myswitch);
 $finish = time();
@@ -94,7 +91,7 @@ print "TIME USED: " . $finish . "seconds \n";
 sub remove_duplicate_prefixes{
 	my %seen = ();
 	my @return = ();
-	foreach my $elem(@_){
+	foreach my $elem (@_){
 		next if $seen{$elem->prefix()}++;
 		push(@return,$elem);
 	}
