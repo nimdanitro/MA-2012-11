@@ -23,7 +23,7 @@ void Filter_Prefix_Blacklist::add_prefix(const string& prefix, int as)
 {
 	if( as < 0 or prefix.size() < 3)
 	{
-		cout << "FILTER IN OUT ADD: Invalid data '" << prefix << "'  " << as << "  "<< endl;
+		cout << "FILTER BLACKLIST ADD: Invalid data '" << prefix << "'  " << as << "  "<< endl;
 		cout.flush();
 		throw 200; // FIXME
 	}
@@ -45,10 +45,14 @@ void Filter_Prefix_Blacklist::filter(Connection* con, Prefix& p)
 
 		p.from_nb(con->addr_dst, 32, Prefix::FAMILY_IPV4);
 		dst = prefix_map.lookup(p);
-	}
-	else
-	{
-		cout << "FILTER IN OUT ADD: FILTER not implemented ... "<< endl;
+	}else if(con->addr_length == 16){
+			p.from_nb(con->addr_src, 128, Prefix::FAMILY_IPV6);
+			src = prefix_map.lookup(p);
+
+			p.from_nb(con->addr_dst, 128, Prefix::FAMILY_IPV6);
+			dst = prefix_map.lookup(p);
+	}else{
+		cout << "FILTER BLACKLIST ADD: FILTER not implemented ... "<< endl;
 		cout.flush();
 		throw 200; // FIXME
 	}

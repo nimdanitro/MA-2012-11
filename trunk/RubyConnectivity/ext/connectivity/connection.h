@@ -170,6 +170,8 @@ VALUE rb_getter_if_in(VALUE self);
 VALUE rb_getter_if_out(VALUE self);
 VALUE rb_getter_direction(VALUE self);
 VALUE rb_getter_border(VALUE self);
+VALUE rb_getter_addr_length(VALUE self);
+
 
 //------------------------------------------------------------------------------
 // IMPORT

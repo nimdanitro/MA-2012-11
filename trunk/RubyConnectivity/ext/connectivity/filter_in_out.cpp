@@ -38,22 +38,17 @@ void Filter_In_Out::filter(Connection* con, Prefix& p)
 	int as_src = 0;
 	int as_dst = 0;
 	string tmp;
-	if(con->addr_length == 4)
-	{
+	if(con->addr_length == 4){
 		p.from_nb(con->addr_src, 32, Prefix::FAMILY_IPV4);
 		as_src = prefix_map.lookup(p);
 		p.from_nb(con->addr_dst, 32, Prefix::FAMILY_IPV4);
 		as_dst = prefix_map.lookup(p);
-	}
-	else if(con->addr_length == 16)
-	{
+	}else if(con->addr_length == 16){
 		p.from_nb(con->addr_src, 128, Prefix::FAMILY_IPV6);
 		as_src = prefix_map.lookup(p);
 		p.from_nb(con->addr_dst, 128, Prefix::FAMILY_IPV6);
 		as_dst = prefix_map.lookup(p);
-	}
-	else
-	{
+	}else{
 		cout << "FILTER IN OUT ADD: FILTER not implemented ... "<< endl;
 		cout.flush();
 		throw 200; // FIXME

@@ -40,7 +40,7 @@ void Analyser_BGP::add_prefix(const string& prefix, int length)
 {
 	if( length < -1 or length > 128 or prefix.size() < 3)
 	{
-		cout << "FILTER IN OUT ADD: Invalid data '" << prefix << "'  " << length << "  "<< endl;
+		cout << "ANALYSER BGP PREFIX ADD: Invalid data '" << prefix << "'  " << length << "  "<< endl;
 		cout.flush();
 		throw 200; // FIXME
 	}

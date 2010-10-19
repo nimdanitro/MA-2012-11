@@ -322,6 +322,11 @@ VALUE rb_getter_border(VALUE self)
 	RB_CONNECTION_UNWRAP
 	return(ULL2NUM(con->border));
 };
+VALUE rb_getter_addr_length(VALUE self)
+{
+	RB_CONNECTION_UNWRAP
+	return(ULL2NUM(con->addr_length));
+};
 
 /*
 //------------------------------------------------------------------------------

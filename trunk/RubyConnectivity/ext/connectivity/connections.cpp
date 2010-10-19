@@ -114,6 +114,17 @@ VALUE rb_connections_get_next_unused(VALUE self)
 	else
 		return(Qnil);
 };
+VALUE rb_connections_get_first_unused_addr_length(VALUE self)
+{
+	RB_CONNECTIONS_UNWRAP
+	Connection* con = cons->get_first_unused();
+	if(con != NULL)
+	{
+		return(ULL2NUM(con->addr_length));
+	}
+	else
+		return(Qnil);
+};
 VALUE rb_connections_reset(VALUE self)
 {
 	RB_CONNECTIONS_UNWRAP

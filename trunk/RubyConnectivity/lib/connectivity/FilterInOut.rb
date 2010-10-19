@@ -96,35 +96,56 @@ class FilterInOut
 ################################################################################
 	def load_internal_prefixes(file_p)
 		prefixes_a = Array.new
+		prefixes_v6_a = Array.new
 		File.open(file_p).each do |line|
 
 			# filter out comments
-			if line.size() < 4 or line =~ /^#/
+			if line.size() < 3 or line =~ /^#/
 				next
 			end
 
 			# parse the data
-			data = line.chomp!.split('/')
-			if data.size != CGF_Columns
-				throw " Format Error in '#{file_p}' on line #{$.} :: '#{line}'"
+			# IPv4 Prefix
+			if line.include? '.'
+			  data = line.chomp!.split('/')
+			  if data.size != CGF_Columns 
+  				throw " Format Error in '#{file_p}' on line #{$.} :: '#{line}'"
+    		end
+    		# prepare data
+  			addr = data[0]
+  			addr_length = data[1].to_i
+  			as = data[2].to_i
+  			
+    		prefixes_a[addr_length] = [] if prefixes_a[addr_length] == nil
+  			prefixes_a[addr_length] << data
+    		
 			end
-
-			# prepare data
-			addr = data[0]
-			addr_length = data[1].to_i
-			as = data[2].to_i
-
-
-			prefixes_a[addr_length] = [] if prefixes_a[addr_length] == nil
-			prefixes_a[addr_length] << data
+			# IPv6 Prefix
+			if line.include? ':'
+			  data6 = line.chomp!.split('/')
+			  if data6.size != CGF_Columns
+  				throw " Format Error in '#{file_p}' on line #{$.} :: '#{line}'"
+  			end
+  			# prepare data
+        addr = data6[0]
+  			addr_length = data6[1].to_i
+  			as = data6[2].to_i
+  			
+  			prefixes_v6_a[addr_length] = [] if prefixes_v6_a[addr_length] == nil
+  			prefixes_v6_a[addr_length] << data6
+  			puts "JUHU"
+		  end
+      
+      #DEBUG
+			puts "PREFIX #{addr}/#{addr_length} AS #{as}"
 
 			# we care only about border interfaces
 			# add_prefix__("#{addr}/#{addr_length}", as)
 		end
 		0.upto(32) do |i|
 			next if prefixes_a[i] == nil
-			puts "ADD #{prefixes_a[i].size} X.X.X.X/#{i} prefixes"
-			# we care only about border interfaces
+			  puts "ADD #{prefixes_a[i].size} X.X.X.X/#{i} prefixes"
+			  # we care only about border interfaces
 			prefixes_a[i].each do |data|
 				addr = data[0]
 				addr_length = data[1].to_i
@@ -133,6 +154,19 @@ class FilterInOut
 				add_prefix__("#{addr}/#{addr_length}", as)
 			end
 		end
+		0.upto(128) do |i|
+			next if prefixes_v6_a[i] == nil
+			  puts "ADD #{prefixes_v6_a[i].size} X:X::X/#{i} prefixes"
+			# we care only about border interfaces
+			prefixes_v6_a[i].each do |data6|
+				addr = data6[0]
+				addr_length = data6[1].to_i
+				as = data6[2].to_i
+				#puts "#{addr}/#{addr_length}, #{as}"
+				add_prefix__("#{addr}/#{addr_length}", as)
+			end
+		end
+		
 	end
 ################################################################################
 ### filter #####################################################################

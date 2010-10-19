@@ -97,7 +97,7 @@ class Prefix_Mapping
 			family = prefix.get_family();
 			if(family == Prefix::FAMILY_IPV4){
 				node = head_ipv4;
-			}else if(familiy == Prefix::FAMILY_IPV6){
+			}else if(family == Prefix::FAMILY_IPV6){
 				node = head_ipv6;
 			}else{
 				cout << "LOOKUP: Unknown Addr Type" << endl;

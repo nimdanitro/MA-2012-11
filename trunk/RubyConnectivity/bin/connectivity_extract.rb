@@ -39,23 +39,41 @@ filter_in_out.load_internal_prefixes("#{config_folder}/filter_in_out/switch_pref
 filter_prefix_blacklist =  FilterPrefixBlacklist.new(output_folder + '/filter_prefix_blacklist', 300)
 filter_prefix_blacklist.load_prefix_folder("#{config_folder}/filter_prefix_blacklist")
 
-## CONNECTION MATRIX
-connection_matrix_output = output_folder + '/connection_matrix'
-connection_matrix_perodic_s = 300
-connection_matrix_cache_duration_s = 900
-connection_matrix_cache_max = 1000000000
-connection_matrix_cache_prune_interval_s = 300
-connection_matrix_analysis_delay_s = 360
-connection_matrix_analysis_active_duration_s = 300
+## CONNECTION MATRIX FOR IPV4
+connection_matrix4_output = output_folder + '/connection_matrix4'
+connection_matrix4_perodic_s = 300
+connection_matrix4_cache_duration_s = 900
+connection_matrix4_cache_max = 1000000000
+connection_matrix4_cache_prune_interval_s = 300
+connection_matrix4_analysis_delay_s = 360
+connection_matrix4_analysis_active_duration_s = 300
 
-connection_matrix = ConnectionMatrix.new(
-	connection_matrix_output,
-	connection_matrix_perodic_s,
-	connection_matrix_cache_duration_s,
-	connection_matrix_cache_max,
-	connection_matrix_cache_prune_interval_s,
-	connection_matrix_analysis_delay_s,
-	connection_matrix_analysis_active_duration_s
+connection_matrix4 = ConnectionMatrix.new(
+	connection_matrix4_output,
+	connection_matrix4_perodic_s,
+	connection_matrix4_cache_duration_s,
+	connection_matrix4_cache_max,
+	connection_matrix4_cache_prune_interval_s,
+	connection_matrix4_analysis_delay_s,
+	connection_matrix4_analysis_active_duration_s
+)
+## CONNECTION MATRIX FOR IPV6
+connection_matrix6_output = output_folder + '/connection_matrix6'
+connection_matrix6_perodic_s = 300
+connection_matrix6_cache_duration_s = 900
+connection_matrix6_cache_max = 1000000000
+connection_matrix6_cache_prune_interval_s = 300
+connection_matrix6_analysis_delay_s = 360
+connection_matrix6_analysis_active_duration_s = 300
+
+connection_matrix6 = ConnectionMatrix.new(
+	connection_matrix6_output,
+	connection_matrix6_perodic_s,
+	connection_matrix6_cache_duration_s,
+	connection_matrix6_cache_max,
+	connection_matrix6_cache_prune_interval_s,
+	connection_matrix6_analysis_delay_s,
+	connection_matrix6_analysis_active_duration_s
 )
 ################################################################################
 ## ANALYSER ###################################################################
@@ -94,31 +112,35 @@ data_parser.parse_files(input_files_a) do |cons|
 	# Filter bank
 	process_monitor.filter_start
 	#filter_ipv6.filter cons
-	filter_ipv4.filter cons
+	#filter_ipv4.filter cons
 	filter_border.filter cons
 	filter_in_out.filter cons
 	filter_prefix_blacklist.filter cons
 	process_monitor.filter_stop
 
 	# Connection Matrix
-	process_monitor.connection_matrix_start
-	connection_matrix.add_connections(cons) do |time_s|
-		process_monitor.connection_matrix_stop
+	test = cons.get_first_unused_addr_length()
+	puts "ADDR LENGTH = #{test}"
+	if cons.get_first_unused_addr_length()==4
+	  puts "JUUHHUU"
+  	process_monitor.connection_matrix4_start	
+	  connection_matrix4.add_connections(cons) do |time_s|
+  		process_monitor.connection_matrix4_stop
+  		next if time_s == 0 # skip the zero interval
+  		puts "#{time_s} :: Analyse the Connection Matrix"
+  		STDOUT.flush()
+  		process_monitor.analyser_start
+  		#analyser.analyse(connection_matrix4, time_s)
+  		process_monitor.analyser_stop
 
-		next if time_s == 0 # skip the zero interval
-		puts "#{time_s} :: Analyse the Connection Matrix"
-		STDOUT.flush()
-		process_monitor.analyser_start
-		analyser.analyse(connection_matrix, time_s)
-		process_monitor.analyser_stop
+  		# process monitor
+  		process_monitor.period_stop(time_s)
+  		process_monitor.period_start
 
-		# process monitor
-		process_monitor.period_stop(time_s)
-		process_monitor.period_start
-
-		process_monitor.connection_matrix_start
+  		process_monitor.connection_matrix4_start
+  	end
+  	process_monitor.connection_matrix4_stop
 	end
-	process_monitor.connection_matrix_stop
 	process_monitor.data_parser_start
 end
 process_monitor.data_parser_stop
