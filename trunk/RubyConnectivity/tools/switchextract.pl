@@ -47,17 +47,19 @@ print "SORTING DONE: ". scalar @switchzeilen . " PREFIXES FOR SWITCH!\n";
 print "LOOKING FOR MORE SPECIFIC PREFIXES!\n";
 close(bgpdump);
 open (bgpdump,"<$ARGV[0]") || die "ERROR: WRONG BGPDUMPFILENAME: $!";
-
 print "Please wait.. Get a coffee!\n";
 my %seen = ();
+my @prefixes_all;
 while(<bgpdump>){
 	if(m/TABLE_DUMP2\|[^\|]*\|[^\|]*\|[^\|]*\|[^\|]*\|(?<prefix>[^\|]*)\|[^\|]*\s(?<as>\d{1,6})/){
 		next if $seen{$+{prefix}}++;
 		#print $+{prefix} . " with AS " . $+{as} . "\n";
 		my $ip = new Net::IP($+{prefix});
+		push(@prefixes_all, $ip);
+		$ashash{$+{prefix}} = $+{as};
+		
 		foreach $switchprefix (@switchzeilen){
 			if ($switchprefix->overlaps($ip)==$IP_B_IN_A_OVERLAP){
-				$ashash{$+{prefix}} = $+{as};
 				print "ONE MSP FOUND: " . $ip->prefix() ."\n";
 				push(@switchzeilen, $ip);
 			}
@@ -65,7 +67,6 @@ while(<bgpdump>){
 	}
 }
 close(bgpdump);
-
 print "TRAVERSING FINISHED! \n";
 @msp = remove_duplicate_prefixes(@msp);
 @switchzeilen = (@switchzeilen,@msp);
@@ -75,15 +76,23 @@ foreach $ip (@switchzeilen){
 
 	if($ip->version()==4){
 		print myswitch $ip->prefix() . "/" . $ashash{$ip->prefix()} . "\n";
-		print $ip->prefix() . "/" . $ashash{$ip->prefix()} . "\n";
 	}
 	if($ip->version()==6){
 		print myswitch $ip->short()."/" . $ip->prefixlen() . "/" . $ashash{$ip->short()."/". $ip->prefixlen()} . "\n";
-		print $ip->short()."/" . $ip->prefixlen() . "/" . $ashash{$ip->short()."/" . $ip->prefixlen()} . "\n";
 	}
-}	
-
+}
 close(myswitch);
+open (prefixes,">prefixes.txt") || die "ERROR: CANNOT WRITE ON DIRECTORY: $!";
+foreach $ip (@prefixes_all){
+
+	if($ip->version()==4){
+		print prefixes $ip->prefix() . "/" . $ashash{$ip->prefix()} . "\n";
+	}
+	if($ip->version()==6){
+		print prefixes $ip->short()."/" . $ip->prefixlen() . "/" . $ashash{$ip->short()."/". $ip->prefixlen()} . "\n";
+	}
+}
+close(prefixes),
 $finish = time();
 $finish = $finish - $start;
 print "TIME USED: " . $finish . "seconds \n";
