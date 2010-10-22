@@ -61,7 +61,6 @@ VALUE rb_connections_used(VALUE self);
 
 VALUE rb_connections_get_first_unused(VALUE self);
 VALUE rb_connections_get_next_unused(VALUE self);
-VALUE rb_connections_get_first_unused_addr_length(VALUE self);
 
 VALUE rb_connections_reset(VALUE self);
 VALUE rb_connections_each_used(VALUE self);

@@ -119,28 +119,23 @@ data_parser.parse_files(input_files_a) do |cons|
 	process_monitor.filter_stop
 
 	# Connection Matrix
-	test = cons.get_first_unused_addr_length()
-	puts "ADDR LENGTH = #{test}"
-	if cons.get_first_unused_addr_length()==4
-	  puts "JUUHHUU"
-  	process_monitor.connection_matrix4_start	
-	  connection_matrix4.add_connections(cons) do |time_s|
-  		process_monitor.connection_matrix4_stop
-  		next if time_s == 0 # skip the zero interval
-  		puts "#{time_s} :: Analyse the Connection Matrix"
-  		STDOUT.flush()
-  		process_monitor.analyser_start
-  		#analyser.analyse(connection_matrix4, time_s)
-  		process_monitor.analyser_stop
+	process_monitor.connection_matrix_start	
+  connection_matrix4.add_connections(cons) do |time_s|
+		process_monitor.connection_matrix_stop
+		next if time_s == 0 # skip the zero interval
+		puts "#{time_s} :: Analyse the Connection Matrix"
+		STDOUT.flush()
+		process_monitor.analyser_start
+		#analyser.analyse(connection_matrix4, time_s)
+		process_monitor.analyser_stop
 
-  		# process monitor
-  		process_monitor.period_stop(time_s)
-  		process_monitor.period_start
+		# process monitor
+		process_monitor.period_stop(time_s)
+		process_monitor.period_start
 
-  		process_monitor.connection_matrix4_start
-  	end
-  	process_monitor.connection_matrix4_stop
+		process_monitor.connection_matrix_start
 	end
+	process_monitor.connection_matrix_stop
 	process_monitor.data_parser_start
 end
 process_monitor.data_parser_stop

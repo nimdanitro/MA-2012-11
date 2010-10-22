@@ -95,7 +95,7 @@ foreach $ip (@prefixes_all){
 close(prefixes),
 $finish = time();
 $finish = $finish - $start;
-print "TIME USED: " . $finish . "seconds \n";
+print "TIME USED: " . $finish . " seconds \n";
 
 sub remove_duplicate_prefixes{
 	my %seen = ();

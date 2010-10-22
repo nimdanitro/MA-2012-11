@@ -36,9 +36,6 @@ class Connections
 			yield(con)
 		end
 	end
-	def get_first_unused_addr_length()
-	  return(get_first_unused_addr_length__)
-  end
 	def to_s 
 		"Connections: #{used} / #{capacity}"
 	end

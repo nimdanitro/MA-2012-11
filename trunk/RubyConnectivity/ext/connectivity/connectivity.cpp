@@ -118,7 +118,6 @@ extern "C" void Init_connectivity()
 
 	rb_define_method(rb_cConnections, "get_first_unused__", RUBY_METHOD_FUNC(rb_connections_get_first_unused), 0);
 	rb_define_method(rb_cConnections, "get_next_unused__", RUBY_METHOD_FUNC(rb_connections_get_next_unused), 0);
-	rb_define_method(rb_cConnections, "get_first_unused_addr_length__", RUBY_METHOD_FUNC(rb_connections_get_first_unused_addr_length), 0);
 
 	rb_define_method(rb_cConnections, "reset__", RUBY_METHOD_FUNC(rb_connections_reset), 0);
 	rb_define_method(rb_cConnections, "each_used__", RUBY_METHOD_FUNC(rb_connections_each_used), 0);
