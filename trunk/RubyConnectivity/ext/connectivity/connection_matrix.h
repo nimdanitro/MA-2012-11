@@ -58,9 +58,10 @@ class Connection_Matrix
 	~Connection_Matrix();
 
 //------------------------------------------------------------------------------
-// Cache
+// Cache									// store  the valid connections
 //------------------------------------------------------------------------------
-	Connection_Matrix_HT connections_h;	 // store  the valid connections
+	Connection_Matrix_HT connections_ipv4_h;
+	Connection_Matrix_HT connections_ipv6_h;	 
 
 //------------------------------------------------------------------------------
 // Periodic Jobs
@@ -90,6 +91,8 @@ class Connection_Matrix
 // Analyze Connections
 //------------------------------------------------------------------------------
 	void analyze(uint32_t i_start_s, uint32_t i_stop_s);
+	void analyzev4(uint32_t i_start_s, uint32_t i_stop_s);
+	void analyzev6(uint32_t i_start_s, uint32_t i_stop_s);
 };
 
 //******************************************************************************

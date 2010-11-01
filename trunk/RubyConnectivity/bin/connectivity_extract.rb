@@ -39,46 +39,29 @@ filter_in_out.load_internal_prefixes("#{config_folder}/filter_in_out/switch_pref
 filter_prefix_blacklist =  FilterPrefixBlacklist.new(output_folder + '/filter_prefix_blacklist', 300)
 filter_prefix_blacklist.load_prefix_folder("#{config_folder}/filter_prefix_blacklist")
 
-## CONNECTION MATRIX FOR IPV4
-connection_matrix4_output = output_folder + '/connection_matrix4'
-connection_matrix4_perodic_s = 300
-connection_matrix4_cache_duration_s = 900
-connection_matrix4_cache_max = 1000000000
-connection_matrix4_cache_prune_interval_s = 300
-connection_matrix4_analysis_delay_s = 360
-connection_matrix4_analysis_active_duration_s = 300
+## CONNECTION MATRIX
+connection_matrix_output = output_folder + '/connection_matrix'
+connection_matrix_perodic_s = 300
+connection_matrix_cache_duration_s = 900
+connection_matrix_cache_max = 1000000000
+connection_matrix_cache_prune_interval_s = 300
+connection_matrix_analysis_delay_s = 360
+connection_matrix_analysis_active_duration_s = 300
 
-connection_matrix4 = ConnectionMatrix.new(
-	connection_matrix4_output,
-	connection_matrix4_perodic_s,
-	connection_matrix4_cache_duration_s,
-	connection_matrix4_cache_max,
-	connection_matrix4_cache_prune_interval_s,
-	connection_matrix4_analysis_delay_s,
-	connection_matrix4_analysis_active_duration_s
+connection_matrix = ConnectionMatrix.new(
+	connection_matrix_output,
+	connection_matrix_perodic_s,
+	connection_matrix_cache_duration_s,
+	connection_matrix_cache_max,
+	connection_matrix_cache_prune_interval_s,
+	connection_matrix_analysis_delay_s,
+	connection_matrix_analysis_active_duration_s
 )
-## CONNECTION MATRIX FOR IPV6
-connection_matrix6_output = output_folder + '/connection_matrix6'
-connection_matrix6_perodic_s = 300
-connection_matrix6_cache_duration_s = 900
-connection_matrix6_cache_max = 1000000000
-connection_matrix6_cache_prune_interval_s = 300
-connection_matrix6_analysis_delay_s = 360
-connection_matrix6_analysis_active_duration_s = 300
 
-connection_matrix6 = ConnectionMatrix.new(
-	connection_matrix6_output,
-	connection_matrix6_perodic_s,
-	connection_matrix6_cache_duration_s,
-	connection_matrix6_cache_max,
-	connection_matrix6_cache_prune_interval_s,
-	connection_matrix6_analysis_delay_s,
-	connection_matrix6_analysis_active_duration_s
-)
 ################################################################################
 ## ANALYSER ###################################################################
 ################################################################################
-analyser = Analyser.new(output_folder + '/analyser')
+analyser = Analyser.new(output_folder + '/analyser/IPv4')
 analyser.load_prefixes("#{config_folder}/analyser/prefixes.txt")
 analyser.add_interface(1, 2)  # Equinix Exchange Zurich
 analyser.add_interface(1, 6)  # AS1299  Telia
@@ -94,7 +77,6 @@ analyser.add_interface(4, 86) # AS3303 Swisscom (CERN, Meyrin GE)
 analyser.add_interface(5, 5)  # AS3303 Swisscom (Equinix Zurich)
 analyser.add_interface(5, 36) # SwissIX
 analyser.add_interface(6, 6)  # BelWue
-
 ################################################################################
 ## Process Monitor #############################################################
 ################################################################################
@@ -112,7 +94,7 @@ data_parser.parse_files(input_files_a) do |cons|
 	# Filter bank
 	process_monitor.filter_start
 	#filter_ipv6.filter cons
-	#filter_ipv4.filter cons
+	filter_ipv4.filter cons
 	filter_border.filter cons
 	filter_in_out.filter cons
 	filter_prefix_blacklist.filter cons
@@ -120,13 +102,13 @@ data_parser.parse_files(input_files_a) do |cons|
 
 	# Connection Matrix
 	process_monitor.connection_matrix_start	
-  connection_matrix4.add_connections(cons) do |time_s|
+  connection_matrix.add_connections(cons) do |time_s|
 		process_monitor.connection_matrix_stop
 		next if time_s == 0 # skip the zero interval
 		puts "#{time_s} :: Analyse the Connection Matrix"
 		STDOUT.flush()
 		process_monitor.analyser_start
-		#analyser.analyse(connection_matrix4, time_s)
+		analyser.analyse(connection_matrix, time_s)
 		process_monitor.analyser_stop
 
 		# process monitor

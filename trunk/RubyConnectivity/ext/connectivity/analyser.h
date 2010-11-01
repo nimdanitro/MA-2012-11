@@ -261,67 +261,115 @@ class Analyser
 {
 	public:
 
-	// working folder
-	path working_p;
+	// working folder, one for IPv4 and one for IPv6
+	path working_p4;
+	path working_p6;
 
 	// data aggregation (per interface)
-  Analyser_Net_Net_h* agg_host_host_h[ANALYSER_MAX_ROUTER*ANALYSER_MAX_INTERFACE];
-  Analyser_Net_h* agg_host_h[ANALYSER_MAX_ROUTER*ANALYSER_MAX_INTERFACE];
-  Analyser_Net_h* agg_net_h[ANALYSER_MAX_ROUTER*ANALYSER_MAX_INTERFACE];
-  Analyser_Net_h* agg_bgp_h[ANALYSER_MAX_ROUTER*ANALYSER_MAX_INTERFACE];
+ 	 Analyser_Net_Net_h* agg_host_host_h[ANALYSER_MAX_ROUTER*ANALYSER_MAX_INTERFACE];
+	 Analyser_Net_h* agg_host_h[ANALYSER_MAX_ROUTER*ANALYSER_MAX_INTERFACE];
+	 Analyser_Net_h* agg_net_h[ANALYSER_MAX_ROUTER*ANALYSER_MAX_INTERFACE];
+	 Analyser_Net_h* agg_bgp_h[ANALYSER_MAX_ROUTER*ANALYSER_MAX_INTERFACE];
 
 	// data aggregation all interface
-  Analyser_Net_h agg_host_all_h;
-  Analyser_Net_h agg_net_all_h;
-  Analyser_Net_h agg_bgp_all_h;
+	Analyser_Net_h agg_host_all_h;
+	Analyser_Net_h agg_net_all_h;
+	Analyser_Net_h agg_bgp_all_h;
 
 	// BGP Prefixes
 	Prefix_To_Int_Map bgp_prefixes;
-
-	// extract weird connections (TCP)
-	path weird_connections_folder_p;
+	
 	int weird_connection_bpp_min;
+	
+//IPV4
+	// extract weird connections (TCP)
+	path weird_connections_folder_p4;
 
 	// STATISTICS
 	// connections
 	uint64_t stat_cons_processed;
 
 	// interfaces
-	uint64_t stat_cons_if_invalid;
-	uint64_t stat_cons_if_zero;
-	uint64_t stat_cons_if_not_monitored;
-	uint64_t stat_cons_if_monitored;
+	uint64_t stat_cons_if_invalid4;
+	uint64_t stat_cons_if_zero4;
+	uint64_t stat_cons_if_not_monitored4;
+	uint64_t stat_cons_if_monitored4;
 
 	// state
-	uint64_t stat_cons_state_processed;
-	uint64_t stat_cons_state_balanced;
-	uint64_t stat_cons_state_unbalanced;
-	uint64_t stat_cons_state_other;
+	uint64_t stat_cons_state_processed4;
+	uint64_t stat_cons_state_balanced4;
+	uint64_t stat_cons_state_unbalanced4;
+	uint64_t stat_cons_state_other4;
 
 	// weird connections
-	uint64_t stat_cons_weird_cons_processed;
-	uint64_t stat_cons_weird_cons_no_rule;
-	uint64_t stat_cons_weird_cons_zero_packet;
-	uint64_t stat_cons_weird_cons_bpp;
-	uint64_t stat_cons_weird_cons_ok;
+	uint64_t stat_cons_weird_cons_processed4;
+	uint64_t stat_cons_weird_cons_no_rule4;
+	uint64_t stat_cons_weird_cons_zero_packet4;
+	uint64_t stat_cons_weird_cons_bpp4;
+	uint64_t stat_cons_weird_cons_ok4;
 
 	// signal traffic
-	uint64_t stat_cons_signal_processed;
-	uint64_t stat_cons_signal_ok;
-	uint64_t stat_cons_signal_other;
+	uint64_t stat_cons_signal_processed4;
+	uint64_t stat_cons_signal_ok4;
+	uint64_t stat_cons_signal_other4;
 
 	// accounted unbalanced traffic
-	uint64_t stat_cons_accounted_unbalanced;
+	uint64_t stat_cons_accounted_unbalanced4;
 
-	path stat_host_host_folder_p;
-	path stat_host_folder_p;
-	path stat_net_folder_p;
-	path stat_bgp_folder_p;
+	path stat_host_host_folder_p4;
+	path stat_host_folder_p4;
+	path stat_net_folder_p4;
+	path stat_bgp_folder_p4;
+	
+	// Prefixes
+	path prefixes_host_folder_p4;
+	path prefixes_net_folder_p4;
+	path prefixes_bgp_folder_p4;
+
+//IPV6
+	// extract weird connections (TCP)
+	path weird_connections_folder_p6;
+	
+	// STATISTICS
+	// connections
+	uint64_t stat_cons_processed6;
+
+	// interfaces
+	uint64_t stat_cons_if_invalid6;
+	uint64_t stat_cons_if_zero6;
+	uint64_t stat_cons_if_not_monitored6;
+	uint64_t stat_cons_if_monitored6;
+
+	// state
+	uint64_t stat_cons_state_processed6;
+	uint64_t stat_cons_state_balanced6;
+	uint64_t stat_cons_state_unbalanced6;
+	uint64_t stat_cons_state_other6;
+
+	// weird connections
+	uint64_t stat_cons_weird_cons_processed6;
+	uint64_t stat_cons_weird_cons_no_rule6;
+	uint64_t stat_cons_weird_cons_zero_packet6;
+	uint64_t stat_cons_weird_cons_bpp6;
+	uint64_t stat_cons_weird_cons_ok6;
+
+	// signal traffic
+	uint64_t stat_cons_signal_processed6;
+	uint64_t stat_cons_signal_ok6;
+	uint64_t stat_cons_signal_other6;
+
+	// accounted unbalanced traffic
+	uint64_t stat_cons_accounted_unbalanced6;
+
+	path stat_host_host_folder_p6;
+	path stat_host_folder_p6;
+	path stat_net_folder_p6;
+	path stat_bgp_folder_p6;
 
 	// Prefixes
-	path prefixes_host_folder_p;
-	path prefixes_net_folder_p;
-	path prefixes_bgp_folder_p;
+	path prefixes_host_folder_p6;
+	path prefixes_net_folder_p6;
+	path prefixes_bgp_folder_p6;
 
 // -----------------------------------------------------------------------------
 	Analyser();

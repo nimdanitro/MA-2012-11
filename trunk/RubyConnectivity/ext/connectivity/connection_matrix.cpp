@@ -10,7 +10,8 @@
 #include "connection_matrix.h"
 Connection_Matrix::Connection_Matrix()
 {
-	connections_h.clear();
+	connections_ipv4_h.clear();
+	connections_ipv6_h.clear();
 	time_s = 0;
 	periodic_job_next_s = 0;
 	statistics_reset();
@@ -23,37 +24,73 @@ void Connection_Matrix::add(Connection* con, Connection_Matrix_Key& key)
 {
 	stat_connections_processed++;
 	key.from(*con);
-	connections_h[key].add_connection(con);
-	return;
+	if(con->addr_length==4){
+		connections_ipv4_h[key].add_connection(con);		
+		return;
+	}
+	if(con->addr_length==16){
+ 		connections_ipv6_h[key].add_connection(con);
+		return;	
+	}
 };
 void Connection_Matrix::prune(uint32_t older_s)
 {
-
-	int before = connections_h.size();
-	Connection_Matrix_HT::iterator iter = connections_h.begin();
-	while(iter != connections_h.end())
+	int before = connections_ipv6_h.size();
+	Connection_Matrix_HT::iterator iter = connections_ipv6_h.begin();
+	while(iter != connections_ipv6_h.end())
 	{
 		if( (iter->second).prune(older_s) )
-			connections_h.erase(iter++);
+			connections_ipv6_h.erase(iter++);
 		else
 			iter++;
 	}
-	int after = connections_h.size();
-	cout << "cme, " << older_s << ", " << before << ", " << after << ", " << connections_h.bucket_count()<< endl;
-
+	int after = connections_ipv6_h.size();
+	cout << "cmev6, " << older_s << ", " << before << ", " << after << ", " << connections_ipv6_h.bucket_count()<< endl;
+	
+	before = connections_ipv4_h.size();
+	iter = connections_ipv4_h.begin();
+	while(iter != connections_ipv4_h.end())
+	{
+		if( (iter->second).prune(older_s) )
+			connections_ipv4_h.erase(iter++);
+		else
+			iter++;
+	}
+	after = connections_ipv4_h.size();
+	cout << "cmev4, " << older_s << ", " << before << ", " << after << ", " << connections_ipv4_h.bucket_count()<< endl;
 	return;
 };
-void Connection_Matrix::analyze(uint32_t i_start_s, uint32_t i_stop_s)
+void Connection_Matrix::analyzev4(uint32_t i_start_s, uint32_t i_stop_s)
 {
-	int state;
-	Connection_Matrix_HT::iterator iter = connections_h.begin();
-	while(iter != connections_h.end())
+	int statev4;
+	Connection_Matrix_HT::iterator iter = connections_ipv4_h.begin();
+	while(iter != connections_ipv4_h.end())
 	{
 		// analyse the connection ...
-		state = (iter->second).state_within(i_start_s, i_stop_s);
-		stat_connections_state[state]++;
+		statev4 = (iter->second).state_within(i_start_s, i_stop_s);
+		stat_connections_state[statev4]++;
+		iter++;
+	}
+	return;
+}
+
+void Connection_Matrix::analyzev6(uint32_t i_start_s, uint32_t i_stop_s)
+{
+	int statev6;
+	Connection_Matrix_HT::iterator iter = connections_ipv6_h.begin();
+	while(iter != connections_ipv6_h.end())
+	{
+		// analyse the connection ...
+		statev6 = (iter->second).state_within(i_start_s, i_stop_s);
+		stat_connections_state[statev6]++;
 		iter++;
 	}	
+	return;
+}
+void Connection_Matrix::analyze(uint32_t i_start_s, uint32_t i_stop_s)
+{
+	analyzev4(i_start_s, i_stop_s);
+	analyzev6(i_start_s, i_stop_s);
 	return;
 }
 void Connection_Matrix::statistics_reset(void)
@@ -125,7 +162,7 @@ VALUE rb_connection_matrix_stat_get(VALUE self)
 
 	rb_ary_push(array, ULL2NUM(cm->time_s));
 	rb_ary_push(array, ULL2NUM(cm->stat_connections_processed));
-	rb_ary_push(array, ULL2NUM(cm->connections_h.size()));
+	rb_ary_push(array, ULL2NUM(cm->connections_ipv4_h.size()+cm->connections_ipv6_h.size()));
 	for(int i = 0; i<CONNECTION_MATRIX_ENTRY_STATES; i++)
 		rb_ary_push(array, ULL2NUM(cm->stat_connections_state[i]));
 	return(array);

@@ -11,15 +11,27 @@
 #include "analyser.h"
 Analyser::Analyser()
 {
-	working_p = "~/RubyConnectivityDefaultOut";
-	weird_connections_folder_p = working_p / "weird_connections";
-	stat_host_host_folder_p = working_p / "host_host";
-	stat_host_folder_p = working_p / "host";
-	stat_net_folder_p = working_p / "net";
-	stat_bgp_folder_p = working_p / "bgp";
-	prefixes_host_folder_p = working_p / "prefix_host";
-	prefixes_net_folder_p = working_p / "prefix_net";
-	prefixes_bgp_folder_p = working_p / "prefix_bgp";
+	// SETTING THE PATHS FOR IPv4
+	working_p4 = "~/RubyConnectivityDefaultOut/IPv4";
+	weird_connections_folder_p4 = working_p4 / "weird_connections";
+	stat_host_host_folder_p4 = working_p4 / "host_host";
+	stat_host_folder_p4 = working_p4 / "host";
+	stat_net_folder_p4 = working_p4 / "net";
+	stat_bgp_folder_p4 = working_p4 / "bgp";
+	prefixes_host_folder_p4 = working_p4 / "prefix_host";
+	prefixes_net_folder_p4 = working_p4 / "prefix_net";
+	prefixes_bgp_folder_p4 = working_p4 / "prefix_bgp";
+	
+	// SETTING THE PATHS FOR IPv6
+	working_p6 = "~/RubyConnectivityDefaultOut/IPv6";
+	weird_connections_folder_p6 = working_p6 / "weird_connections";
+	stat_host_host_folder_p6 = working_p6 / "host_host";
+	stat_host_folder_p6 = working_p6 / "host";
+	stat_net_folder_p6 = working_p6 / "net";
+	stat_bgp_folder_p6 = working_p6 / "bgp";
+	prefixes_host_folder_p6 = working_p6 / "prefix_host";
+	prefixes_net_folder_p6 = working_p6 / "prefix_net";
+	prefixes_bgp_folder_p6 = working_p6 / "prefix_bgp";
 
 	weird_connection_bpp_min = 100;
 	bgp_prefixes.set_value_not_found(-1);
@@ -62,41 +74,73 @@ void Analyser::reset()
 			agg_bgp_h[i]->clear();
 		}
 	};
-  agg_host_all_h.clear();
-  agg_net_all_h.clear();
-  agg_bgp_all_h.clear();
+	agg_host_all_h.clear();
+	agg_net_all_h.clear();
+	agg_bgp_all_h.clear();
 
-	// statistics
+	// IPv4 statistics
 
 	// connections
-	stat_cons_processed = 0;
+	stat_cons_processed4 = 0;
 
 	// interfaces
-	stat_cons_if_invalid = 0;
-	stat_cons_if_zero = 0;
-	stat_cons_if_not_monitored = 0;
-	stat_cons_if_monitored = 0;
+	stat_cons_if_invalid4 = 0;
+	stat_cons_if_zero4 = 0;
+	stat_cons_if_not_monitored4 = 0;
+	stat_cons_if_monitored4 = 0;
 
 	// state
-	stat_cons_state_processed = 0;
-	stat_cons_state_balanced = 0;
-	stat_cons_state_unbalanced = 0;
-	stat_cons_state_other = 0;
+	stat_cons_state_processed4 = 0;
+	stat_cons_state_balanced4 = 0;
+	stat_cons_state_unbalanced4 = 0;
+	stat_cons_state_other4 = 0;
 
 	// weird connections
-  stat_cons_weird_cons_processed = 0;
-	stat_cons_weird_cons_no_rule = 0;
-	stat_cons_weird_cons_zero_packet = 0;
-	stat_cons_weird_cons_bpp = 0;
-	stat_cons_weird_cons_ok = 0;
+  	stat_cons_weird_cons_processed4 = 0;
+	stat_cons_weird_cons_no_rule4 = 0;
+	stat_cons_weird_cons_zero_packet4 = 0;
+	stat_cons_weird_cons_bpp4 = 0;
+	stat_cons_weird_cons_ok4 = 0;
 
 	// signal traffic
-	stat_cons_signal_processed = 0;
-	stat_cons_signal_ok = 0;
-	stat_cons_signal_other = 0;
+	stat_cons_signal_processed4 = 0;
+	stat_cons_signal_ok4 = 0;
+	stat_cons_signal_other4 = 0;
 
 	// accounted
-	stat_cons_accounted_unbalanced = 0;
+	stat_cons_accounted_unbalanced4 = 0;
+	
+	// IPv6 statistics
+
+	// connections
+	stat_cons_processed6 = 0;
+
+	// interfaces
+	stat_cons_if_invalid6 = 0;
+	stat_cons_if_zero6 = 0;
+	stat_cons_if_not_monitored6 = 0;
+	stat_cons_if_monitored6 = 0;
+
+	// state
+	stat_cons_state_processed6 = 0;
+	stat_cons_state_balanced6 = 0;
+	stat_cons_state_unbalanced6 = 0;
+	stat_cons_state_other6 = 0;
+
+	// weird connections
+  	stat_cons_weird_cons_processed6 = 0;
+	stat_cons_weird_cons_no_rule6 = 0;
+	stat_cons_weird_cons_zero_packet6 = 0;
+	stat_cons_weird_cons_bpp6 = 0;
+	stat_cons_weird_cons_ok6 = 0;
+
+	// signal traffic
+	stat_cons_signal_processed6 = 0;
+	stat_cons_signal_ok6 = 0;
+	stat_cons_signal_other6 = 0;
+
+	// accounted
+	stat_cons_accounted_unbalanced6 = 0;
 
 	return;
 };
@@ -105,26 +149,47 @@ void Analyser::reset()
 // -----------------------------------------------------------------------------
 void Analyser::set_working_path(string path_s)
 {
-	working_p = path_s.c_str();
-	create_directory(working_p);
-	weird_connections_folder_p = working_p / "weird_connections";
+	working_p4 = path_s.c_str() / "IPv4";
+	create_directory(working_p4);
+	
+	weird_connections_folder_p4 = working_p4 / "weird_connections";
+	create_directory(weird_connections_folder_p4);
+	stat_host_host_folder_p4 = working_p4 / "host_host";
+	create_directory(stat_host_host_folder_p4);
+	stat_host_folder_p4 = working_p4 / "host";
+	create_directory(stat_host_folder_p4);
+	stat_net_folder_p4 = working_p4 / "net";
+	create_directory(stat_net_folder_p4);
+	stat_bgp_folder_p4 = working_p4 / "bgp";
+	create_directory(stat_bgp_folder_p4);
 
-	create_directory(weird_connections_folder_p);
-	stat_host_host_folder_p = working_p / "host_host";
-	create_directory(stat_host_host_folder_p);
-	stat_host_folder_p = working_p / "host";
-	create_directory(stat_host_folder_p);
-	stat_net_folder_p = working_p / "net";
-	create_directory(stat_net_folder_p);
-	stat_bgp_folder_p = working_p / "bgp";
-	create_directory(stat_bgp_folder_p);
+	prefixes_host_folder_p4 = working_p4 / "prefix_host";
+	create_directory(prefixes_host_folder_p4);
+	prefixes_net_folder_p4 = working_p4 / "prefix_net";
+	create_directory(prefixes_net_folder_p4);
+	prefixes_bgp_folder_p4 = working_p4 / "prefix_bgp";
+	create_directory(prefixes_bgp_folder_p4);
+	
+	working_p6 = path_s.c_str() / "IPv6";
+	create_directory(working_p6);
+	
+	weird_connections_folder_p6 = working_p6 / "weird_connections";
+	create_directory(weird_connections_folder_p6);
+	stat_host_host_folder_p6 = working_p6 / "host_host";
+	create_directory(stat_host_host_folder_p6);
+	stat_host_folder_p6 = working_p6 / "host";
+	create_directory(stat_host_folder_p6);
+	stat_net_folder_p6 = working_p6 / "net";
+	create_directory(stat_net_folder_p6);
+	stat_bgp_folder_p6 = working_p6 / "bgp";
+	create_directory(stat_bgp_folder_p6);
 
-	prefixes_host_folder_p = working_p / "prefix_host";
-	create_directory(prefixes_host_folder_p);
-	prefixes_net_folder_p = working_p / "prefix_net";
-	create_directory(prefixes_net_folder_p);
-	prefixes_bgp_folder_p = working_p / "prefix_bgp";
-	create_directory(prefixes_bgp_folder_p);
+	prefixes_host_folder_p6 = working_p6 / "prefix_host";
+	create_directory(prefixes_host_folder_p6);
+	prefixes_net_folder_p6 = working_p6 / "prefix_net";
+	create_directory(prefixes_net_folder_p6);
+	prefixes_bgp_folder_p6 = working_p6 / "prefix_bgp";
+	create_directory(prefixes_bgp_folder_p6);
 
 };
 void Analyser::add_interface(int router, int interface)
@@ -144,7 +209,7 @@ void Analyser::add_interface(int router, int interface)
 };
 void Analyser::add_prefix(const string& prefix, int length)
 {
-	//cout << "ADD: " << prefix << " :: " << length << endl;
+	cout << "ADD: " << prefix << " :: " << length << endl;
 	//cout.flush();
 
 	if(length < -1 or length > 128 or prefix.size() < 3)
@@ -155,7 +220,7 @@ void Analyser::add_prefix(const string& prefix, int length)
 	}
 	Prefix p;
 	p.from(prefix);
-//	cout << "PREFIX: "<< p.to_s() << endl;
+	cout << "PREFIX: "<< p.to_s() << endl;
 //	cout.flush();
 	bgp_prefixes.insert(p, length);
 	return;
@@ -201,35 +266,47 @@ void Analyser::analyse_connections(
 {
 	// Analyses the connection matrix
 	// -- build host-host table
-  Analyser_Key_Net_Net host_host_key;
-	Connection_Matrix_HT::const_iterator iter, end;
-	iter = con_mat.connections_h.begin();
-	end = con_mat.connections_h.end();
+  	Analyser_Key_Net_Net host_host_key;
+	Connection_Matrix_HT::const_iterator iter, end, iter6, end6;
+	iter = con_mat.connections_ipv4_h.begin();
+	end = con_mat.connections_ipb4_h.end();
 
   // -- extract weird unbalanced signal connections
-	stringstream weird_connections_path_ss;
-	weird_connections_path_ss << weird_connections_folder_p.string();
-	weird_connections_path_ss << "/" << time_s /(24*3600) << "/";
-	path tmp = weird_connections_path_ss.str().c_str();
+	stringstream weird_connections_path_ss4;
+	stringstream weird_connections_path_ss6;
+	
+	weird_connections_path_ss4 << weird_connections_folder_p4.string();
+	weird_connections_path_ss4 << "/" << time_s /(24*3600) << "/";
+	path tmp = weird_connections_path_ss4.str().c_str();
 	create_directory(tmp);
-	weird_connections_path_ss << "/" << time_s << ".csv";
+	weird_connections_path_ss4 << "/" << time_s << ".csv";
 	ofstream weird_connections_f(
-		(weird_connections_path_ss.str()).c_str(),
+		(weird_connections_path_ss4.str()).c_str(),
 		ios_base::trunc
 	);
-
+	
+	iter6 = con_mat.connections_ipv6_h.begin();
+	end6 = con_mat.connections_ipb6_h.end();
+	weird_connections_path_ss6 << weird_connections_folder_p6.string();
+	weird_connections_path_ss6 << "/" << time_s /(24*3600) << "/";
+	tmp = weird_connections_path_ss6.str().c_str();
+	create_directory(tmp);
+	weird_connections_path_ss6 << "/" << time_s << ".csv";
+	ofstream weird_connections_f(
+		(weird_connections_path_ss6.str()).c_str(),
+		ios_base::trunc
+	);
 	uint8_t state;
 	Analyser_Net_Net_h* host_host_p;
 	int bpp;
 
 	while(iter != end)
 	{
-
 		stat_cons_processed++;
 
-//------------------------------------------------------------------------------
-// INTERFACE -------------------------------------------------------------------
-//------------------------------------------------------------------------------
+		//------------------------------------------------------------------------------
+		// INTERFACE -------------------------------------------------------------------
+		//------------------------------------------------------------------------------
 		// Valid, Monitored ?
 		if(
 			(iter->second).in_out_router >= ANALYSER_MAX_ROUTER or 
@@ -266,9 +343,9 @@ void Analyser::analyse_connections(
 		}
 		stat_cons_if_monitored++;
 
-//------------------------------------------------------------------------------
-// STATE -----------------------------------------------------------------------
-//------------------------------------------------------------------------------
+		//------------------------------------------------------------------------------
+		// STATE -----------------------------------------------------------------------
+		//------------------------------------------------------------------------------
 
 		// STATE of this connection?
 		stat_cons_state_processed++;
@@ -301,10 +378,10 @@ void Analyser::analyse_connections(
 		}
 		// only state unbalanced survives
 
-//------------------------------------------------------------------------------
-// WEIRD CONNECTIONS -----------------------------------------------------------
-//------------------------------------------------------------------------------
-// Packet Loss, Measurement Infrastructure Loss
+		//------------------------------------------------------------------------------
+		// WEIRD CONNECTIONS -----------------------------------------------------------
+		//------------------------------------------------------------------------------
+		// Packet Loss, Measurement Infrastructure Loss
 		// TCP
 		stat_cons_weird_cons_processed++;
 		if( (iter->first).protocol() != 6 )
@@ -334,9 +411,9 @@ void Analyser::analyse_connections(
 		}
 		stat_cons_weird_cons_ok++;
 
-//------------------------------------------------------------------------------
-// SINGAL TRAFFIC --------------------------------------------------------------
-//------------------------------------------------------------------------------
+		//------------------------------------------------------------------------------
+		// SINGAL TRAFFIC --------------------------------------------------------------
+		//------------------------------------------------------------------------------
 		stat_cons_signal_processed++;
 		if( 
 			(iter->first).protocol() != 6 or
@@ -349,9 +426,9 @@ void Analyser::analyse_connections(
 			continue;
 		}
 		stat_cons_signal_ok++;
-//------------------------------------------------------------------------------
-// ACCOUNT THE REST --------------------------------------------------------------
-//------------------------------------------------------------------------------
+		//------------------------------------------------------------------------------
+		// ACCOUNT THE REST --------------------------------------------------------------
+		//------------------------------------------------------------------------------
 
 		// ACCOUNT the unbalanced connection
 		host_host_key.from(iter->first, 32, 32);
