@@ -61,7 +61,7 @@ connection_matrix = ConnectionMatrix.new(
 ################################################################################
 ## ANALYSER ###################################################################
 ################################################################################
-analyser = Analyser.new(output_folder + '/analyser/IPv4')
+analyser = Analyser.new(output_folder + '/analyser')
 analyser.load_prefixes("#{config_folder}/analyser/prefixes.txt")
 analyser.add_interface(1, 2)  # Equinix Exchange Zurich
 analyser.add_interface(1, 6)  # AS1299  Telia
@@ -94,7 +94,7 @@ data_parser.parse_files(input_files_a) do |cons|
 	# Filter bank
 	process_monitor.filter_start
 	#filter_ipv6.filter cons
-	filter_ipv4.filter cons
+	#filter_ipv4.filter cons
 	filter_border.filter cons
 	filter_in_out.filter cons
 	filter_prefix_blacklist.filter cons

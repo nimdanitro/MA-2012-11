@@ -265,16 +265,27 @@ class Analyser
 	path working_p4;
 	path working_p6;
 
-	// data aggregation (per interface)
- 	 Analyser_Net_Net_h* agg_host_host_h[ANALYSER_MAX_ROUTER*ANALYSER_MAX_INTERFACE];
-	 Analyser_Net_h* agg_host_h[ANALYSER_MAX_ROUTER*ANALYSER_MAX_INTERFACE];
-	 Analyser_Net_h* agg_net_h[ANALYSER_MAX_ROUTER*ANALYSER_MAX_INTERFACE];
-	 Analyser_Net_h* agg_bgp_h[ANALYSER_MAX_ROUTER*ANALYSER_MAX_INTERFACE];
+	// data aggregation (per interface) IPv4
+	Analyser_Net_Net_h* agg_host_host_h4[ANALYSER_MAX_ROUTER*ANALYSER_MAX_INTERFACE];
+	Analyser_Net_h* agg_host_h4[ANALYSER_MAX_ROUTER*ANALYSER_MAX_INTERFACE];
+	Analyser_Net_h* agg_net_h4[ANALYSER_MAX_ROUTER*ANALYSER_MAX_INTERFACE];
+	Analyser_Net_h* agg_bgp_h4[ANALYSER_MAX_ROUTER*ANALYSER_MAX_INTERFACE];
 
-	// data aggregation all interface
-	Analyser_Net_h agg_host_all_h;
-	Analyser_Net_h agg_net_all_h;
-	Analyser_Net_h agg_bgp_all_h;
+	// data aggregation all interface IPv4
+	Analyser_Net_h agg_host_all_h4;
+	Analyser_Net_h agg_net_all_h4;
+	Analyser_Net_h agg_bgp_all_h4;
+	
+	// data aggregation (per interface) IPv6
+	Analyser_Net_Net_h* agg_host_host_h6[ANALYSER_MAX_ROUTER*ANALYSER_MAX_INTERFACE];
+	Analyser_Net_h* agg_host_h6[ANALYSER_MAX_ROUTER*ANALYSER_MAX_INTERFACE];
+	Analyser_Net_h* agg_net_h6[ANALYSER_MAX_ROUTER*ANALYSER_MAX_INTERFACE];
+	Analyser_Net_h* agg_bgp_h6[ANALYSER_MAX_ROUTER*ANALYSER_MAX_INTERFACE];
+
+	// data aggregation all interface IPv6
+	Analyser_Net_h agg_host_all_h6;
+	Analyser_Net_h agg_net_all_h6;
+	Analyser_Net_h agg_bgp_all_h6;
 
 	// BGP Prefixes
 	Prefix_To_Int_Map bgp_prefixes;
@@ -287,7 +298,7 @@ class Analyser
 
 	// STATISTICS
 	// connections
-	uint64_t stat_cons_processed;
+	uint64_t stat_cons_processed4;
 
 	// interfaces
 	uint64_t stat_cons_if_invalid4;

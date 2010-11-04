@@ -31,29 +31,53 @@ class Analyser
 		s = '# '
 		s += 'time_s, '
 
-		s += 'stat_cons_processed, '
+		s += 'stat_cons_processed4, '
 
-		s += 'stat_cons_if_invalid, '
-		s += 'stat_cons_if_zero, '
-		s += 'stat_cons_if_not_monitored, '
-		s += 'stat_cons_if_monitored, '
+		s += 'stat_cons_if_invalid4, '
+		s += 'stat_cons_if_zero4, '
+		s += 'stat_cons_if_not_monitored4, '
+		s += 'stat_cons_if_monitored4, '
 
-		s += 'stat_cons_state_processed, '
-		s += 'stat_cons_state_balanced, '
-		s += 'stat_cons_state_unbalanced, '
-		s += 'stat_cons_state_other, '
+		s += 'stat_cons_state_processed4, '
+		s += 'stat_cons_state_balanced4, '
+		s += 'stat_cons_state_unbalanced4, '
+		s += 'stat_cons_state_other4, '
 
-		s += "stat_cons_weird_cons_processed, "
-		s += "stat_cons_weird_cons_no_rule, "
-		s += "stat_cons_weird_cons_zero_packet, "
-		s += "stat_cons_weird_cons_bpp, "
-		s += "stat_cons_weird_cons_ok, "
+		s += "stat_cons_weird_cons_processed4, "
+		s += "stat_cons_weird_cons_no_rule4, "
+		s += "stat_cons_weird_cons_zero_packet4, "
+		s += "stat_cons_weird_cons_bpp4, "
+		s += "stat_cons_weird_cons_ok4, "
 
-		s += "stat_cons_signal_processed, "
-		s += "stat_cons_signal_ok, "
-		s += "stat_cons_signal_other, "
+		s += "stat_cons_signal_processed4, "
+		s += "stat_cons_signal_ok4, "
+		s += "stat_cons_signal_other4, "
 
-		s += "stat_cons_accounted_unbalanced, "
+		s += "stat_cons_accounted_unbalanced4, "
+		
+		s += 'stat_cons_processed6, '
+
+		s += 'stat_cons_if_invalid6, '
+		s += 'stat_cons_if_zero6, '
+		s += 'stat_cons_if_not_monitored6, '
+		s += 'stat_cons_if_monitored6, '
+		
+		s += 'stat_cons_state_processed6, '
+		s += 'stat_cons_state_balanced6, '
+		s += 'stat_cons_state_unbalanced6, '
+		s += 'stat_cons_state_other6, '
+
+		s += "stat_cons_weird_cons_processed6, "
+		s += "stat_cons_weird_cons_no_rule6, "
+		s += "stat_cons_weird_cons_zero_packet6, "
+		s += "stat_cons_weird_cons_bpp6, "
+		s += "stat_cons_weird_cons_ok6, "
+
+		s += "stat_cons_signal_processed6, "
+		s += "stat_cons_signal_ok6, "
+		s += "stat_cons_signal_other6, "
+
+		s += "stat_cons_accounted_unbalanced6, "
 		
 		s += "stat_delay_s, "
 
@@ -63,29 +87,53 @@ class Analyser
 		s = ''
 		s += "#{export_time_s}, "
 
-		s += "#{@stat_cons_processed}, "
+		s += "#{@stat_cons_processed4}, "
 
-		s += "#{@stat_cons_if_invalid}, "
-		s += "#{@stat_cons_if_zero}, "
-		s += "#{@stat_cons_if_not_monitored}, "
-		s += "#{@stat_cons_if_monitored}, "
+		s += "#{@stat_cons_if_invalid4}, "
+		s += "#{@stat_cons_if_zero4}, "
+		s += "#{@stat_cons_if_not_monitored4}, "
+		s += "#{@stat_cons_if_monitored4}, "
 
-		s += "#{@stat_cons_state_processed}, "
-		s += "#{@stat_cons_state_balanced}, "
-		s += "#{@stat_cons_state_unbalanced}, "
-		s += "#{@stat_cons_state_other}, "
+		s += "#{@stat_cons_state_processed4}, "
+		s += "#{@stat_cons_state_balanced4}, "
+		s += "#{@stat_cons_state_unbalanced4}, "
+		s += "#{@stat_cons_state_other4}, "
 
-		s += "#{@stat_cons_weird_cons_processed}, "
-		s += "#{@stat_cons_weird_cons_no_rule}, "
-		s += "#{@stat_cons_weird_cons_zero_packet}, "
-		s += "#{@stat_cons_weird_cons_bpp}, "
-		s += "#{@stat_cons_weird_cons_ok}, "
+		s += "#{@stat_cons_weird_cons_processed4}, "
+		s += "#{@stat_cons_weird_cons_no_rule4}, "
+		s += "#{@stat_cons_weird_cons_zero_packet4}, "
+		s += "#{@stat_cons_weird_cons_bpp4}, "
+		s += "#{@stat_cons_weird_cons_ok4}, "
 
-		s += "#{@stat_cons_signal_processed}, "
-		s += "#{@stat_cons_signal_ok}, "
-		s += "#{@stat_cons_signal_other}, "
+		s += "#{@stat_cons_signal_processed4}, "
+		s += "#{@stat_cons_signal_ok4}, "
+		s += "#{@stat_cons_signal_other4}, "
 
-		s += "#{@stat_cons_accounted_unbalanced}, "
+		s += "#{@stat_cons_accounted_unbalanced4}, "
+		
+		s += "#{@stat_cons_processed6}, "
+
+		s += "#{@stat_cons_if_invalid6}, "
+		s += "#{@stat_cons_if_zero6}, "
+		s += "#{@stat_cons_if_not_monitored6}, "
+		s += "#{@stat_cons_if_monitored6}, "
+
+		s += "#{@stat_cons_state_processed6}, "
+		s += "#{@stat_cons_state_balanced6}, "
+		s += "#{@stat_cons_state_unbalanced6}, "
+		s += "#{@stat_cons_state_other6}, "
+
+		s += "#{@stat_cons_weird_cons_processed6}, "
+		s += "#{@stat_cons_weird_cons_no_rule6}, "
+		s += "#{@stat_cons_weird_cons_zero_packet6}, "
+		s += "#{@stat_cons_weird_cons_bpp6}, "
+		s += "#{@stat_cons_weird_cons_ok6}, "
+
+		s += "#{@stat_cons_signal_processed6}, "
+		s += "#{@stat_cons_signal_ok6}, "
+		s += "#{@stat_cons_signal_other6}, "
+
+		s += "#{@stat_cons_accounted_unbalanced6}, "
 
 		s += "#{@stat_delay_s}, "
 
@@ -93,61 +141,114 @@ class Analyser
 	end
 	def statistics_reset()
 		reset__()
-		@stat_cons_processed = 0
+		@stat_cons_processed4 = 0
 
-		@stat_cons_if_invalid = 0
-		@stat_cons_if_zero = 0
-		@stat_cons_if_not_monitored = 0
-		@stat_cons_if_monitored = 0
+		@stat_cons_if_invalid4 = 0
+		@stat_cons_if_zero4 = 0
+		@stat_cons_if_not_monitored4 = 0
+		@stat_cons_if_monitored4 = 0
 
-		@stat_cons_state_balanced = 0
-		@stat_cons_state_unbalanced = 0
-		@stat_cons_state_other = 0
+		@stat_cons_state_balanced4 = 0
+		@stat_cons_state_unbalanced4 = 0
+		@stat_cons_state_other4 = 0
 
-		@stat_cons_weird_cons_processed = 0
-		@stat_cons_weird_cons_no_rule = 0
-		@stat_cons_weird_cons_zero_packet = 0
-		@stat_cons_weird_cons_bpp = 0
-		@stat_cons_weird_cons_ok = 0
+		@stat_cons_weird_cons_processed4 = 0
+		@stat_cons_weird_cons_no_rule4 = 0
+		@stat_cons_weird_cons_zero_packet4 = 0
+		@stat_cons_weird_cons_bpp4 = 0
+		@stat_cons_weird_cons_ok4 = 0
 
-		@stat_cons_signal_processed = 0
-		@stat_cons_signal_ok = 0
-		@stat_cons_signal_other = 0
+		@stat_cons_signal_processed4 = 0
+		@stat_cons_signal_ok4 = 0
+		@stat_cons_signal_other4 = 0
 
-		@stat_cons_accounted_unbalanced = 0
+		@stat_cons_accounted_unbalanced4 = 0
+		
+		@stat_cons_processed6 = 0
+
+		@stat_cons_if_invalid6 = 0
+		@stat_cons_if_zero6 = 0
+		@stat_cons_if_not_monitored6 = 0
+		@stat_cons_if_monitored6 = 0
+
+		@stat_cons_state_balanced6 = 0
+		@stat_cons_state_unbalanced6 = 0
+		@stat_cons_state_other6 = 0
+
+		@stat_cons_weird_cons_processed6 = 0
+		@stat_cons_weird_cons_no_rule6 = 0
+		@stat_cons_weird_cons_zero_packet6 = 0
+		@stat_cons_weird_cons_bpp6 = 0
+		@stat_cons_weird_cons_ok6 = 0
+
+		@stat_cons_signal_processed6 = 0
+		@stat_cons_signal_ok6 = 0
+		@stat_cons_signal_other6 = 0
+
+		@stat_cons_accounted_unbalanced6 = 0
 
 		@stat_delay_s = 0
 	end
 	def statistics_get_from_ext()
 		stats_a = stat_get__()
-		@stat_cons_processed = stats_a[0]
+		@stat_cons_processed4 = stats_a[0]
 
 		offset = 1
-		@stat_cons_if_invalid = stats_a[offset]
-		@stat_cons_if_zero = stats_a[offset+1]
-		@stat_cons_if_not_monitored = stats_a[offset+2]
-		@stat_cons_if_monitored = stats_a[offset+3]
+		@stat_cons_if_invalid4 = stats_a[offset]
+		@stat_cons_if_zero4 = stats_a[offset+1]
+		@stat_cons_if_not_monitored4 = stats_a[offset+2]
+		@stat_cons_if_monitored4 = stats_a[offset+3]
 
 		offset = 5
-		@stat_cons_state_processed = stats_a[offset]
-		@stat_cons_state_balanced = stats_a[offset+1]
-		@stat_cons_state_unbalanced = stats_a[offset+2]
-		@stat_cons_state_other = stats_a[offset+3]
+		@stat_cons_state_processed4 = stats_a[offset]
+		@stat_cons_state_balanced4 = stats_a[offset+1]
+		@stat_cons_state_unbalanced4 = stats_a[offset+2]
+		@stat_cons_state_other4 = stats_a[offset+3]
 
 		offset = 9
-		@stat_cons_weird_cons_processed = stats_a[offset]
-		@stat_cons_weird_cons_no_rule = stats_a[offset+1]
-		@stat_cons_weird_cons_zero_packet = stats_a[offset+2]
-		@stat_cons_weird_cons_bpp = stats_a[offset+3]
-		@stat_cons_weird_cons_ok = stats_a[offset+4]
+		@stat_cons_weird_cons_processed4 = stats_a[offset]
+		@stat_cons_weird_cons_no_rule4 = stats_a[offset+1]
+		@stat_cons_weird_cons_zero_packet4 = stats_a[offset+2]
+		@stat_cons_weird_cons_bpp4 = stats_a[offset+3]
+		@stat_cons_weird_cons_ok4 = stats_a[offset+4]
 
 		offset = 14
-		@stat_cons_signal_processed = stats_a[offset]
-		@stat_cons_signal_ok = stats_a[offset+1]
-		@stat_cons_signal_other = stats_a[offset+2]
+		@stat_cons_signal_processed4 = stats_a[offset]
+		@stat_cons_signal_ok4 = stats_a[offset+1]
+		@stat_cons_signal_other4 = stats_a[offset+2]
 
 		offset = 17
-		@stat_cons_accounted_unbalanced = stats_a[offset]
+		@stat_cons_accounted_unbalanced6 = stats_a[offset]
+		
+		@stat_cons_processed6 = stats_a[18]
+
+		offset = 19
+		@stat_cons_if_invalid6 = stats_a[offset]
+		@stat_cons_if_zero6 = stats_a[offset+1]
+		@stat_cons_if_not_monitored6 = stats_a[offset+2]
+		@stat_cons_if_monitored6 = stats_a[offset+3]
+
+		offset = 23
+		@stat_cons_state_processed6 = stats_a[offset]
+		@stat_cons_state_balanced6 = stats_a[offset+1]
+		@stat_cons_state_unbalanced6 = stats_a[offset+2]
+		@stat_cons_state_other6 = stats_a[offset+3]
+
+		offset = 27
+		@stat_cons_weird_cons_processed6 = stats_a[offset]
+		@stat_cons_weird_cons_no_rule6 = stats_a[offset+1]
+		@stat_cons_weird_cons_zero_packet6 = stats_a[offset+2]
+		@stat_cons_weird_cons_bpp6 = stats_a[offset+3]
+		@stat_cons_weird_cons_ok6 = stats_a[offset+4]
+
+		offset = 32
+		@stat_cons_signal_processed6 = stats_a[offset]
+		@stat_cons_signal_ok6 = stats_a[offset+1]
+		@stat_cons_signal_other6 = stats_a[offset+2]
+
+		offset = 35
+		@stat_cons_accounted_unbalanced6 = stats_a[offset]
+		
 	end
 	def statistics_export(export_time_s)
 		@stat_f.puts statistics_data_to_csv(export_time_s)
