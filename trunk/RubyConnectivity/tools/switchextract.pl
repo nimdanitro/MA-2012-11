@@ -1,7 +1,7 @@
 #!/usr/local/bin/perl
 #
 #	Script for extracting Prefixes of an specific AS and their more specific prefixes
-#	out of a bgpdumpfile file!
+#	out of a bgpdumpfile file! Moreover, it extracts all validly announced prefixes into prefixes.txt
 #	usage: perl switchextract.pl bgpdump.txt prefixes.txt
 #	create bgpdump.txt with ./libbgpdump-1.4.99.12/bgpdump bview.20101006.0800.gz -m > bgpdump.txt
 #	find the bviewXXXXXX.gz file from the rrc00.ripe.net at RIPE NCC, Amsterdam.(Collects default free routing updates!)
@@ -23,25 +23,25 @@ print "EXTRACTING SWITCH PREFIXES\n";
 my @switchzeilen;		#Liste für die Switchzeilen des Files!
 my $asnumber = "559";	#Hardcodes Target-AS für Switch!
 my %ashash;				#Hash für die AS-Nummer mit den Prefixes zu verbinden!
-
+my %pfseen;
 
 open (bgpdump,"<$ARGV[0]") || die "ERROR: WRONG BGPDUMPFILENAME: $!";
 while(<bgpdump>){
-	#Nach einem Muster für SWITCH suchen: AS 559 ist am Ende des ASPATH"
+	#Nach einem Muster für SWITCH-Prefixe suchen: AS 559 ist am Ende des ASPATH"
 	#Und extrahiere das Prefix, speichern in myswitch!
-	if(m/(?<prefix>[^\|]*)\|[^\|]*\s$asnumber\|/){
-		$ashash{$+{prefix}}=$asnumber;
-		push(@switchzeilen, new Net::IP($+{prefix}));
+	@zeilen = split(/\|/,$_);
+	$aspath = $zeilen[6];
+	$prefix = $zeilen[5];
+	@aspath = split(/ /,$aspath);
+	if (pop(@aspath)==$asnumber){
+		if ($pfseen{$prefix}==0){
+			push(@switchzeilen, new Net::IP($prefix));
+			$ashash{$prefix}=$asnumber;
+			$pfseen{$prefix}++;
+		}
 	}
 }
 print "EXTRACTING DONE: " . scalar @switchzeilen . " PREFIXES EXTRACTED!\n";
-
-
-#sortiere Liste und entferne doppelte Einträge!
-print "SORTING AND REMOVING DUPLICATE PREFIXES!\n";
-@switchzeilen = remove_duplicate_prefixes(@switchzeilen);
-print "SORTING DONE: ". scalar @switchzeilen . " PREFIXES FOR SWITCH!\n";
-
 
 #Suche nach more specific prefixes!
 print "LOOKING FOR MORE SPECIFIC PREFIXES!\n";
@@ -50,26 +50,32 @@ open (bgpdump,"<$ARGV[0]") || die "ERROR: WRONG BGPDUMPFILENAME: $!";
 print "Please wait.. Get a coffee!\n";
 my %seen = ();
 my @prefixes_all;
+
 while(<bgpdump>){
-	if(m/TABLE_DUMP2\|[^\|]*\|[^\|]*\|[^\|]*\|[^\|]*\|(?<prefix>[^\|]*)\|[^\|]*\s(?<as>\d{1,6})/){
-		next if $seen{$+{prefix}}++;
-		#print $+{prefix} . " with AS " . $+{as} . "\n";
-		my $ip = new Net::IP($+{prefix});
-		push(@prefixes_all, $ip);
-		$ashash{$+{prefix}} = $+{as};
-		
-		foreach $switchprefix (@switchzeilen){
-			if ($switchprefix->overlaps($ip)==$IP_B_IN_A_OVERLAP){
-				print "ONE MSP FOUND: " . $ip->prefix() ."\n";
-				push(@switchzeilen, $ip);
-			}
+	# Extrahiere alle Prefixe und AS
+	@zeilen = split(/\|/,$_);
+	$aspath = $zeilen[6];
+	@aspath = split(/ /,$aspath);
+	$as = pop(@aspath);
+	$prefix = $zeilen[5];
+	#Wenn das Prefix bereits geprüft, gehe zu nächstem Prefix!
+	next if $seen{$prefix}++;
+	my $ip = new Net::IP($prefix);
+	push(@prefixes_all, $ip);
+	$ashash{$prefix} = ${as};
+	
+	#Ist $prefix ein MSP von einem SWITCH prefix?
+	foreach $switchprefix (@switchzeilen){
+		if ($switchprefix->overlaps($ip)==$IP_B_IN_A_OVERLAP){
+			print "ONE MSP FOUND: " . $ip->prefix() ."\n";
+			push(@switchzeilen, $ip);
 		}
 	}
 }
 close(bgpdump);
-print "TRAVERSING FINISHED! \n";
-@msp = remove_duplicate_prefixes(@msp);
-@switchzeilen = (@switchzeilen,@msp);
+print "PREFIX EXTRACTION FINISHED! \n";
+
+# Schreibe die gefundenen Prefixe für SWITCH im richtigen Format in das SWITCH-Prefix-Ausgabe-File!
 open (myswitch,">$ARGV[1]") || die "ERROR: CANNOT WRITE ON DIRECTORY: $!";
 
 foreach $ip (@switchzeilen){
@@ -82,6 +88,8 @@ foreach $ip (@switchzeilen){
 	}
 }
 close(myswitch);
+
+# Schreibe alle gültigen Prefixe in das prefix-all-File!
 open (prefixes,">prefixes.txt") || die "ERROR: CANNOT WRITE ON DIRECTORY: $!";
 foreach $ip (@prefixes_all){
 
@@ -93,16 +101,7 @@ foreach $ip (@prefixes_all){
 	}
 }
 close(prefixes),
+
 $finish = time();
 $finish = $finish - $start;
 print "TIME USED: " . $finish . " seconds \n";
-
-sub remove_duplicate_prefixes{
-	my %seen = ();
-	my @return = ();
-	foreach my $elem (@_){
-		next if $seen{$elem->prefix()}++;
-		push(@return,$elem);
-	}
-	return @return;
-}

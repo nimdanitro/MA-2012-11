@@ -133,11 +133,10 @@ class FilterInOut
   			
   			prefixes_v6_a[addr_length] = [] if prefixes_v6_a[addr_length] == nil
   			prefixes_v6_a[addr_length] << data6
-  			puts "JUHU"
 		  end
       
       #DEBUG
-			puts "PREFIX #{addr}/#{addr_length} AS #{as}"
+			#puts "PREFIX #{addr}/#{addr_length} AS #{as}"
 
 			# we care only about border interfaces
 			# add_prefix__("#{addr}/#{addr_length}", as)
