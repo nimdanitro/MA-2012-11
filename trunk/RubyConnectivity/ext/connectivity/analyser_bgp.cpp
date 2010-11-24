@@ -97,8 +97,8 @@ void Analyser_BGP::analyse_con_mat(const Connection_Matrix& con_mat)
 	ofstream weird_connections_f((weird_connections_path_ss.str()).c_str(), ios_base::binary| ios_base::trunc);
 	int bpp;
 
-	iter = con_mat.connections_h.begin();
-	end = con_mat.connections_h.end();
+	iter = con_mat.connections_ipv4_h.begin();
+	end = con_mat.connections_ipv4_h.end();
 	while(iter != end)
 	{
 		// topology

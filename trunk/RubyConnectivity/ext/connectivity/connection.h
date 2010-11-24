@@ -113,6 +113,7 @@ class Connection
 		~Connection();
 //------------------------------------------------------------------------------
 	int import_from_m_data_cube(char * b);
+	int import_from_nfdump_data(char * b);
 
 	static void to_s(string& buf, const char* ip_, uint8_t addr_length_) 
 	{
@@ -129,6 +130,7 @@ class Connection
 		return;
 	};
 };
+
 
 //******************************************************************************
 // RUBY

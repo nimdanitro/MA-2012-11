@@ -102,11 +102,13 @@ class NFDataParser
 	end
 	def parse_file(file_p)
 		begin
-			parse_file__(file_p, @connections) do |cons|
-					yield(cons)
+			tmp = system("nfdump -r #{file_p}")
+			puts tmp
+			#parse_file__(file_p, @connections) do |cons|
+			#		yield(cons)
 			end
-		rescue DataParserError
-				puts "Error Parsing the data file #{file_p}"
+		rescue NFDataParserError
+				puts "Error Parsing the nfdata file #{file_p}"
 		end
 	end
 end

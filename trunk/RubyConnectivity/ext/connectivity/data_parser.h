@@ -1,5 +1,5 @@
 /**
- * File: data_parser.h 
+ * File: Nfdata_Parser.h 
  *
  * Copyright (c) 2010, Dominik Schatzmann 
  *
@@ -8,8 +8,8 @@
  * 
  */
 
-#ifndef DATA_PARSER_H__
-#define DATA_PARSER_H__
+#ifndef Nfdata_Parser_H__
+#define Nfdata_Parser_H__
 #define __STDC_LIMIT_MACROS
 
 

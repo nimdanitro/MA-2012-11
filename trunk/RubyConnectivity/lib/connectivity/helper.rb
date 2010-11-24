@@ -14,6 +14,7 @@ require_relative 'Connections'
 # Data Parser
 require_relative 'DataParser'
 
+
 # Extract Network Topology
 require_relative 'ExtractTopology'
 
