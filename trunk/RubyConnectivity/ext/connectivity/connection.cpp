@@ -422,13 +422,15 @@ VALUE rb_nf_import(
 	int packets = NUM2INT(pck);
 	int bytes = NUM2INT(byts);
 	
-	int res = con->import_from_nfdump_data(proto, src_addr, src_port, dst_addr, dst_port, time_s, time_e, nh , in_interface, out_interface, packets, bytes);
-	if (res!=1){
+	int res = con->import_from_nfdump_data(protocol, src_addr, src_port, dst_addr, dst_port, time_s, time_e, nh , in_interface, out_interface, packets, bytes);
+	if (res==1){
+		return(1);
+	}else{
 		rb_raise(rb_path2class("NFDUMPDataParserError"), "INVALID NFDUMP CONNECTION IMPORTED!");
-		
+		return(0);
 	}
 	
-
+	
 
 }
 

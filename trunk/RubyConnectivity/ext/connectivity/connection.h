@@ -113,7 +113,7 @@ class Connection
 		~Connection();
 //------------------------------------------------------------------------------
 	int import_from_m_data_cube(char * b);
-	int import_from_nfdump_data(int proto, char addrsrc, int portsrc, char addrdst, int portdst, int ts, int te, char nh, int intface_in, int intface_out, int pck, int byts);
+	int import_from_nfdump_data(int proto, const char* addrsrc, int portsrc, const char* addrdst, int portdst, int ts, int te, const char* nh, int intface_in, int intface_out, int pck, int byts);
 
 	static void to_s(string& buf, const char* ip_, uint8_t addr_length_) 
 	{

@@ -6,7 +6,7 @@
 # All rights reserved
 #------------------------------------------------------------------------------#
 
-
+require 'time'
 require_relative 'helper.rb'
 class DataParser
 
@@ -110,13 +110,14 @@ class DataParser
 		end
 	end
 	## parsing nfdump data to connection blocks
-	# fmt:%pr,%sa,%sp,%da,%dp,%nh
+	# csv:ts,te,td,sa,da,sp,dp,pr,flg,fwd,stos,ipkt,ibyt,opkt,obyt,in,out,sas,das,smk,dmk,dtos,dir,nh,nhb,svln,dvln,ismc,odmc,idmc,osmc,mpls1,mpls2,mpls3,mpls4,mpls5,mpls6,mpls7,mpls8,mpls9,mpls10,ra,eng
+
 	def nf_parse_files(files_a)
 	  files_a.each do |file_p|
 	    # ON CLUSTER IS NOT THE PROPER VERSION OF NFDUMP!!
-	    #f = %x(nfdump -r  #{file_p} -o "fmt:%pr,%sa,%sp,%da,%dp,%nh")
+	    #f = %x(nfdump -r  #{file_p} -o csv)
       #so use self-compiled local nfdump!
-      f = %x(/home/asdaniel/nfdump/bin/nfdump -r  #{file_p} -o "fmt:%pr,%sa,%sp,%da,%dp,%ts,%te,%ra,%in,%out,%pkt,%byt" -6)
+      f = %x(/home/asdaniel/nfdump/bin/nfdump -r  #{file_p} -o csv -6)
       a = f.split(/\n/,2).last
       a = a.split("Summary",2).first
       nf_parse(a)
@@ -126,17 +127,39 @@ class DataParser
 	def nf_parse(output)
       output.each_line do |line|
         nfdata = line.split(',')
-        proto = nfdata[0].tr_s('"', '').strip
-        srcaddr = nfdata[1].tr_s('"', '').strip
-        srcport = nfdata[2].tr_s('"', '').strip
+        protocol = nfdata[7].tr_s('"', '').strip
+        src_addr = nfdata[3].tr_s('"', '').strip
+        src_port = nfdata[5].tr_s('"', '').strip
+        dst_addr = nfdata[4].tr_s('"', '').strip
+        dst_port = nfdata[6].tr_s('"', '').strip
+        #puts "SRC: #{src_addr} / #{src_port} --> DEST: #{dst_addr} / #{dst_port} with PROTO #{protocol}"
+        nh = nfdata[23].tr_s('"', '').strip
+        #puts "NH: #{nh}"
+ 
+        in_interface = nfdata[15].tr_s('"', '').strip
+        out_interface = nfdata[16].tr_s('"', '').strip
+        #puts "INTERFACES: IN #{in_interface} / OUT #{out_interface}"
+
+        packets = nfdata[11].tr_s('"', '').strip.to_i + nfdata[13].tr_s('"', '').strip.to_i
+        #puts "PACKETS: #{packets}"
+
+        bytes = nfdata[12].tr_s('"', '').strip.to_i + nfdata[14].tr_s('"', '').strip.to_i
+        #puts "BYTES: #{bytes}"
+
+        start_time = nfdata[0].tr_s('"', '').strip
+        time_s = Time.parse(start_time).to_i
+        #puts "TIME_S: #{time_s}"
+        
+        end_time = nfdata[1].tr_s('"', '').strip
+        time_e = Time.parse(end_time).to_i
         
         begin
-    			nf_parse__(proto,srcaddr) do |cons|
-    					yield(cons)
-    			end
-    		rescue DataParserError
-    				puts "Error Parsing the nfdump data line #{line}"
+    		nf_parse__(protocol, src_addr, src_port, dst_addr, dst_port, time_s, time_e, nh , in_interface, out_interface, packets, bytes) do |cons|
+    			yield(cons)
     		end
+    	rescue DataParserError
+    		puts "Error Parsing the nfdump data line #{line}"
+    	end
       
       end
       
