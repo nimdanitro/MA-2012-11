@@ -93,22 +93,16 @@ class NFDataParser
 ################################################################################
 
 	## parsing data to connection blocks
-	def parse_files(files_a)
-		files_a.each do |file_p|
-			parse_file(file_p) do |cons|
-				yield(cons)
-			end
-		end
-	end
-	def parse_file(file_p)
+	# fmt:%pr,%sa,%sp,%da,%dp,%nh
+	def parse(output)
 		begin
-			tmp = system("nfdump -r #{file_p}")
-			puts tmp
-			#parse_file__(file_p, @connections) do |cons|
-			#		yield(cons)
-			end
-		rescue NFDataParserError
-				puts "Error Parsing the nfdata file #{file_p}"
+      output.each_line do |line|
+        nfdata = line.split(',')
+        proto = nfdata[0].tr_s('"', '').strip
+        srcaddr = nfdata[2].tr_s('"', '').strip
+        puts "PROTO: #{proto} and #{srcaddr}"
+      end
+      
 		end
 	end
 end

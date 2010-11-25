@@ -1,5 +1,5 @@
 #!/usr/bin/ruby1.9
-
+require_relative '../lib/connectivity/helper.rb'
 
 if ARGV[0] == nil 
 	puts "Usage <config folder>"
@@ -32,18 +32,10 @@ loop do
   temp = Array.new
 
   input_files_b.each do |file_p|
-    f = open("|nfdump -r  #{file_p} -o "'fmt":"%pr,%sa,%sp,%da,%dp,%nh'"")
-	f.each { |line| 
-	if f.lineno==1
-		next
-	end
-	if f.lineno==-2
-		break
-	end
-	
-	temp.push(line)
-	}
-	puts "#{temp}"
+    f = %x(nfdump -r  #{file_p} -o "fmt:%pr,%sa,%sp,%da,%dp,%nh")
+    a = f.split(/\n/,2).last
+    a = a.split("Summary",2).first
+    NFDataParser.parse(a)
   end
   
   input_files_b.clear

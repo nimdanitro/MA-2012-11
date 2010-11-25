@@ -13,6 +13,7 @@ require_relative 'Connections'
 
 # Data Parser
 require_relative 'DataParser'
+require_relative 'NFDataParser'
 
 
 # Extract Network Topology
