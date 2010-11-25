@@ -1,10 +1,13 @@
 #!/usr/bin/ruby1.9
 require_relative '../lib/connectivity/helper.rb'
 
-if ARGV[0] == nil 
-	puts "Usage <config folder>"
+
+if ARGV[0] == nil or ARGV[1] == nil
+	puts "Usage <config folder> <config folder>"
 	exit
 end
+output_folder = ARGV[1]
+data_parser = DataParser.new(output_folder + '/data_parser', 300)
 
 # input ::: NFCAP FILES...
 input_folder = ARGV[0]  
@@ -23,21 +26,17 @@ loop do
   input_files_a.each do |file_p|
     cur_m_time = File.new(file_p).mtime
     if(cur_m_time.to_i > iter_time)
-      puts "New File: '#{file_p}'"
+      puts "new input file: '#{file_p}'"
       input_files_b.push(file_p)
     end 
   end
   iter_time = Time.now.to_i
   puts "Time now: '#{iter_time}'"
-  temp = Array.new
-
-  input_files_b.each do |file_p|
-    f = %x(nfdump -r  #{file_p} -o "fmt:%pr,%sa,%sp,%da,%dp,%nh")
-    a = f.split(/\n/,2).last
-    a = a.split("Summary",2).first
-    NFDataParser.parse(a)
-  end
+  #puts "#{input_files_b}"
   
+  unless input_files_b.empty?
+    data_parser.nf_parse_files(input_files_b)
+  end
   input_files_b.clear
   sleep(10)
   

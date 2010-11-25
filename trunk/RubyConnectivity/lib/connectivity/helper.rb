@@ -13,7 +13,6 @@ require_relative 'Connections'
 
 # Data Parser
 require_relative 'DataParser'
-require_relative 'NFDataParser'
 
 
 # Extract Network Topology
@@ -49,6 +48,9 @@ def get_ipv4_n(ip_s)
 end
 def get_ipv4_s(ip_n)
 	return(IPAddr.new(ip_n, Socket::AF_INET).to_s)
+end
+def get_ipv6_s(ip_n)
+	return(IPAddr.new(ip_n, Socket::AF_INET6).to_s)
 end
 
 

@@ -50,7 +50,8 @@ int Connection::import_from_m_data_cube(char * b)
 		// (ip) addr of the hosts (network byte order)
 		addr_length = *((uint8_t *)(b+45));
 		if (addr_length == 4)
-		{
+		{	
+			
 			CONNECTION_ADDR_IMPORT_IPV4(addr_src, b + 46);
 			CONNECTION_ADDR_IMPORT_IPV4(addr_dst, b + 50); 
 			valid = true; 
@@ -73,6 +74,63 @@ int Connection::import_from_m_data_cube(char * b)
 		// flags = *((uint8_t *)(b+42));
 		// router_engine_id  = *((uint8_t *)(b+44));
 };
+
+int Connection::import_from_nfdump_data(int proto, char addrsrc, int portsrc, char addrdst, int portdst, int ts, int te, char nh, int intface_in, int intface_out, int pck, int byts)
+{
+		// is this connection a valid data structure
+		// instead of delete the data structure, just mark it as invalid
+		// and reuse it later ... 
+
+		// protocol
+		protocol = (uint8_t) proto;
+		port_src = (uint16_t) portsrc;
+		port_dst = (uint16_t) portdst;
+
+		// timing
+		start_s = (uint32_t) ts;
+		stop_s  = (uint32_t) te;
+
+		// router
+		router = 0;
+		if_in = (uint16_t) intface_in;
+		if_out = (uint16_t) intface_out;
+		
+		if (inet_pton(AF_INET, nh, &addr_next)==0){
+			if (inet_pton(AF_INET6, nh, &addr_next)==-1 || inet_pton(AF_INET6, nh, &addr_next)==0 ){
+				throw 100; // FIXME
+				return(0);
+			}
+		}
+
+		// network
+		direction = CONNECTION_DIRECTION_UNKNOWN;
+		border = CONNECTION_BORDER_UNKNOWN;
+
+		// content
+		packets = (uint32_t) pck;
+		bytes = (uint32_t) byts;
+
+		// (ip) addr of the hosts (network byte order)
+		
+		if (inet_pton(AF_INET, addrsrc, &addr_src)==1){
+			addr_length = 4;
+			valid = true;
+			return(1);
+		}
+		else{
+			if (inet_pton(AF_INET6, addrsrc, &addr_src)==1){
+				addr_length = 16;
+				valid = true;
+				return(1);
+			}else{
+				valid = false;
+				throw 100; // FIXME
+				return(0);
+			}
+			
+		}
+};
+
 
 /*
 void Connection::import_from_m_custom_flow__(char* b)
@@ -328,23 +386,50 @@ VALUE rb_getter_addr_length(VALUE self)
 	return(ULL2NUM(con->addr_length));
 };
 
-/*
+
 //------------------------------------------------------------------------------
 // IMPORT
 //------------------------------------------------------------------------------
-VALUE rb_import(VALUE self, VALUE type, VALUE buf)
+VALUE rb_nf_import(
+	VALUE self,
+	VALUE proto, 
+	VALUE addrsrc,
+	VALUE portsrc,
+	VALUE addrdst,
+	VALUE portdst,
+	VALUE ts,
+	VALUE te,
+	VALUE addr_router,
+	VALUE intface_in,
+	VALUE intface_out,
+	VALUE pck,
+	VALUE byts)
 {
 	RB_CONNECTION_UNWRAP
-	int type_ = NUM2INT(type);
-	char* buf_ = RSTRING_PTR(buf);
-	if(type_ == CONNECTION_FF_M_CONNECTIONS_TYPE_ID)
-	{
-		con->import_from_m_connections__(buf_);
+	int protocol = NUM2INT(proto);
+	char* src_addr = RSTRING(addrsrc)->ptr;
+	int src_port = NUM2INT(portsrc);
+	char* dst_addr = RSTRING(addrdst)->ptr;
+	int dst_port = NUM2INT(portdst);
+	
+	int time_s = NUM2INT(ts);
+	int time_e = NUM2INT(te);
+	
+	char* nh = RSTRING(addr_router)->ptr;
+	int in_interface = NUM2INT(intface_in);
+	int out_interface = NUM2INT(intface_out);
+	
+	int packets = NUM2INT(pck);
+	int bytes = NUM2INT(byts);
+	
+	int res = con->import_from_nfdump_data(proto, src_addr, src_port, dst_addr, dst_port, time_s, time_e, nh , in_interface, out_interface, packets, bytes);
+	if (res!=1){
+		rb_raise(rb_path2class("NFDUMPDataParserError"), "INVALID NFDUMP CONNECTION IMPORTED!");
+		
 	}
-	else
-	{
-   rb_raise(rb_path2class("ConnectionError"), "Import: Unknown type of connection");
-	}
+	
+
+
 }
-*/
+
 

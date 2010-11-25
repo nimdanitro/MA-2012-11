@@ -76,5 +76,11 @@ VALUE rb_data_parser_parse_file(
 	VALUE file_p,
 	VALUE con_block
 );
+VALUE rb_data_parser_nf_parse(
+	VALUE self, 
+	VALUE file_p,
+	VALUE con_block
+);
+
 
 #endif // DATA_PARSER_H__

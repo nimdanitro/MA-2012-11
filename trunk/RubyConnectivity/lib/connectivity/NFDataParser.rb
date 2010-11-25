@@ -94,12 +94,20 @@ class NFDataParser
 
 	## parsing data to connection blocks
 	# fmt:%pr,%sa,%sp,%da,%dp,%nh
+	def parse_files(input_files_b)
+	  input_files_b.each do |file_p|
+      f = %x(nfdump -r  #{file_p} -o "fmt:%pr,%sa,%sp,%da,%dp,%nh")
+      a = f.split(/\n/,2).last
+      a = a.split("Summary",2).first
+      parse(a)
+    end 
+  end
+	
 	def parse(output)
-		begin
       output.each_line do |line|
         nfdata = line.split(',')
         proto = nfdata[0].tr_s('"', '').strip
-        srcaddr = nfdata[2].tr_s('"', '').strip
+        srcaddr = nfdata[1].tr_s('"', '').strip
         puts "PROTO: #{proto} and #{srcaddr}"
       end
       

@@ -113,7 +113,7 @@ class Connection
 		~Connection();
 //------------------------------------------------------------------------------
 	int import_from_m_data_cube(char * b);
-	int import_from_nfdump_data(char * b);
+	int import_from_nfdump_data(int proto, char addrsrc, int portsrc, char addrdst, int portdst, int ts, int te, char nh, int intface_in, int intface_out, int pck, int byts);
 
 	static void to_s(string& buf, const char* ip_, uint8_t addr_length_) 
 	{
@@ -178,6 +178,19 @@ VALUE rb_getter_addr_length(VALUE self);
 //------------------------------------------------------------------------------
 // IMPORT
 //------------------------------------------------------------------------------
-//VALUE rb_import(VALUE self, VALUE type, VALUE buf);
+VALUE rb_nf_import(
+	VALUE self,
+	VALUE proto, 
+	VALUE addrsrc,
+	VALUE portsrc,
+	VALUE addrdst,
+	VALUE portdst,
+	VALUE ts,
+	VALUE te,
+	VALUE addr_router,
+	VALUE intface_in,
+	VALUE intface_out,
+	VALUE pck,
+	VALUE byts);
 
 #endif // CONNECTION_H__

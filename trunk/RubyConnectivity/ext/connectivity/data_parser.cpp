@@ -192,3 +192,37 @@ VALUE rb_data_parser_parse_file(
 	rb_yield(con_block);
 	return(self);
 };
+// PARSE DATA
+VALUE rb_data_parser_nf_parse(
+	VALUE self, 
+	VALUE file_p,
+	VALUE con_block
+)
+{
+	RB_DATA_PARSER_UNWRAP
+
+	// the container
+	Connections* cons;
+	Connection* con;
+	Data_Get_Struct(con_block, Connections, cons);
+
+	// iterator
+	con = cons->get_first_unused();
+	if(con == NULL)
+	{ // no space left ...
+		rb_yield(con_block);
+		cons->reset();
+		con = cons->get_first_unused();
+		if(con == NULL)
+		{
+			rb_raise(rb_path2class("DataParserError"), "A misconfigured 'Connections' Container ");
+		}
+	}
+	
+	
+	
+	
+	// last connections
+	rb_yield(con_block);
+	return(self);
+};

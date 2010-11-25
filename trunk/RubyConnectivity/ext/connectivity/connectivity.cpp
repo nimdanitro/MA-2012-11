@@ -141,6 +141,8 @@ extern "C" void Init_connectivity()
 
 	// parse data
 	rb_define_method(rb_cDataParser, "parse_file__", RUBY_METHOD_FUNC(rb_data_parser_parse_file), 2);
+	rb_define_method(rb_cDataParser, "nf_parse__", RUBY_METHOD_FUNC(rb_data_parser_nf_parse), 2);
+	
 
 //------------------------------------------------------------------------------
 // The Extract Topology

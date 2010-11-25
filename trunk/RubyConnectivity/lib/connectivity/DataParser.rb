@@ -109,5 +109,38 @@ class DataParser
 				puts "Error Parsing the data file #{file_p}"
 		end
 	end
+	## parsing nfdump data to connection blocks
+	# fmt:%pr,%sa,%sp,%da,%dp,%nh
+	def nf_parse_files(files_a)
+	  files_a.each do |file_p|
+	    # ON CLUSTER IS NOT THE PROPER VERSION OF NFDUMP!!
+	    #f = %x(nfdump -r  #{file_p} -o "fmt:%pr,%sa,%sp,%da,%dp,%nh")
+      #so use self-compiled local nfdump!
+      f = %x(/home/asdaniel/nfdump/bin/nfdump -r  #{file_p} -o "fmt:%pr,%sa,%sp,%da,%dp,%ts,%te,%ra,%in,%out,%pkt,%byt" -6)
+      a = f.split(/\n/,2).last
+      a = a.split("Summary",2).first
+      nf_parse(a)
+    end 
+  end
+	
+	def nf_parse(output)
+      output.each_line do |line|
+        nfdata = line.split(',')
+        proto = nfdata[0].tr_s('"', '').strip
+        srcaddr = nfdata[1].tr_s('"', '').strip
+        srcport = nfdata[2].tr_s('"', '').strip
+        
+        begin
+    			nf_parse__(proto,srcaddr) do |cons|
+    					yield(cons)
+    			end
+    		rescue DataParserError
+    				puts "Error Parsing the nfdump data line #{line}"
+    		end
+      
+      end
+      
+  end
+	
 end
 
