@@ -407,15 +407,15 @@ VALUE rb_nf_import(
 {
 	RB_CONNECTION_UNWRAP
 	int protocol = NUM2INT(proto);
-	char* src_addr = RSTRING(addrsrc)->ptr;
+	char* src_addr = RSTRING_PTR(addrsrc);
 	int src_port = NUM2INT(portsrc);
-	char* dst_addr = RSTRING(addrdst)->ptr;
+	char* dst_addr = RSTRING_PTR(addrdst);
 	int dst_port = NUM2INT(portdst);
 	
 	int time_s = NUM2INT(ts);
 	int time_e = NUM2INT(te);
 	
-	char* nh = RSTRING(addr_router)->ptr;
+	char* nh = RSTRING_PTR(addr_router);
 	int in_interface = NUM2INT(intface_in);
 	int out_interface = NUM2INT(intface_out);
 	
