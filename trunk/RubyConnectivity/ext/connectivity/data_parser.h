@@ -78,7 +78,18 @@ VALUE rb_data_parser_parse_file(
 );
 VALUE rb_data_parser_nf_parse(
 	VALUE self, 
-	VALUE file_p,
+	VALUE proto, 
+	VALUE addrsrc,
+	VALUE portsrc,
+	VALUE addrdst,
+	VALUE portdst,
+	VALUE ts,
+	VALUE te,
+	VALUE addr_router,
+	VALUE intface_in,
+	VALUE intface_out,
+	VALUE pck,
+	VALUE byts,
 	VALUE con_block
 );
 

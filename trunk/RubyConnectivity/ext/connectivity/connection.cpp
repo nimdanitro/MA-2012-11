@@ -390,48 +390,48 @@ VALUE rb_getter_addr_length(VALUE self)
 //------------------------------------------------------------------------------
 // IMPORT
 //------------------------------------------------------------------------------
-VALUE rb_nf_import(
-	VALUE self,
-	VALUE proto, 
-	VALUE addrsrc,
-	VALUE portsrc,
-	VALUE addrdst,
-	VALUE portdst,
-	VALUE ts,
-	VALUE te,
-	VALUE addr_router,
-	VALUE intface_in,
-	VALUE intface_out,
-	VALUE pck,
-	VALUE byts)
-{
-	RB_CONNECTION_UNWRAP
-	int protocol = NUM2INT(proto);
-	char* src_addr = RSTRING_PTR(addrsrc);
-	int src_port = NUM2INT(portsrc);
-	char* dst_addr = RSTRING_PTR(addrdst);
-	int dst_port = NUM2INT(portdst);
+//VALUE rb_nf_import(
+	//VALUE self,
+	//VALUE proto, 
+	//VALUE addrsrc,
+	//VALUE portsrc,
+	//VALUE addrdst,
+	//VALUE portdst,
+	//VALUE ts,
+	//VALUE te,
+	//VALUE addr_router,
+	//VALUE intface_in,
+	//VALUE intface_out,
+	//VALUE pck,
+	//VALUE byts)
+//{
+	//RB_CONNECTION_UNWRAP
+	//int protocol = NUM2INT(proto);
+	//char* src_addr = RSTRING_PTR(addrsrc);
+	//int src_port = NUM2INT(portsrc);
+	//char* dst_addr = RSTRING_PTR(addrdst);
+	//int dst_port = NUM2INT(portdst);
 	
-	int time_s = NUM2INT(ts);
-	int time_e = NUM2INT(te);
+	//int time_s = NUM2INT(ts);
+	//int time_e = NUM2INT(te);
 	
-	char* nh = RSTRING_PTR(addr_router);
-	int in_interface = NUM2INT(intface_in);
-	int out_interface = NUM2INT(intface_out);
+	//char* nh = RSTRING_PTR(addr_router);
+	//int in_interface = NUM2INT(intface_in);
+	//int out_interface = NUM2INT(intface_out);
 	
-	int packets = NUM2INT(pck);
-	int bytes = NUM2INT(byts);
+	//int packets = NUM2INT(pck);
+	//int bytes = NUM2INT(byts);
 	
-	int res = con->import_from_nfdump_data(protocol, src_addr, src_port, dst_addr, dst_port, time_s, time_e, nh , in_interface, out_interface, packets, bytes);
-	if (res==1){
-		return(1);
-	}else{
-		rb_raise(rb_path2class("NFDUMPDataParserError"), "INVALID NFDUMP CONNECTION IMPORTED!");
-		return(0);
-	}
+	//int res = con->import_from_nfdump_data(protocol, src_addr, src_port, dst_addr, dst_port, time_s, time_e, nh , in_interface, out_interface, packets, bytes);
+	//if (res==1){
+		//return(1);
+	//}else{
+		//rb_raise(rb_path2class("NFDUMPDataParserError"), "INVALID NFDUMP CONNECTION IMPORTED!");
+		//return(0);
+	//}
 	
 	
 
-}
+//}
 
 

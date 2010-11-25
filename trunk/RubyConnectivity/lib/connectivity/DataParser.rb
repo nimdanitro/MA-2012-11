@@ -127,17 +127,17 @@ class DataParser
 	def nf_parse(output)
       output.each_line do |line|
         nfdata = line.split(',')
-        protocol = nfdata[7].tr_s('"', '').strip
+        protocol = nfdata[7].tr_s('"', '').strip.to_i
         src_addr = nfdata[3].tr_s('"', '').strip
-        src_port = nfdata[5].tr_s('"', '').strip
+        src_port = nfdata[5].tr_s('"', '').strip.to_i
         dst_addr = nfdata[4].tr_s('"', '').strip
-        dst_port = nfdata[6].tr_s('"', '').strip
+        dst_port = nfdata[6].tr_s('"', '').strip.to_i
         #puts "SRC: #{src_addr} / #{src_port} --> DEST: #{dst_addr} / #{dst_port} with PROTO #{protocol}"
         nh = nfdata[23].tr_s('"', '').strip
         #puts "NH: #{nh}"
  
-        in_interface = nfdata[15].tr_s('"', '').strip
-        out_interface = nfdata[16].tr_s('"', '').strip
+        in_interface = nfdata[15].tr_s('"', '').strip.to_i
+        out_interface = nfdata[16].tr_s('"', '').strip.to_i
         #puts "INTERFACES: IN #{in_interface} / OUT #{out_interface}"
 
         packets = nfdata[11].tr_s('"', '').strip.to_i + nfdata[13].tr_s('"', '').strip.to_i
@@ -154,7 +154,7 @@ class DataParser
         time_e = Time.parse(end_time).to_i
         
         begin
-    		nf_parse__(protocol, src_addr, src_port, dst_addr, dst_port, time_s, time_e, nh , in_interface, out_interface, packets, bytes) do |cons|
+    		nf_parse__(protocol, src_addr, src_port, dst_addr, dst_port, time_s, time_e, nh , in_interface, out_interface, packets, bytes, @connections) do |cons|
     			yield(cons)
     		end
     	rescue DataParserError

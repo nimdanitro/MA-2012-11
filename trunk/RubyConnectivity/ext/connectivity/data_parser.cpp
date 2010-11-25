@@ -195,7 +195,18 @@ VALUE rb_data_parser_parse_file(
 // PARSE DATA
 VALUE rb_data_parser_nf_parse(
 	VALUE self, 
-	VALUE file_p,
+	VALUE proto, 
+	VALUE addrsrc,
+	VALUE portsrc,
+	VALUE addrdst,
+	VALUE portdst,
+	VALUE ts,
+	VALUE te,
+	VALUE addr_router,
+	VALUE intface_in,
+	VALUE intface_out,
+	VALUE pck,
+	VALUE byts,
 	VALUE con_block
 )
 {
@@ -218,9 +229,41 @@ VALUE rb_data_parser_nf_parse(
 			rb_raise(rb_path2class("DataParserError"), "A misconfigured 'Connections' Container ");
 		}
 	}
+	int protocol = NUM2INT(proto);
+	char* src_addr = RSTRING_PTR(addrsrc);
+	int src_port = NUM2INT(portsrc);
+	char* dst_addr = RSTRING_PTR(addrdst);
+	int dst_port = NUM2INT(portdst);
 	
+	int time_s = NUM2INT(ts);
+	int time_e = NUM2INT(te);
 	
+	char* nh = RSTRING_PTR(addr_router);
+	int in_interface = NUM2INT(intface_in);
+	int out_interface = NUM2INT(intface_out);
 	
+	int packets = NUM2INT(pck);
+	int bytes = NUM2INT(byts);
+	
+	int res = con->import_from_nfdump_data(protocol, src_addr, src_port, dst_addr, dst_port, time_s, time_e, nh , in_interface, out_interface, packets, bytes);
+	if (res==1){
+		return(1);
+	}else{
+		rb_raise(rb_path2class("NFDUMPDataParserError"), "INVALID NFDUMP CONNECTION IMPORTED!");
+		return(0);
+	}
+	
+	dp->stat_connections_processed++;
+	// periodic stat export					
+	if (con->start_s > dp->stat_next_export_s)
+	{
+		// update the time
+		dp->time_s = con->start_s;
+
+		// lets call the export function (ruby)
+		ID method_id = rb_intern("statistics_export");
+		rb_funcall(self, method_id, 0);
+	}
 	
 	// last connections
 	rb_yield(con_block);

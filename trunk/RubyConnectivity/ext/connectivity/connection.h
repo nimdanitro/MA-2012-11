@@ -178,19 +178,19 @@ VALUE rb_getter_addr_length(VALUE self);
 //------------------------------------------------------------------------------
 // IMPORT
 //------------------------------------------------------------------------------
-VALUE rb_nf_import(
-	VALUE self,
-	VALUE proto, 
-	VALUE addrsrc,
-	VALUE portsrc,
-	VALUE addrdst,
-	VALUE portdst,
-	VALUE ts,
-	VALUE te,
-	VALUE addr_router,
-	VALUE intface_in,
-	VALUE intface_out,
-	VALUE pck,
-	VALUE byts);
+//VALUE rb_nf_import(
+	//VALUE self,
+	//VALUE proto, 
+	//VALUE addrsrc,
+	//VALUE portsrc,
+	//VALUE addrdst,
+	//VALUE portdst,
+	//VALUE ts,
+	//VALUE te,
+	//VALUE addr_router,
+	//VALUE intface_in,
+	//VALUE intface_out,
+	//VALUE pck,
+	//VALUE byts);
 
 #endif // CONNECTION_H__
