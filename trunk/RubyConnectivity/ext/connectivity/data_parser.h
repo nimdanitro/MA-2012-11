@@ -76,7 +76,7 @@ VALUE rb_data_parser_parse_file(
 	VALUE file_p,
 	VALUE con_block
 );
-VALUE rb_data_parser_nf_parse(
+VALUE rb_data_parse_nf_parse_file_csv(
 	VALUE self, 
 	VALUE proto, 
 	VALUE addrsrc,
@@ -92,6 +92,5 @@ VALUE rb_data_parser_nf_parse(
 	VALUE byts,
 	VALUE con_block
 );
-
 
 #endif // DATA_PARSER_H__

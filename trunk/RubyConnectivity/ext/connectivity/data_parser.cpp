@@ -8,6 +8,7 @@
  * 
  */
 #include "data_parser.h"
+
 Data_Parser::Data_Parser()
 {
 	// statistics
@@ -15,6 +16,7 @@ Data_Parser::Data_Parser()
 	stat_next_export_s = 0;
 	stat_reset();
 };
+
 Data_Parser::~Data_Parser(){};
 
 //------------------------------------------------------------------------------
@@ -24,7 +26,7 @@ void Data_Parser::stat_reset(void)
 {
 	stat_connections_processed = 0;
 	return;
-}
+};
 
 //******************************************************************************
 // RUBY
@@ -100,7 +102,7 @@ VALUE rb_data_parser_parse_file(
 	// input stream
 	Check_Type(file_p, T_STRING);
 
-  boost::iostreams::filtering_istream in;
+  	boost::iostreams::filtering_istream in;
 	ifstream input_f;
 	string file_path_s = (RSTRING_PTR(file_p));
 	// decompression
@@ -112,7 +114,7 @@ VALUE rb_data_parser_parse_file(
 
 	// file
 	input_f.open(file_path_s.c_str(), ifstream::in | ifstream::binary);
-  in.push(input_f);
+  	in.push(input_f);
 
 	// the buffer
 	char b[CONNECTION_FF_M_DATACUBE_FLOW_BIN_SIZE_IPV6];
@@ -192,8 +194,8 @@ VALUE rb_data_parser_parse_file(
 	rb_yield(con_block);
 	return(self);
 };
-// PARSE DATA
-VALUE rb_data_parser_nf_parse(
+
+VALUE rb_data_parse_nf_parse_file_csv(
 	VALUE self, 
 	VALUE proto, 
 	VALUE addrsrc,
@@ -235,37 +237,104 @@ VALUE rb_data_parser_nf_parse(
 	char* dst_addr = RSTRING_PTR(addrdst);
 	int dst_port = NUM2INT(portdst);
 	
-	int time_s = NUM2INT(ts);
-	int time_e = NUM2INT(te);
+	Check_Type(file_p, T_STRING);
+	string file_path_s = (RSTRING_PTR(file_p));
+	string command = "/home/asdaniel/nfdump/bin/nfdump -o csv -r ";
+	command.append(file_path_s);
+	cout << command << "\n";
 	
-	char* nh = RSTRING_PTR(addr_router);
-	int in_interface = NUM2INT(intface_in);
-	int out_interface = NUM2INT(intface_out);
+	const char *cmd;
+	cmd = command.c_str();
+	cout << cmd << "\n";
 	
-	int packets = NUM2INT(pck);
-	int bytes = NUM2INT(byts);
+	FILE *fp;
+	int linesize = 300;
+	char line[linesize];
 	
-	int res = con->import_from_nfdump_data(protocol, src_addr, src_port, dst_addr, dst_port, time_s, time_e, nh , in_interface, out_interface, packets, bytes);
-	if (res==1){
-		return(1);
+	fp = popen(cmd , "r");
+		
+	if(fp!=NULL){
+		
+		cout << "JUHUUUU\n";
+		while(fgets(line, linesize,fp) !=NULL){
+			printf("%s",line);
+			//STATS..
+			dp->stat_connections_processed++;
+			// periodic stat export					
+			if (con->start_s > dp->stat_next_export_s){
+				// update the time
+				dp->time_s = con->start_s;
+	
+				// lets call the export function (ruby)
+				ID method_id = rb_intern("statistics_export");
+				rb_funcall(self, method_id, 0);
+			}
+			// next			
+			con = cons->get_next_unused();
+			if(con == NULL){
+				rb_yield(con_block);
+				cons->reset();
+				con = cons->get_first_unused();
+				if (con == NULL){
+					rb_raise(rb_path2class("DataParserError"), "A misconfigured 'Connections' ");
+				}
+			}
+		}
+		fclose(fp);
 	}else{
-		rb_raise(rb_path2class("NFDUMPDataParserError"), "INVALID NFDUMP CONNECTION IMPORTED!");
-		return(0);
+		rb_raise(rb_path2class("DataParserError"), "Failed to call nfdump");
+		return -1;	
 	}
-	
-	dp->stat_connections_processed++;
-	// periodic stat export					
-	if (con->start_s > dp->stat_next_export_s)
-	{
-		// update the time
-		dp->time_s = con->start_s;
-
-		// lets call the export function (ruby)
-		ID method_id = rb_intern("statistics_export");
-		rb_funcall(self, method_id, 0);
-	}
-	
-	// last connections
+	//last connections
 	rb_yield(con_block);
 	return(self);
 };
+
+
+// OLD!!!!!
+// PARSE DATA
+// VALUE rb_data_parser_nf_parse(
+// 	VALUE self, 
+// 	VALUE self,
+// 	VALUE proto, 
+// 	VALUE addrsrc,
+// 	VALUE portsrc,
+// 	VALUE addrdst,
+// 	VALUE portdst,
+// 	VALUE ts,
+// 	VALUE te,
+// 	VALUE addr_router,
+// 	VALUE intface_in,
+// 	VALUE intface_out,
+// 	VALUE pck,
+// 	VALUE byts,
+// 	VALUE con_block
+// )
+// {
+// 	RB_DATA_PARSER_UNWRAP
+// 
+// 	// the container
+// 	Connections* cons;
+// 	Connection* con;
+// 	Data_Get_Struct(con_block, Connections, cons);
+// 
+// 	// iterator
+// 	con = cons->get_first_unused();
+// 	if(con == NULL)
+// 	{ // no space left ...
+// 		rb_yield(con_block);
+// 		cons->reset();
+// 		con = cons->get_first_unused();
+// 		if(con == NULL)
+// 		{
+// 			rb_raise(rb_path2class("DataParserError"), "A misconfigured 'Connections' Container ");
+// 		}
+// 	}
+// 	
+// 	
+// 	
+// 	
+// 	// last connections
+// 	rb_yield(con_block);
+// 	return(self);
+// };

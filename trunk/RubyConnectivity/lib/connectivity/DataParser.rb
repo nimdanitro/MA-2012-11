@@ -110,60 +110,74 @@ class DataParser
 		end
 	end
 	## parsing nfdump data to connection blocks
-	# csv:ts,te,td,sa,da,sp,dp,pr,flg,fwd,stos,ipkt,ibyt,opkt,obyt,in,out,sas,das,smk,dmk,dtos,dir,nh,nhb,svln,dvln,ismc,odmc,idmc,osmc,mpls1,mpls2,mpls3,mpls4,mpls5,mpls6,mpls7,mpls8,mpls9,mpls10,ra,eng
-
 	def nf_parse_files(files_a)
 	  files_a.each do |file_p|
-	    # ON CLUSTER IS NOT THE PROPER VERSION OF NFDUMP!!
-	    #f = %x(nfdump -r  #{file_p} -o csv)
-      #so use self-compiled local nfdump!
-      f = %x(/home/asdaniel/nfdump/bin/nfdump -r  #{file_p} -o csv -6)
-      a = f.split(/\n/,2).last
-      a = a.split("Summary",2).first
-      nf_parse(a)
-    end 
+	    nf_parse_file(file_p) do |cons|
+	      yield(cons)
+	    end
+    end
+    # OLD!!!
+    # files_a.each do |file_p|
+    #   # ON CLUSTER IS NOT THE PROPER VERSION OF NFDUMP!!
+    #   #f = %x(nfdump -r  #{file_p} -o csv)
+    #       #so use self-compiled local nfdump!
+    #       f = %x(/home/asdaniel/nfdump/bin/nfdump -r  #{file_p} -o csv -6)
+    #       a = f.split(/\n/,2).last
+    #       a = a.split("Summary",2).first
+    #       nf_parse(a)
+    #     end 
+  end
+  
+  def nf_parse_file(file_p)
+    begin 
+      nf_parse_file_csv__(file_p, @connections) do |cons|
+          yield(cons)
+      end
+    rescue
+        puts "Error Parsing the Nfdump data file #{file_p}"
+    end
   end
 	
-	def nf_parse(output)
-      output.each_line do |line|
-        nfdata = line.split(',')
-        protocol = nfdata[7].tr_s('"', '').strip.to_i
-        src_addr = nfdata[3].tr_s('"', '').strip
-        src_port = nfdata[5].tr_s('"', '').strip.to_i
-        dst_addr = nfdata[4].tr_s('"', '').strip
-        dst_port = nfdata[6].tr_s('"', '').strip.to_i
-        #puts "SRC: #{src_addr} / #{src_port} --> DEST: #{dst_addr} / #{dst_port} with PROTO #{protocol}"
-        nh = nfdata[23].tr_s('"', '').strip
-        #puts "NH: #{nh}"
- 
-        in_interface = nfdata[15].tr_s('"', '').strip.to_i
-        out_interface = nfdata[16].tr_s('"', '').strip.to_i
-        #puts "INTERFACES: IN #{in_interface} / OUT #{out_interface}"
-
-        packets = nfdata[11].tr_s('"', '').strip.to_i + nfdata[13].tr_s('"', '').strip.to_i
-        #puts "PACKETS: #{packets}"
-
-        bytes = nfdata[12].tr_s('"', '').strip.to_i + nfdata[14].tr_s('"', '').strip.to_i
-        #puts "BYTES: #{bytes}"
-
-        start_time = nfdata[0].tr_s('"', '').strip
-        time_s = Time.parse(start_time).to_i
-        #puts "TIME_S: #{time_s}"
-        
-        end_time = nfdata[1].tr_s('"', '').strip
-        time_e = Time.parse(end_time).to_i
-        
-        begin
-    		nf_parse__(protocol, src_addr, src_port, dst_addr, dst_port, time_s, time_e, nh , in_interface, out_interface, packets, bytes, @connections) do |cons|
-    			yield(cons)
-    		end
-    	rescue DataParserError
-    		puts "Error Parsing the nfdump data line #{line}"
-    	end
-      
-      end
-      
-  end
+	# def nf_parse(output)
+	#       output.each_line do |line|
+	#         nfdata = line.split(',')
+	#         protocol = nfdata[7].tr_s('"', '').strip
+	#         src_addr = nfdata[3].tr_s('"', '').strip
+	#         src_port = nfdata[5].tr_s('"', '').strip
+	#         dst_addr = nfdata[4].tr_s('"', '').strip
+	#         dst_port = nfdata[6].tr_s('"', '').strip
+	#         #puts "SRC: #{src_addr} / #{src_port} --> DEST: #{dst_addr} / #{dst_port} with PROTO #{protocol}"
+	#         nh = nfdata[23].tr_s('"', '').strip
+	#         #puts "NH: #{nh}"
+	#  
+	#         in_interface = nfdata[15].tr_s('"', '').strip
+	#         out_interface = nfdata[16].tr_s('"', '').strip
+	#         #puts "INTERFACES: IN #{in_interface} / OUT #{out_interface}"
+	# 
+	#         packets = nfdata[11].tr_s('"', '').strip.to_i + nfdata[13].tr_s('"', '').strip.to_i
+	#         #puts "PACKETS: #{packets}"
+	# 
+	#         bytes = nfdata[12].tr_s('"', '').strip.to_i + nfdata[14].tr_s('"', '').strip.to_i
+	#         #puts "BYTES: #{bytes}"
+	# 
+	#         start_time = nfdata[0].tr_s('"', '').strip
+	#         time_s = Time.parse(start_time).to_i
+	#         #puts "TIME_S: #{time_s}"
+	#         
+	#         end_time = nfdata[1].tr_s('"', '').strip
+	#         time_e = Time.parse(end_time).to_i
+	#         
+	#         begin
+	#        nf_parse__(protocol, src_addr, src_port, dst_addr, dst_port, time_s, time_e, nh , in_interface, out_interface, packets, bytes) do |cons|
+	#          yield(cons)
+	#        end
+	#      rescue DataParserError
+	#        puts "Error Parsing the nfdump data line #{line}"
+	#      end
+	#       
+	#       end
+	#       
+	#   end
 	
 end
 
