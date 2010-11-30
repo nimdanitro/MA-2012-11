@@ -74,8 +74,171 @@ int Connection::import_from_m_data_cube(char * b)
 		// flags = *((uint8_t *)(b+42));
 		// router_engine_id  = *((uint8_t *)(b+44));
 };
-int Connection::import_from_nfdump_data(){
+int Connection::import_from_nfdump_csv_file(char * line){
+		//PARSING THE NFDUMP LINE
+		// START TIME
+		char *curElem = strtok(line, ",");
+		if (curElem == NULL){
+			//WRONG LINE
+			return 0;
+		}
+		struct tm tm;
 		
+		strptime(curElem, "%Y-%m-%d %H:%M:%S", &tm);
+		start_s = (uint32_t) mktime(&tm);
+		
+		// STOP TIME
+		curElem = strtok(NULL,",");
+		if (curElem == NULL){
+			//MISSFOMATED LINE!!
+			return -1;
+		}
+		strptime(curElem, "%Y-%m-%d %H:%M:%S", &tm);
+		stop_s = (uint32_t) mktime(&tm);
+
+		// source address
+		curElem = strtok(NULL," ,");
+		if (curElem == NULL){
+			return -1;
+		}
+		if (inet_pton(AF_INET, curElem, addr_src)==1){
+			addr_length = 4;
+		}
+		else{
+			if (inet_pton(AF_INET6, curElem, addr_src)==1){
+				addr_length = 16;
+			}else{
+				valid = false;
+				throw 100; // FIXME
+				return(0);
+			}
+		}
+		
+		// source port
+		curElem = strtok(NULL," ,");
+		if (curElem == NULL){
+			//MISSFOMATED LINE!!
+			return -1;
+		}
+		port_src = (uint16_t) atoi(curElem);
+		
+		// destination address
+		char * dst_addr = strtok(NULL," ,");
+		if (curElem == NULL){
+			return -1;
+		}
+		if (addr_length == 4){
+			if (inet_pton(AF_INET, dst_addr, addr_dst)==1){
+				valid = true;
+			}else{
+				valid = false;
+				return(0);
+			}
+		}
+		else if (addr_length == 16){
+			if (inet_pton(AF_INET6, curElem, addr_dst)==1){
+				valid = true;
+			}else{
+				valid = false;
+				return(0);
+			}
+		}else{
+				valid = false;
+				throw 100; // FIXME
+				return(0);
+		}
+		
+		// destination port
+		curElem = strtok(NULL," ,");
+		if (curElem == NULL){
+			//MISSFOMATED LINE!!
+			return -1;
+		}
+		port_dst = (uint16_t) atoi(curElem);
+		
+		// protocol
+		curElem = strtok(NULL," ,");
+		if (curElem == NULL){
+			//MISSFOMATED LINE!!
+			return -1;
+		}
+		//getting the protocol string and through protoent from netdb.h the protocol number!
+		struct protoent * tmp; 
+		tmp = getprotobyname(curElem);
+		if (tmp != NULL){
+			protocol = (uint8_t) tmp->p_proto;
+		}else{
+			cout << "ERROR USING PROTOENT!!\n";
+		}
+		
+		// router address
+		curElem = strtok(NULL," ,");
+		if (curElem == NULL){
+			//MISSFOMATED LINE!!
+			return -1;
+		}
+ 		//ROUTER MAPPING!
+		//######################################################################################################
+		// TO DO!!!!
+		////////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		// next hop address
+		curElem = strtok(NULL," ,");
+		if (curElem == NULL){
+			//MISSFOMATED LINE!!
+			return -1;
+		}
+		if (inet_pton(AF_INET, curElem, addr_next)==1){
+			//EVERYTHING OK!
+		}
+		else{
+			if (inet_pton(AF_INET6, curElem, addr_next)==1){
+
+			}else{
+				valid = false;
+				throw 100; // FIXME
+				return(0);
+			}
+		}
+		
+		// in interface
+		curElem = strtok(NULL," ,");
+		if (curElem == NULL){
+			//MISSFOMATED LINE!!
+			return -1;
+		}
+		if_in = (uint16_t) atoi(curElem);
+		
+		// out interface
+		curElem = strtok(NULL," ,");
+		if (curElem == NULL){
+			//MISSFOMATED LINE!!
+			return -1;
+		}
+
+		if_out = (uint16_t) atoi(curElem);
+		
+		// packets
+		curElem = strtok(NULL," ,");
+		if (curElem == NULL){
+			//MISSFOMATED LINE!!
+			return -1;
+		}
+		packets = (uint32_t) atoi(curElem);
+
+		// bytes
+		curElem = strtok(NULL," ,");
+		if (curElem == NULL){
+			//MISSFOMATED LINE!!
+			return -1;
+		}
+		bytes = (uint32_t) atoi(curElem);
+				
+		// network
+		direction = CONNECTION_DIRECTION_UNKNOWN;
+		border = CONNECTION_BORDER_UNKNOWN;
+		
+		return 1;
 }
 
 

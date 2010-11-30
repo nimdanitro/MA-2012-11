@@ -18,6 +18,7 @@
 #include <string>
 #include <sstream>
 #include <arpa/inet.h>
+#include <netdb.h>
 
 #include "ruby.h"
 
@@ -113,8 +114,8 @@ class Connection
 		~Connection();
 //------------------------------------------------------------------------------
 	int import_from_m_data_cube(char * b);
-	int import_from_nfdump_data();
-
+	int import_from_nfdump_csv_file(char * line);
+	
 	static void to_s(string& buf, const char* ip_, uint8_t addr_length_) 
 	{
 		char tmp_ip[INET6_ADDRSTRLEN];

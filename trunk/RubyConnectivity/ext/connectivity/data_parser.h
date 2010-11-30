@@ -78,18 +78,7 @@ VALUE rb_data_parser_parse_file(
 );
 VALUE rb_data_parse_nf_parse_file_csv(
 	VALUE self, 
-	VALUE proto, 
-	VALUE addrsrc,
-	VALUE portsrc,
-	VALUE addrdst,
-	VALUE portdst,
-	VALUE ts,
-	VALUE te,
-	VALUE addr_router,
-	VALUE intface_in,
-	VALUE intface_out,
-	VALUE pck,
-	VALUE byts,
+	VALUE file_p,
 	VALUE con_block
 );
 

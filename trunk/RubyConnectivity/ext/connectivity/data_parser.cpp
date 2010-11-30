@@ -197,18 +197,7 @@ VALUE rb_data_parser_parse_file(
 
 VALUE rb_data_parse_nf_parse_file_csv(
 	VALUE self, 
-	VALUE proto, 
-	VALUE addrsrc,
-	VALUE portsrc,
-	VALUE addrdst,
-	VALUE portdst,
-	VALUE ts,
-	VALUE te,
-	VALUE addr_router,
-	VALUE intface_in,
-	VALUE intface_out,
-	VALUE pck,
-	VALUE byts,
+	VALUE file_p,
 	VALUE con_block
 )
 {
@@ -231,45 +220,50 @@ VALUE rb_data_parse_nf_parse_file_csv(
 			rb_raise(rb_path2class("DataParserError"), "A misconfigured 'Connections' Container ");
 		}
 	}
-	int protocol = NUM2INT(proto);
-	char* src_addr = RSTRING_PTR(addrsrc);
-	int src_port = NUM2INT(portsrc);
-	char* dst_addr = RSTRING_PTR(addrdst);
-	int dst_port = NUM2INT(portdst);
 	
 	Check_Type(file_p, T_STRING);
 	string file_path_s = (RSTRING_PTR(file_p));
-	string command = "/home/asdaniel/nfdump/bin/nfdump -o csv -r ";
+	string command = "/home/asdaniel/nfdump/bin/nfdump -m -o \"fmt:%ts,%te,%sa,%sp,%da,%dp,%pr,%ra,%nh,%in,%out,%pkt,%byt\" -r ";
 	command.append(file_path_s);
-	cout << command << "\n";
 	
 	const char *cmd;
-	cmd = command.c_str();
-	cout << cmd << "\n";
-	
+	cmd = command.c_str();	
 	FILE *fp;
-	int linesize = 300;
+	int linesize = 1000;
 	char line[linesize];
 	
 	fp = popen(cmd , "r");
 		
 	if(fp!=NULL){
 		
-		cout << "JUHUUUU\n";
 		while(fgets(line, linesize,fp) !=NULL){
-			printf("%s",line);
+			if (line[0]=='D'){
+				continue;
+			}else if (line[0]=='S'){
+				break;
+			}else{
+				if(con->import_from_nfdump_csv_file(line) == -1){
+					cout << "ERROR-LINE: " << line << "\n";
+					rb_raise(rb_path2class("DataParserError"), "A misformatted nfdump file! No connection created!");
+					fclose(fp);
+					break;
+				}
+				//EVERYTHING IS OK!!
+			}
+			cout << "JUHUUU\n";			
 			//STATS..
 			dp->stat_connections_processed++;
-			// periodic stat export					
+			//periodic stat export		
+					
 			if (con->start_s > dp->stat_next_export_s){
 				// update the time
 				dp->time_s = con->start_s;
-	
+		
 				// lets call the export function (ruby)
 				ID method_id = rb_intern("statistics_export");
 				rb_funcall(self, method_id, 0);
 			}
-			// next			
+			//next			
 			con = cons->get_next_unused();
 			if(con == NULL){
 				rb_yield(con_block);
@@ -285,6 +279,7 @@ VALUE rb_data_parse_nf_parse_file_csv(
 		rb_raise(rb_path2class("DataParserError"), "Failed to call nfdump");
 		return -1;	
 	}
+	
 	//last connections
 	rb_yield(con_block);
 	return(self);
