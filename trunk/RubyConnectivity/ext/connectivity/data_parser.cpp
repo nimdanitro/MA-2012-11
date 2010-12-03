@@ -216,11 +216,13 @@ VALUE rb_data_parse_nf_parse_file_csv(
 		cons->reset();
 		con = cons->get_first_unused();
 		if(con == NULL)
-		{
+		{	
+			cout << "ERROR: CON==NULL1" << "\n";
+
 			rb_raise(rb_path2class("DataParserError"), "A misconfigured 'Connections' Container ");
 		}
 	}
-	
+	// call nfdump and get stdout!
 	Check_Type(file_p, T_STRING);
 	string file_path_s = (RSTRING_PTR(file_p));
 	string command = "/home/asdaniel/nfdump/bin/nfdump -m -o \"fmt:%ts,%te,%sa,%sp,%da,%dp,%pr,%ra,%nh,%in,%out,%pkt,%byt\" -r ";
@@ -235,22 +237,25 @@ VALUE rb_data_parse_nf_parse_file_csv(
 	fp = popen(cmd , "r");
 		
 	if(fp!=NULL){
-		
 		while(fgets(line, linesize,fp) !=NULL){
 			if (line[0]=='D'){
+				cout << "Checking in and skip first!\n";
+
 				continue;
 			}else if (line[0]=='S'){
+				cout << "CHECKINGOUT\n";
+
 				break;
 			}else{
 				if(con->import_from_nfdump_csv_file(line) == -1){
 					cout << "ERROR-LINE: " << line << "\n";
 					rb_raise(rb_path2class("DataParserError"), "A misformatted nfdump file! No connection created!");
-					fclose(fp);
 					break;
 				}
+				cout << "One done!\n";
+
 				//EVERYTHING IS OK!!
 			}
-			cout << "JUHUUU\n";			
 			//STATS..
 			dp->stat_connections_processed++;
 			//periodic stat export		
@@ -270,16 +275,13 @@ VALUE rb_data_parse_nf_parse_file_csv(
 				cons->reset();
 				con = cons->get_first_unused();
 				if (con == NULL){
+					cout << "ERROR: CON==NULL2\n";
 					rb_raise(rb_path2class("DataParserError"), "A misconfigured 'Connections' ");
 				}
 			}
 		}
 		fclose(fp);
-	}else{
-		rb_raise(rb_path2class("DataParserError"), "Failed to call nfdump");
-		return -1;	
 	}
-	
 	//last connections
 	rb_yield(con_block);
 	return(self);

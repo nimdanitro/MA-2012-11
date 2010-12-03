@@ -8,14 +8,11 @@ if ARGV[0] == nil or  ARGV[1] == nil or ARGV[2] == nil
 	puts "Usage <config folder> <input folder> <output folder>"
 	exit
 end
-
 # config 
 config_folder = ARGV[0]
 puts "Config Folder '#{config_folder}'"
-
 # input
 input_folder = ARGV[1]
-
 # output
 output_folder = ARGV[2]
 FileUtils::mkdir_p(output_folder)
@@ -83,9 +80,17 @@ analyser.add_interface(6, 6)  # BelWue
 ################################################################################
 process_monitor = ProcessMonitor.new(output_folder + '/process_monitor')
 
+################################################################################
+## DO SOME WORK ################################################################
+################################################################################
+global_time_s = 0
+process_monitor.reset
+
 # time
 iter_time = 0
 input_files_b = Array.new
+process_monitor.reset
+process_monitor.period_start
 
 loop do
   input_files_a = Dir["#{input_folder}/nfcapd.*"].sort
@@ -101,12 +106,42 @@ loop do
       iter_time = timestamp
     end
   end
-
+  process_monitor.data_parser_start
   unless input_files_b.empty?
-    data_parser.nf_parse_files(input_files_b)
+	data_parser.nf_parse_files(input_files_b) do |cons|
+		#process_monitor.data_parser_stop
+		## Filter bank
+		#process_monitor.filter_start
+		##filter_ipv6.filter cons
+		##filter_ipv4.filter cons
+		#filter_border.filter cons
+		#filter_in_out.filter cons
+		#filter_prefix_blacklist.filter cons
+		#process_monitor.filter_stop
+	
+		# Connection Matrix
+		#process_monitor.connection_matrix_start	cd 
+	  #connection_matrix.add_connections(cons) do |time_s|
+			#process_monitor.connection_matrix_stop
+			#next if time_s == 0 # skip the zero interval
+			#puts "#{time_s} :: Analyse the Connection Matrix"
+			#STDOUT.flush()
+			#process_monitor.analyser_start
+			#analyser.analyse(connection_matrix, time_s)
+			#process_monitor.analyser_stop
+	
+			## process monitor
+			#process_monitor.period_stop(time_s)
+			#process_monitor.period_start
+	
+			#process_monitor.connection_matrix_start
+		#end
+		#process_monitor.connection_matrix_stop
+		#process_monitor.data_parser_start
+	end
+	process_monitor.data_parser_stop
   end
   input_files_b.clear
-  sleep(10)
-  
+  sleep(10)  
   
 end

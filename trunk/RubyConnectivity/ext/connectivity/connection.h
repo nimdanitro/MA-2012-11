@@ -115,6 +115,8 @@ class Connection
 //------------------------------------------------------------------------------
 	int import_from_m_data_cube(char * b);
 	int import_from_nfdump_csv_file(char * line);
+	int map_router_id(const char * ra);
+
 	
 	static void to_s(string& buf, const char* ip_, uint8_t addr_length_) 
 	{

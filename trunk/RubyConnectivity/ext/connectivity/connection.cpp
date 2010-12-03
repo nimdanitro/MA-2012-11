@@ -170,7 +170,8 @@ int Connection::import_from_nfdump_csv_file(char * line){
 		}else{
 			cout << "ERROR USING PROTOENT!!\n";
 		}
-		
+		cout << "Proto: " << curElem << "\n";
+
 		// router address
 		curElem = strtok(NULL," ,");
 		if (curElem == NULL){
@@ -178,9 +179,8 @@ int Connection::import_from_nfdump_csv_file(char * line){
 			return -1;
 		}
  		//ROUTER MAPPING!
-		//######################################################################################################
-		// TO DO!!!!
-		////////////////////////////////////////////////////////////////////////////////////////////////////////
+ 		cout << "RA: " << curElem << "\n";
+		router = (uint8_t) Connection::map_router_id(curElem);
 		
 		// next hop address
 		curElem = strtok(NULL," ,");
@@ -188,6 +188,8 @@ int Connection::import_from_nfdump_csv_file(char * line){
 			//MISSFOMATED LINE!!
 			return -1;
 		}
+		cout << "NH: " << curElem << "\n";
+
 		if (inet_pton(AF_INET, curElem, addr_next)==1){
 			//EVERYTHING OK!
 		}
@@ -207,6 +209,8 @@ int Connection::import_from_nfdump_csv_file(char * line){
 			//MISSFOMATED LINE!!
 			return -1;
 		}
+		cout << "Interface: " << curElem << "\n";
+
 		if_in = (uint16_t) atoi(curElem);
 		
 		// out interface
@@ -237,10 +241,41 @@ int Connection::import_from_nfdump_csv_file(char * line){
 		// network
 		direction = CONNECTION_DIRECTION_UNKNOWN;
 		border = CONNECTION_BORDER_UNKNOWN;
-		
 		return 1;
 }
+int Connection::map_router_id(const char* ra){
+		int id = 0;
+		char router1[] = "130.59.32.30";
+		char router2[] = "130.59.32.42";
+		char router3[] = "130.59.32.51";
+		char router4[] = "130.59.32.60";
+		char router5[] = "130.59.32.32";
+		char router6[] = "130.59.32.7";
+		char router0[] = "0.0.0.0";
 
+		
+		if (strcmp(router1,ra)==1){
+			cout << "ID = 1";
+			id = 1;
+		}else if (strcmp(router2,ra)==1){
+			id = 2;
+		}else if (strcmp(router3,ra)==1){
+			id = 3;
+		}else if (strcmp(router4,ra)==1){
+			id = 4;
+		}else if (strcmp(router5,ra)==1){
+			id = 5;
+		}else if (strcmp(router6,ra)==1){
+			id = 6;
+		}else if (strcmp(router0,ra)==1){
+			id = 10;
+			cout << "ROUTER ID = 10, DANI!\n";
+		}else{
+			cout << "ERROR: No map for router address found!\n";
+			id = 0;
+		}
+		return id;
+};
 
 
 /*int Connection::import_from_nfdump_data(int proto, const char* addrsrc, int portsrc, const char* addrdst, int portdst, int ts, int te, const char* nh, int intface_in, int intface_out, int pck, int byts)
