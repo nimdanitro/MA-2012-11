@@ -218,7 +218,7 @@ class Analyser
 		@stat_cons_signal_other4 = stats_a[offset+2]
 
 		offset = 17
-		@stat_cons_accounted_unbalanced6 = stats_a[offset]
+		@stat_cons_accounted_unbalanced4 = stats_a[offset]
 		
 		@stat_cons_processed6 = stats_a[18]
 

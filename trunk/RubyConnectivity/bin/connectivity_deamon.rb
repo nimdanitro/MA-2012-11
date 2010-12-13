@@ -1,6 +1,4 @@
 #!/usr/bin/ruby1.9
-#require_relative '../lib/connectivity/helper.rb'
-
 
 require_relative '../lib/connectivity/helper.rb'
 
@@ -79,7 +77,9 @@ analyser.add_interface(6, 6)  # BelWue
 ## Process Monitor #############################################################
 ################################################################################
 process_monitor = ProcessMonitor.new(output_folder + '/process_monitor')
-
+################################################################################
+## DO SOME WORK ################################################################
+################################################################################
 ################################################################################
 ## DO SOME WORK ################################################################
 ################################################################################
@@ -88,6 +88,7 @@ process_monitor.reset
 
 # time
 iter_time = 0
+global_time_s = 0
 input_files_b = Array.new
 process_monitor.reset
 process_monitor.period_start

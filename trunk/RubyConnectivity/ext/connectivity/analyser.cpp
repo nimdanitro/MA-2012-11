@@ -485,7 +485,7 @@ void Analyser::analyse_connections(
 	// IPv6 ANALYSER!
 	while(iter6 != end6)
 	{
-		stat_cons_processed4++;
+		stat_cons_processed6++;
 
 		//------------------------------------------------------------------------------
 		// INTERFACE IPv6-------------------------------------------------------------------
