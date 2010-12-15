@@ -315,9 +315,9 @@ def process_analyser(data_folder_p)
 		Log.debug("Process Analyser '#{folder_p}'")
 
 
-### stat.csv ###################################################################
-		Log.debug("Process Analyser STAT.CSV '#{folder_p}'")
-		gnuplot_p = folder_plot_p + "/plot_stat.gp"
+### stat.csv IPv4 ###################################################################
+		Log.debug("Process Analyser STAT.CSV for IPv4 '#{folder_p}'")
+		gnuplot_p = folder_plot_p + "/plot_stat_ipv4.gp"
 		gnuplot_f = File.open(gnuplot_p, 'w')
 		gnuplot_f.puts "
 set timefmt '%s'
@@ -328,7 +328,7 @@ set ytics nomirror
 set terminal postscript eps enhanced color
 
 ### connections  ###############################################################
-set output '#{folder_plot_p}/monitored.eps'
+set output '#{folder_plot_p}/monitored_ipv4.eps'
 set ylabel 'cons'
 plot \
 	'#{folder_p}/stat.csv' u 1:($3+$4+$5+$6) w filledcurve x1 fs pattern 0 lc 4 t 'if invalid', \
@@ -337,7 +337,7 @@ plot \
 	'#{folder_p}/stat.csv' u 1:($6) w filledcurve x1 fs pattern 0 lc 2 t 'monitored',\
 	'#{folder_p}/stat.csv' u 1:2 w l lt 17  t 'ALL' \
 
-set output '#{folder_plot_p}/state.eps'
+set output '#{folder_plot_p}/state_ipv4.eps'
 set ylabel 'cons'
 plot \
 	'#{folder_p}/stat.csv' u 1:($8 +$9 +$10) w filledcurve x1 fs pattern 0 lc 3 t 'other', \
@@ -347,7 +347,7 @@ plot \
 
 
 
-set output '#{folder_plot_p}/weird_connections.eps'
+set output '#{folder_plot_p}/weird_connections_ipv4.eps'
 set ylabel 'cons'
 plot \
 	'#{folder_p}/stat.csv' u 1:($12 + $13 +$14 +$15) w filledcurve x1 fs pattern 0 lc 5 t 'no rule', \
@@ -356,7 +356,7 @@ plot \
 	'#{folder_p}/stat.csv' u 1:($15) w filledcurve x1 fs pattern 0 lc 2 t 'ok', \
 	'#{folder_p}/stat.csv' u 1:11 w l lt 17  t 'ALL' \
 
-set output '#{folder_plot_p}/signal.eps'
+set output '#{folder_plot_p}/signal_ipv4.eps'
 set ylabel 'cons'
 plot \
 	'#{folder_p}/stat.csv' u 1:($18+$17) w filledcurve x1 fs pattern 0 lc 3 t 'other', \
@@ -364,7 +364,7 @@ plot \
 	'#{folder_p}/stat.csv' u 1:16 w l lt 17  t 'ALL' \
 
 
-set output '#{folder_plot_p}/overview.eps'
+set output '#{folder_plot_p}/overview_ipv4.eps'
 set logscale y
 set ylabel 'cons'
 plot \
@@ -376,10 +376,71 @@ plot \
 	gnuplot_f.flush
 	gnuplot_f.close
 	`gnuplot #{gnuplot_p}`
+### stat.csv IPv6 ###################################################################  
+		Log.debug("Process Analyser STAT.CSV for IPv6 '#{folder_p}'")
+		gnuplot_p = folder_plot_p + "/plot_stat_ipv6.gp"
+		gnuplot_f = File.open(gnuplot_p, 'w')
+		gnuplot_f.puts "
+set timefmt '%s'
+set xdata time
+set xlabel 'time'
+set ytics nomirror
+
+set terminal postscript eps enhanced color
+
+### connections  ###############################################################
+set output '#{folder_plot_p}/monitored_ipv6.eps'
+set ylabel 'cons'
+plot \
+	'#{folder_p}/stat.csv' u 1:($21+$22+$23+$24) w filledcurve x1 fs pattern 0 lc 4 t 'if invalid', \
+	'#{folder_p}/stat.csv' u 1:($22+$23+$24) w filledcurve x1 fs pattern 0 lc 3 t 'if not set', \
+	'#{folder_p}/stat.csv' u 1:($23+$24) w filledcurve x1 fs pattern 0 lc 1 t 'if not monitored', \
+	'#{folder_p}/stat.csv' u 1:($24) w filledcurve x1 fs pattern 0 lc 2 t 'monitored',\
+	'#{folder_p}/stat.csv' u 1:20 w l lt 17  t 'ALL' \
+
+set output '#{folder_plot_p}/state_ipv6.eps'
+set ylabel 'cons'
+plot \
+	'#{folder_p}/stat.csv' u 1:($26 +$27 +$28) w filledcurve x1 fs pattern 0 lc 3 t 'other', \
+	'#{folder_p}/stat.csv' u 1:($26 +$27) w filledcurve x1 fs pattern 0 lc 1 t 'unbalanced',\
+	'#{folder_p}/stat.csv' u 1:($26) w filledcurve x1 fs pattern 0 lc 2 t 'balanced',\
+	'#{folder_p}/stat.csv' u 1:25 w l lt 17 t 'ALL' \
+
+
+
+set output '#{folder_plot_p}/weird_connections_ipv6.eps'
+set ylabel 'cons'
+plot \
+	'#{folder_p}/stat.csv' u 1:($30 + $31 +$32 +$33) w filledcurve x1 fs pattern 0 lc 5 t 'no rule', \
+	'#{folder_p}/stat.csv' u 1:($31 +$32 +$33) w filledcurve x1 fs pattern 0 lc 3 t 'weird zero', \
+	'#{folder_p}/stat.csv' u 1:($32 +$33) w filledcurve x1 fs pattern 0 lc 1 t 'weird',\
+	'#{folder_p}/stat.csv' u 1:($33) w filledcurve x1 fs pattern 0 lc 2 t 'ok', \
+	'#{folder_p}/stat.csv' u 1:29 w l lt 17  t 'ALL' \
+
+set output '#{folder_plot_p}/signal_ipv6.eps'
+set ylabel 'cons'
+plot \
+	'#{folder_p}/stat.csv' u 1:($36+$35) w filledcurve x1 fs pattern 0 lc 3 t 'other', \
+	'#{folder_p}/stat.csv' u 1:($35) w filledcurve x1 fs pattern 0 lc 1 t 'signal',\
+	'#{folder_p}/stat.csv' u 1:34 w l lt 17  t 'ALL' \
+
+
+set output '#{folder_plot_p}/overview_ipv6.eps'
+set logscale y
+set ylabel 'cons'
+plot \
+	'#{folder_p}/stat.csv' u 1:($2 + 0.1) w filledcurve x1 fs pattern 0 lc 3 t 'ALL', \
+	'#{folder_p}/stat.csv' u 1:($26 + $37 + 0.1) w filledcurve x1 fs pattern 0 lc 2 t 'balanced', \
+	'#{folder_p}/stat.csv' u 1:($37 + 0.1) w filledcurve x1 fs pattern 0 lc 1 t 'unbalanced accounted signal'
+
+"
+	gnuplot_f.flush
+	gnuplot_f.close
+	`gnuplot #{gnuplot_p}`
 
 ### host_host ##################################################################
 		Log.debug("Process Analyser host_host '#{folder_p}'")
-		folder_host_host_p = data_folder_p + "/analyser/host_host"
+		folder_host_host_p = data_folder_p + "/analyser/IPv4/host_host"
 		folder_plot_p = folder_host_host_p + "/plot"
 		FileUtils::mkdir_p folder_plot_p
 

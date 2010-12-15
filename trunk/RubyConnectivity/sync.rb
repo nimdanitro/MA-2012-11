@@ -31,7 +31,7 @@ end
 ################################################################################
 
 local_base  = "~/debug_inter_net/trunk"
-remote_base = "/home/asdaniel/RubyConnectivity"
+remote_base = "/home/asdaniel/"
 
 exclude = " --exclude '*.o' --exclude '*.so' --exclude 'Makefile' "
 exclude = "#{exclude} --exclude '*.a' --exclude '*.svn' --exclude '.*' "

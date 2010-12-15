@@ -219,6 +219,8 @@ merge_file(mapping_h, folder_a, output_folder,"data_parser", "stat.csv", 0, 2)
 ################################################################################
 ## filter bank
 ################################################################################
+# ipv4
+merge_file(mapping_h, folder_a, output_folder,"filter_ipv4", "stat.csv", 0, 3)
 # ipv6
 merge_file(mapping_h, folder_a, output_folder,"filter_ipv6", "stat.csv", 0, 3)
 # border
@@ -236,20 +238,26 @@ merge_file(mapping_h, folder_a, output_folder, "connection_matrix", "stat.csv", 
 ################################################################################
 ## analyser
 ################################################################################
-merge_file(mapping_h, folder_a, output_folder, "analyser", "stat.csv", 0, 20)
+merge_file(mapping_h, folder_a, output_folder, "analyser", "stat.csv", 0, 38)
+#IPv4
+merge_folders(mapping_h, folder_a, output_folder, "analyser/IPv4/weird_connections")
+merge_files(mapping_h, folder_a, output_folder, "analyser/IPv4/host_host", 0, 3)
+merge_files(mapping_h, folder_a, output_folder, "analyser/IPv4/host", 0, 5)
+merge_folders_folders(mapping_h, folder_a, output_folder, "analyser/IPv4/prefix_host")
+merge_files(mapping_h, folder_a, output_folder, "analyser/IPv4/net", 0, 4)
+merge_folders_folders(mapping_h, folder_a, output_folder, "analyser/IPv4/prefix_net")
+merge_files(mapping_h, folder_a, output_folder, "analyser/IPv4/bgp", 0, 4)
+merge_folders_folders(mapping_h, folder_a, output_folder, "analyser/IPv4/prefix_bgp")
+#IPv6
+merge_folders(mapping_h, folder_a, output_folder, "analyser/IPv6/weird_connections")
+merge_files(mapping_h, folder_a, output_folder, "analyser/IPv6/host_host", 0, 3)
+merge_files(mapping_h, folder_a, output_folder, "analyser/IPv6/host", 0, 5)
+merge_folders_folders(mapping_h, folder_a, output_folder, "analyser/IPv6/prefix_host")
+merge_files(mapping_h, folder_a, output_folder, "analyser/IPv6/net", 0, 4)
+merge_folders_folders(mapping_h, folder_a, output_folder, "analyser/IPv6/prefix_net")
+merge_files(mapping_h, folder_a, output_folder, "analyser/IPv6/bgp", 0, 4)
+merge_folders_folders(mapping_h, folder_a, output_folder, "analyser/IPv6/prefix_bgp")
 
-merge_folders(mapping_h, folder_a, output_folder, "analyser/weird_connections")
-
-merge_files(mapping_h, folder_a, output_folder, "analyser/host_host", 0, 3)
-
-merge_files(mapping_h, folder_a, output_folder, "analyser/host", 0, 5)
-merge_folders_folders(mapping_h, folder_a, output_folder, "analyser/prefix_host")
-
-merge_files(mapping_h, folder_a, output_folder, "analyser/net", 0, 4)
-merge_folders_folders(mapping_h, folder_a, output_folder, "analyser/prefix_net")
-
-merge_files(mapping_h, folder_a, output_folder, "analyser/bgp", 0, 4)
-merge_folders_folders(mapping_h, folder_a, output_folder, "analyser/prefix_bgp")
 
 ################################################################################
 ## analyser application mix
