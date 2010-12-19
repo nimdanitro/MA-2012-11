@@ -1,6 +1,7 @@
 #!/usr/bin/ruby1.9
 require_relative '../lib/connectivity/helper.rb'
 
+
 ################################################################################
 ######## summary ###############################################################
 ################################################################################
@@ -438,7 +439,7 @@ plot \
 	gnuplot_f.close
 	`gnuplot #{gnuplot_p}`
 
-### host_host ##################################################################
+### host_host IPv4 ##################################################################
 		Log.debug("Process Analyser host_host '#{folder_p}'")
 		folder_host_host_p = data_folder_p + "/analyser/IPv4/host_host"
 		folder_plot_p = folder_host_host_p + "/plot"
@@ -471,12 +472,15 @@ plot \
 	gnuplot_f.close
 	`gnuplot #{gnuplot_p}`
 
-### host ##################################################################
+### host IPv4 ##################################################################
 		Log.debug("Process Analyser host '#{folder_p}'")
-		folder_host_p = data_folder_p + "/analyser/host"
+		folder_host_p = data_folder_p + "/analyser/IPv4/host"
 		folder_plot_p = folder_host_p + "/plot"
 		FileUtils::mkdir_p folder_plot_p
 
+    # Generating Threshold file..
+		parse_hostfile(folder_host_p)
+		
 		gnuplot_p = folder_host_p + "/plot.gp"
 		gnuplot_f = File.open(gnuplot_p, 'w')
 
@@ -512,11 +516,14 @@ plot \
 	gnuplot_f.close
 	`gnuplot #{gnuplot_p}`
 
-### net ##################################################################
+### net IPv4##################################################################
 		Log.debug("Process Analyser net '#{folder_p}'")
-		folder_net_p = data_folder_p + "/analyser/net"
+		folder_net_p = data_folder_p + "/analyser/IPv4/net"
 		folder_plot_p = folder_net_p + "/plot"
 		FileUtils::mkdir_p folder_plot_p
+		
+		# Generating Threshold file..
+		parse_netfile(folder_net_p)
 
 		gnuplot_p = folder_net_p + "/plot.gp"
 		gnuplot_f = File.open(gnuplot_p, 'w')
@@ -552,11 +559,14 @@ plot \
 	gnuplot_f.close
 	`gnuplot #{gnuplot_p}`
 
-### bgp ##################################################################
+### bgp IPv4 ##################################################################
 		Log.debug("Process Analyser bgp '#{folder_p}'")
-		folder_bgp_p = data_folder_p + "/analyser/bgp"
+		folder_bgp_p = data_folder_p + "/analyser/IPv4/bgp"
 		folder_plot_p = folder_bgp_p + "/plot"
 		FileUtils::mkdir_p folder_plot_p
+		
+		# Generating Threshold file..
+		parse_bgpfile(folder_bgp_p)
 
 		gnuplot_p = folder_bgp_p + "/plot.gp"
 		gnuplot_f = File.open(gnuplot_p, 'w')
@@ -591,6 +601,167 @@ plot \
 	gnuplot_f.flush
 	gnuplot_f.close
 	`gnuplot #{gnuplot_p}`
+
+  ### host_host IPv6 ##################################################################
+  		Log.debug("Process Analyser host_host '#{folder_p}'")
+  		folder_host_host_p = data_folder_p + "/analyser/IPv6/host_host"
+  		folder_plot_p = folder_host_host_p + "/plot"
+  		FileUtils::mkdir_p folder_plot_p
+
+  		gnuplot_p = folder_host_host_p + "/plot.gp"
+  		gnuplot_f = File.open(gnuplot_p, 'w')
+
+  		Dir["#{folder_host_host_p}/*.csv"].each do |file|
+  		tag = File.basename(file).split('.')[-2]
+
+
+  		gnuplot_f.puts "
+  set timefmt '%s'
+  set xdata time
+  set xlabel 'time'
+  set ytics nomirror
+
+  set terminal postscript eps enhanced color
+  set output '#{folder_plot_p}/host_host_#{tag}.eps'
+  set logscale y
+  set ylabel 'host host keys'
+  plot \
+  	'#{file}' u 1:($3 + $2 + 0.11) w filledcurve x1 fs pattern 0 lc 2 t 'Reachable', \
+  	'#{file}' u 1:($3 + 0.1) w filledcurve x1 fs pattern 0 lc 1 t 'Not Reachable'
+
+  "
+  	end
+  	gnuplot_f.flush
+  	gnuplot_f.close
+  	`gnuplot #{gnuplot_p}`
+
+  ### host IPv6 ##################################################################
+  		Log.debug("Process Analyser host '#{folder_p}'")
+  		folder_host_p = data_folder_p + "/analyser/IPv6/host"
+  		folder_plot_p = folder_host_p + "/plot"
+  		FileUtils::mkdir_p folder_plot_p
+  		
+  		# Generating Threshold file..
+  		parse_hostfile(folder_host_p)
+
+  		gnuplot_p = folder_host_p + "/plot.gp"
+  		gnuplot_f = File.open(gnuplot_p, 'w')
+
+  		Dir["#{folder_host_p}/*.csv"].each do |file|
+  		tag = File.basename(file).split('.')[-2]
+
+
+  		gnuplot_f.puts "
+  set timefmt '%s'
+  set xdata time
+  set xlabel 'time'
+  set ytics nomirror
+
+  set terminal postscript eps enhanced color
+  set output '#{folder_plot_p}/host_#{tag}.eps'
+  set logscale y
+  set ylabel 'host keys'
+
+  #		host_f << interf_hosts_not_routable << ", ";
+  #		host_f << interf_hosts_balanced << ", ";
+  #		host_f << interf_hosts_unbalanced << ", ";
+  #		host_f << interf_hosts_unbalanced_but_reachable << ", ";
+
+  plot \
+  	'#{file}' u 1:($2+$3+$4+$5 + 0.11) w filledcurve x1 fs pattern 0 lc 2 t 'reachable', \
+  	'#{file}' u 1:($2+$4+$5 + 0.1) w filledcurve x1 fs pattern 0 lc 1 t 'not reachable', \
+  	'#{file}' u 1:($2+$5 + 0.1) w filledcurve x1 fs pattern 0 lc 8 t 'not reachable (over this)', \
+  	'#{file}' u 1:($2 + 0.1) w filledcurve x1 fs pattern 0 lc 4 t 'not routable'\
+
+  "
+  	end
+  	gnuplot_f.flush
+  	gnuplot_f.close
+  	`gnuplot #{gnuplot_p}`
+
+  ### net IPv6##################################################################
+  		Log.debug("Process Analyser net '#{folder_p}'")
+  		folder_net_p = data_folder_p + "/analyser/IPv6/net"
+  		folder_plot_p = folder_net_p + "/plot"
+  		FileUtils::mkdir_p folder_plot_p
+      
+      # Generating Threshold file..
+  		parse_netfile(folder_net_p)
+        
+  		gnuplot_p = folder_net_p + "/plot.gp"
+  		gnuplot_f = File.open(gnuplot_p, 'w')
+
+  		Dir["#{folder_net_p}/*.csv"].each do |file|
+  		tag = File.basename(file).split('.')[-2]
+
+
+  		gnuplot_f.puts "
+  set timefmt '%s'
+  set xdata time
+  set xlabel 'time'
+  set ytics nomirror
+
+  set terminal postscript eps enhanced color
+  set output '#{folder_plot_p}/net_#{tag}.eps'
+  set logscale y
+  set ylabel 'net keys'
+
+  # net_f << time_s << ", ";
+  #	net_f << interf_net_balanced << ", ";
+  #	net_f << interf_net_unbalanced << ", ";
+  #	net_f << interf_net_unbalanced_but_reachable << ", ";
+
+  plot \
+  	'#{file}' u 1:($2+$3+$4 + 0.11) w filledcurve x1 fs pattern 0 lc 2 t 'reachable', \
+  	'#{file}' u 1:($3+$4 + 0.1) w filledcurve x1 fs pattern 0 lc 1 t 'not reachable', \
+  	'#{file}' u 1:($4 + 0.1) w filledcurve x1 fs pattern 0 lc 8 t 'not reachable (over this)'
+
+  "
+  	end
+  	gnuplot_f.flush
+  	gnuplot_f.close
+  	`gnuplot #{gnuplot_p}`
+
+  ### bgp IPv6 ##################################################################
+  		Log.debug("Process Analyser bgp '#{folder_p}'")
+  		folder_bgp_p = data_folder_p + "/analyser/IPv6/bgp"
+  		folder_plot_p = folder_bgp_p + "/plot"
+  		FileUtils::mkdir_p folder_plot_p
+
+  		gnuplot_p = folder_bgp_p + "/plot.gp"
+  		gnuplot_f = File.open(gnuplot_p, 'w')
+
+  		Dir["#{folder_bgp_p}/*.csv"].each do |file|
+  		tag = File.basename(file).split('.')[-2]
+
+
+  		gnuplot_f.puts "
+  set timefmt '%s'
+  set xdata time
+  set xlabel 'time'
+  set ytics nomirror
+
+  set terminal postscript eps enhanced color
+  set output '#{folder_plot_p}/bgp_#{tag}.eps'
+  set logscale y
+  set ylabel 'bgp keys'
+
+  # bgp_f << time_s << ", ";
+  #	bgp_f << interf_bgp_balanced << ", ";
+  #	bgp_f << interf_bgp_unbalanced << ", ";
+  #	bgp_f << interf_bgp_unbalanced_but_reachable << ", ";
+
+  plot \
+  	'#{file}' u 1:($2+$3+$4 + 0.11) w filledcurve x1 fs pattern 0 lc 2 t 'reachable', \
+  	'#{file}' u 1:($3+$4 + 0.1) w filledcurve x1 fs pattern 0 lc 1 t 'not reachable', \
+  	'#{file}' u 1:($4 + 0.1) w filledcurve x1 fs pattern 0 lc 8 t 'not reachable (over this)'
+
+  "
+  	end
+  	gnuplot_f.flush
+  	gnuplot_f.close
+  	`gnuplot #{gnuplot_p}`
+
 
 	def generate_density_file(density_file_p, folder, intensity_lines_a)
 		## prepare density plot file
@@ -759,8 +930,8 @@ plot \
 	min_time_count = 10
 	min_hit_count = 10
 ### density host ###############################################################
-		Log.debug("Process Analyser host prefix '#{folder_p}'")
-		folder_density_host_p = data_folder_p + "/analyser/prefix_host"
+		Log.debug("Process Analyser host prefix IPv4 '#{folder_p}'")
+		folder_density_host_p = data_folder_p + "/analyser/IPv4/prefix_host"
 		Dir["#{folder_density_host_p}/*"].each do |folder|
 			tag = File.basename(folder).split('/')[-1]
 
@@ -965,6 +1136,196 @@ replot
 			extract_top_prefix(folder, min_time_count, min_hit_count)
 		end
 end
+
+def get_threshold(input,percentile)
+  theshold = 0
+  if percentile > 100
+    return(0)
+  end
+  if input.size >=0
+    input = input.sort
+    pos = input.size*percentile/100
+    pos1 = pos.floor
+    pos2 = pos.ceil
+    
+    # linear interpolation..
+    delta = input[pos2]-input[pos1]
+    threshold = input[pos1] + delta*(pos-pos1)
+  end
+  return(threshold)
+end
+
+def parse_netfile(net_folder_p)
+  start_s = 0
+  end_s = 0
+  daily = Array.new
+	nightly = Array.new
+	iter = 0
+	
+	File.open(net_folder_p + "/all.csv").each_line do |line|
+		data = line.split(', ')
+		time_s = data[0].to_i
+		if time_s > end_s
+	    end_s = time_s
+    end
+    if iter == 0
+      start_s = time_s
+    end
+    if start_s > time_s
+      start_s = time_s
+    end
+    
+		t = Time.at(time_s)
+		
+		balanced = data[1].to_i
+		unbalanced = data[2].to_i
+		
+		if t.hour >= 8 && < 20
+      daily.push(unbalanced)
+    else
+      nightly.push(unbalanced)
+    end
+    
+  end
+  dailythreshold = get_threshold(daily,95)
+  nightlythreshold = get_threshold(nightly,95)
+  threshold_p = net_folder_p + "/theshold.csv"
+	threshold_f = File.open(threshold_p, 'w')
+	threshold_f.puts "TIME_S, THRESHOLD VALUE"
+	File.open(net_folder_p + "/all.csv").each_line do |line|
+	  data = line.split(', ')
+		time_s = data[0].to_i
+		t = Time.at(time_s)
+		if t.hour >= 8 && < 20
+		  if data[2].to_i>dailythreshold
+        treshold_f.puts "#{time_s}, #{dailythreshold}, 1"
+      else
+        treshold_f.puts "#{time_s}, #{dailythreshold}, 0"
+      end
+    else
+		  if data[2].to_i>nightlythreshold
+        treshold_f.puts "#{time_s}, #{nightlythreshold}, 1"
+      else
+        treshold_f.puts "#{time_s}, #{nightlythreshold}, 0"
+      end
+    end
+  end
+end
+
+def parse_hostfile(host_folder_p)
+  start_s = 0
+  end_s = 0
+  daily = Array.new
+	nightly = Array.new
+	iter = 0
+	
+	File.open(host_folder_p + "/all.csv").each_line do |line|
+		data = line.split(', ')
+		time_s = data[0].to_i
+		if time_s > end_s
+	    end_s = time_s
+    end
+    if iter == 0
+      start_s = time_s
+    end
+    if start_s > time_s
+      start_s = time_s
+    end
+    
+		t = Time.at(time_s)
+		
+		balanced = data[1].to_i
+		unbalanced = data[2].to_i
+		
+		if t.hour >= 8 && < 20
+      daily.push(unbalanced)
+    else
+      nightly.push(unbalanced)
+    end
+    
+  end
+  dailythreshold = get_threshold(daily,95)
+  nightlythreshold = get_threshold(nightly,95)
+  threshold_p = host_folder_p + "/theshold.csv"
+	threshold_f = File.open(threshold_p, 'w')
+	threshold_f.puts "TIME_S, THRESHOLD VALUE"
+	File.open(host_folder_p + "/all.csv").each_line do |line|
+	  data = line.split(', ')
+		time_s = data[0].to_i
+		t = Time.at(time_s)
+		if t.hour >= 8 && < 20
+		  if data[2].to_i>dailythreshold
+        treshold_f.puts "#{time_s}, #{dailythreshold}, 1"
+      else
+        treshold_f.puts "#{time_s}, #{dailythreshold}, 0"
+      end
+    else
+		  if data[2].to_i>nightlythreshold
+        treshold_f.puts "#{time_s}, #{nightlythreshold}, 1"
+      else
+        treshold_f.puts "#{time_s}, #{nightlythreshold}, 0"
+      end
+    end
+  end
+end
+
+def parse_bgpfile(bgp_folder_p)
+  start_s = 0
+  end_s = 0
+  daily = Array.new
+	nightly = Array.new
+	iter = 0
+	
+	File.open(bgp_folder_p + "/all.csv").each_line do |line|
+		data = line.split(', ')
+		time_s = data[0].to_i
+		if time_s > end_s
+	    end_s = time_s
+    end
+    if iter == 0
+      start_s = time_s
+    end
+    if start_s > time_s
+      start_s = time_s
+    end
+    
+		t = Time.at(time_s)
+		
+		balanced = data[1].to_i
+		unbalanced = data[2].to_i
+		
+		if t.hour >= 8 && < 20
+      daily.push(unbalanced)
+    else
+      nightly.push(unbalanced)
+    end
+    
+  end
+  dailythreshold = get_threshold(daily,95)
+  nightlythreshold = get_threshold(nightly,95)
+  threshold_p = bgp_folder_p + "/theshold.csv"
+	threshold_f = File.open(threshold_p, 'w')
+	threshold_f.puts "TIME_S, THRESHOLD VALUE, EXCEEDED"
+	File.open(bgp_folder_p + "/all.csv").each_line do |line|
+	  data = line.split(', ')
+		time_s = data[0].to_i
+		t = Time.at(time_s)
+		if t.hour >= 8 && < 20
+		  if data[2].to_i>dailythreshold
+        treshold_f.puts "#{time_s}, #{dailythreshold}, 1"
+      else
+        treshold_f.puts "#{time_s}, #{dailythreshold}, 0"
+      end
+    else
+		  if data[2].to_i>nightlythreshold
+        treshold_f.puts "#{time_s}, #{nightlythreshold}, 1"
+      else
+        treshold_f.puts "#{time_s}, #{nightlythreshold}, 0"
+      end
+    end
+  end
+end
+
 ################################################################################
 ######## MAIN ##################################################################
 ################################################################################

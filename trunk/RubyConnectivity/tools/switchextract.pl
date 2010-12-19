@@ -16,7 +16,7 @@ $numArgs = $#ARGV + 1;
 
 if ($numArgs != 2){
 	die "ERROR: WRONG COMMAND SYNTAX\nUSAGE: perl switchextract.pl BGPDUMPFILE.txt PREFIX.txt\n";
-	}
+}
 
 print "EXTRACTING SWITCH PREFIXES\n";
 
