@@ -440,7 +440,7 @@ plot \
 	`gnuplot #{gnuplot_p}`
 
 ### host_host IPv4 ##################################################################
-		Log.debug("Process Analyser host_host '#{folder_p}'")
+		Log.debug("Process Analyser host_host IPv4'#{folder_p}'")
 		folder_host_host_p = data_folder_p + "/analyser/IPv4/host_host"
 		folder_plot_p = folder_host_host_p + "/plot"
 		FileUtils::mkdir_p folder_plot_p
@@ -459,7 +459,7 @@ set xlabel 'time'
 set ytics nomirror
 
 set terminal postscript eps enhanced color
-set output '#{folder_plot_p}/host_host_#{tag}.eps'
+set output '#{folder_plot_p}/host_host_ipv4_#{tag}.eps'
 set logscale y
 set ylabel 'host host keys'
 plot \
@@ -473,13 +473,13 @@ plot \
 	`gnuplot #{gnuplot_p}`
 
 ### host IPv4 ##################################################################
-		Log.debug("Process Analyser host '#{folder_p}'")
+		Log.debug("Process Analyser host IPv4 '#{folder_p}'")
 		folder_host_p = data_folder_p + "/analyser/IPv4/host"
 		folder_plot_p = folder_host_p + "/plot"
 		FileUtils::mkdir_p folder_plot_p
 
     # Generating Threshold file..
-		parse_hostfile(folder_host_p)
+		#parse_hostfile(folder_host_p)
 		
 		gnuplot_p = folder_host_p + "/plot.gp"
 		gnuplot_f = File.open(gnuplot_p, 'w')
@@ -495,7 +495,7 @@ set xlabel 'time'
 set ytics nomirror
 
 set terminal postscript eps enhanced color
-set output '#{folder_plot_p}/host_#{tag}.eps'
+set output '#{folder_plot_p}/host_ipv4_#{tag}.eps'
 set logscale y
 set ylabel 'host keys'
 
@@ -512,18 +512,33 @@ plot \
 
 "
 	end
-	gnuplot_f.flush
-	gnuplot_f.close
-	`gnuplot #{gnuplot_p}`
+  # # Generating Threshold file..
+  # parse_hostfile(folder_host_p)
+  # threshold_p = folder_host_p + "/threshold.csv"
+  # allcsv_p = folder_host_p + "/all.csv"
+  # gnuplot_f.puts "
+  # set timefmt '%s'
+  #   set xdata time
+  #   set xlabel 'time'
+  #   set ytics nomirror
+  # 
+  #   set terminal postscript eps enhanced color
+  #   set output '#{folder_plot_p}/host_threshold.eps'
+  #   set ylabel 'host unbalanced'
+  # 
+  # plot  '#{threshold_p}' using 1:2 w filledcurves x1 fs pattern 0 lc 3 t 'threshold', \
+  #       '#{allcsv_p}' using 1:3 w filledcurves x1 fs pattern 0 lc 2 t 'unbalanced'
+  # "
+  # 
+  # gnuplot_f.flush
+  # gnuplot_f.close
+  # `gnuplot #{gnuplot_p}`
 
 ### net IPv4##################################################################
-		Log.debug("Process Analyser net '#{folder_p}'")
+		Log.debug("Process Analyser net IPv4 '#{folder_p}'")
 		folder_net_p = data_folder_p + "/analyser/IPv4/net"
 		folder_plot_p = folder_net_p + "/plot"
 		FileUtils::mkdir_p folder_plot_p
-		
-		# Generating Threshold file..
-		parse_netfile(folder_net_p)
 
 		gnuplot_p = folder_net_p + "/plot.gp"
 		gnuplot_f = File.open(gnuplot_p, 'w')
@@ -539,7 +554,7 @@ set xlabel 'time'
 set ytics nomirror
 
 set terminal postscript eps enhanced color
-set output '#{folder_plot_p}/net_#{tag}.eps'
+set output '#{folder_plot_p}/net_ipv4_#{tag}.eps'
 set logscale y
 set ylabel 'net keys'
 
@@ -555,18 +570,33 @@ plot \
 
 "
 	end
-	gnuplot_f.flush
-	gnuplot_f.close
-	`gnuplot #{gnuplot_p}`
+	
+  # # Generating Threshold file..
+  # parse_netfile(folder_net_p)
+  # threshold_p = folder_net_p + "/threshold.csv"
+  # allcsv_p = folder_net_p + "/all.csv"
+  # gnuplot_f.puts "
+  # set timefmt '%s'
+  #   set xdata time
+  #   set xlabel 'time'
+  #   set ytics nomirror
+  # 
+  #   set terminal postscript eps enhanced color
+  #   set output '#{folder_plot_p}/net_threshold.eps'
+  #   set ylabel 'net unbalanced'
+  # 
+  # plot  '#{threshold_p}' using 1:2 w filledcurves x1 fs pattern 0 lc 3 t 'threshold', \
+  #       '#{allcsv_p}' using 1:3 w filledcurves x1 fs pattern 0 lc 2 t 'unbalanced'
+  # "
+  # gnuplot_f.flush
+  # gnuplot_f.close
+  # `gnuplot #{gnuplot_p}`
 
 ### bgp IPv4 ##################################################################
-		Log.debug("Process Analyser bgp '#{folder_p}'")
+		Log.debug("Process Analyser bgp IPv4 '#{folder_p}'")
 		folder_bgp_p = data_folder_p + "/analyser/IPv4/bgp"
 		folder_plot_p = folder_bgp_p + "/plot"
 		FileUtils::mkdir_p folder_plot_p
-		
-		# Generating Threshold file..
-		parse_bgpfile(folder_bgp_p)
 
 		gnuplot_p = folder_bgp_p + "/plot.gp"
 		gnuplot_f = File.open(gnuplot_p, 'w')
@@ -582,7 +612,7 @@ set xlabel 'time'
 set ytics nomirror
 
 set terminal postscript eps enhanced color
-set output '#{folder_plot_p}/bgp_#{tag}.eps'
+set output '#{folder_plot_p}/bgp_ipv4_#{tag}.eps'
 set logscale y
 set ylabel 'bgp keys'
 
@@ -598,12 +628,30 @@ plot \
 
 "
 	end
-	gnuplot_f.flush
-	gnuplot_f.close
-	`gnuplot #{gnuplot_p}`
+  # # Generating Threshold file..
+  # parse_bgpfile(folder_bgp_p)
+  # threshold_p = folder_bgp_p + "/threshold.csv"
+  # allcsv_p = folder_bgp_p + "/all.csv"
+  # gnuplot_f.puts "
+  # set timefmt '%s'
+  #   set xdata time
+  #   set xlabel 'time'
+  #   set ytics nomirror
+  # 
+  #   set terminal postscript eps enhanced color
+  #   set output '#{folder_plot_p}/bgp_threshold.eps'
+  #   set ylabel 'bgp keys'
+  # 
+  # plot  '#{threshold_p}' using 1:2 w filledcurves x1 fs pattern 0 lc 3 t 'threshold', \
+  #       '#{allcsv_p}' using 1:3 w filledcurves x1 fs pattern 0 lc 2 t 'unbalanced'
+  # 
+  # "
+  # gnuplot_f.flush
+  # gnuplot_f.close
+  # `gnuplot #{gnuplot_p}`
 
   ### host_host IPv6 ##################################################################
-  		Log.debug("Process Analyser host_host '#{folder_p}'")
+  		Log.debug("Process Analyser host_host IPv6 '#{folder_p}'")
   		folder_host_host_p = data_folder_p + "/analyser/IPv6/host_host"
   		folder_plot_p = folder_host_host_p + "/plot"
   		FileUtils::mkdir_p folder_plot_p
@@ -622,7 +670,7 @@ plot \
   set ytics nomirror
 
   set terminal postscript eps enhanced color
-  set output '#{folder_plot_p}/host_host_#{tag}.eps'
+  set output '#{folder_plot_p}/host_host_ipv6_#{tag}.eps'
   set logscale y
   set ylabel 'host host keys'
   plot \
@@ -636,13 +684,13 @@ plot \
   	`gnuplot #{gnuplot_p}`
 
   ### host IPv6 ##################################################################
-  		Log.debug("Process Analyser host '#{folder_p}'")
+  		Log.debug("Process Analyser host IPv6 '#{folder_p}'")
   		folder_host_p = data_folder_p + "/analyser/IPv6/host"
   		folder_plot_p = folder_host_p + "/plot"
   		FileUtils::mkdir_p folder_plot_p
   		
   		# Generating Threshold file..
-  		parse_hostfile(folder_host_p)
+  		#parse_hostfile(folder_host_p)
 
   		gnuplot_p = folder_host_p + "/plot.gp"
   		gnuplot_f = File.open(gnuplot_p, 'w')
@@ -658,7 +706,7 @@ plot \
   set ytics nomirror
 
   set terminal postscript eps enhanced color
-  set output '#{folder_plot_p}/host_#{tag}.eps'
+  set output '#{folder_plot_p}/host_ipv6_#{tag}.eps'
   set logscale y
   set ylabel 'host keys'
 
@@ -680,13 +728,13 @@ plot \
   	`gnuplot #{gnuplot_p}`
 
   ### net IPv6##################################################################
-  		Log.debug("Process Analyser net '#{folder_p}'")
+  		Log.debug("Process Analyser net IPv6 '#{folder_p}'")
   		folder_net_p = data_folder_p + "/analyser/IPv6/net"
   		folder_plot_p = folder_net_p + "/plot"
   		FileUtils::mkdir_p folder_plot_p
       
       # Generating Threshold file..
-  		parse_netfile(folder_net_p)
+  		#parse_netfile(folder_net_p)
         
   		gnuplot_p = folder_net_p + "/plot.gp"
   		gnuplot_f = File.open(gnuplot_p, 'w')
@@ -702,7 +750,7 @@ plot \
   set ytics nomirror
 
   set terminal postscript eps enhanced color
-  set output '#{folder_plot_p}/net_#{tag}.eps'
+  set output '#{folder_plot_p}/net_ipv6_#{tag}.eps'
   set logscale y
   set ylabel 'net keys'
 
@@ -723,7 +771,7 @@ plot \
   	`gnuplot #{gnuplot_p}`
 
   ### bgp IPv6 ##################################################################
-  		Log.debug("Process Analyser bgp '#{folder_p}'")
+  		Log.debug("Process Analyser bgp IPv6 '#{folder_p}'")
   		folder_bgp_p = data_folder_p + "/analyser/IPv6/bgp"
   		folder_plot_p = folder_bgp_p + "/plot"
   		FileUtils::mkdir_p folder_plot_p
@@ -742,7 +790,7 @@ plot \
   set ytics nomirror
 
   set terminal postscript eps enhanced color
-  set output '#{folder_plot_p}/bgp_#{tag}.eps'
+  set output '#{folder_plot_p}/bgp_ipv6_#{tag}.eps'
   set logscale y
   set ylabel 'bgp keys'
 
@@ -763,42 +811,42 @@ plot \
   	`gnuplot #{gnuplot_p}`
 
 
-	def generate_density_file(density_file_p, folder, intensity_lines_a)
-		## prepare density plot file
-		density_output = File.open(density_file_p, 'w')
-		density_files = Dir["#{folder}/*/1*.csv"].sort
-		density_files.each do |file|
-	
-			data_h = Hash.new
-			time_s = file.split('/')[-1].split('.')[0].to_i
-			File.open(file).each_line do |line|
-				data = line.split(', ')
-				if data[0] == "0"
-					unbalanced = data[3].to_i
-					(unbalanced+1).times do |i|
-					
-						if data_h[i] == nil
-							data_h[i] = 1 
-						else
-							data_h[i] += 1 
-						end
-					end
-				end
-			end
-			density_output.print "#{time_s}, "
-			intensity_lines_a.each do |intensity|
-				if data_h[intensity] == nil
-					density_output.print "0, "
-				else
-				 density_output.print "#{data_h[intensity]}, "
-				end
-			end
-			density_output.print "\n"
+  	def generate_density_file(density_file_p, folder, intensity_lines_a)
+  		## prepare density plot file
+  		density_output = File.open(density_file_p, 'w')
+  		density_files = Dir["#{folder}/*/1*.csv"].sort
+  		density_files.each do |file|
 
-		end
-		density_output.flush
-		density_output.close
-	end
+  			data_h = Hash.new
+  			time_s = file.split('/')[-1].split('.')[0].to_i
+  			File.open(file).each_line do |line|
+  				data = line.split(', ')
+  				if data[0] == "0"
+  					unbalanced = data[3].to_i
+  					(unbalanced+1).times do |i|
+
+  						if data_h[i] == nil
+  							data_h[i] = 1 
+  						else
+  							data_h[i] += 1 
+  						end
+  					end
+  				end
+  			end
+  			density_output.print "#{time_s}, "
+  			intensity_lines_a.each do |intensity|
+  				if data_h[intensity] == nil
+  					density_output.print "0, "
+  				else
+  				 density_output.print "#{data_h[intensity]}, "
+  				end
+  			end
+  			density_output.print "\n"
+
+  		end
+  		density_output.flush
+  		density_output.close
+  	end
 	def generate_density_cdf_file(density_cdf_file_p, folder)
 
 		# index = Number of internal hosts (popularity)
@@ -929,7 +977,7 @@ plot \
 	intensity_lines_a = [1,2,3,4,5,10,15,20,30]
 	min_time_count = 10
 	min_hit_count = 10
-### density host ###############################################################
+### density host IPv4 ###############################################################
 		Log.debug("Process Analyser host prefix IPv4 '#{folder_p}'")
 		folder_density_host_p = data_folder_p + "/analyser/IPv4/prefix_host"
 		Dir["#{folder_density_host_p}/*"].each do |folder|
@@ -939,11 +987,11 @@ plot \
 			FileUtils::mkdir_p folder_plot_p
 
 
-			density_file_p = folder_plot_p + "/density.csv"
+			density_file_p = folder_plot_p + "/density_ipv4.csv"
 			generate_density_file(density_file_p, folder, intensity_lines_a)
 
-			density_cdf_file_p = folder_plot_p + "/density_cdf.csv"
-			generate_density_cdf_file(density_cdf_file_p, folder)
+			density_cdf_file_p = folder_plot_p + "/density_cdf_ipv4.csv"
+			generate_density_cdf_file(density_cdf_file_p, folder + "/IPv4")
 
 
 			gnuplot_p = folder_plot_p + "/plot.gp"
@@ -958,7 +1006,7 @@ set ytics nomirror
 ### Host Density
 set autoscale
 set ylabel 'Unbalanced host keys'
-set output '#{folder_plot_p}/host_density_#{tag}.eps'
+set output '#{folder_plot_p}/host_density_ipv4_#{tag}.eps'
 set logscale y
 
 "
@@ -976,7 +1024,7 @@ gnuplot_f.puts "
 ### DIST I
 reset
 set autoscale
-set output '#{folder_plot_p}/host_density_cdf_#{tag}.eps'
+set output '#{folder_plot_p}/host_density_cdf_ipv4_#{tag}.eps'
 unset logscale y
 set xrange [1:10]
 
@@ -990,7 +1038,7 @@ plot  \
 
 set yrange [0.1:100]
 set logscale y
-set output '#{folder_plot_p}/host_density_cdf_log_#{tag}.eps'
+set output '#{folder_plot_p}/host_density_cdf_log_ipv4_#{tag}.eps'
 replot
 
 "
@@ -1001,20 +1049,20 @@ replot
 			extract_top_prefix(folder, min_time_count, min_hit_count)
 		end
 
-	### density net ###############################################################
-		Log.debug("Process Analyser net prefix '#{folder_p}'")
-		folder_density_host_p = data_folder_p + "/analyser/prefix_net"
+	### density net IPv4 ###############################################################
+		Log.debug("Process Analyser net prefix IPv4 '#{folder_p}'")
+		folder_density_host_p = data_folder_p + "/analyser/IPv4/prefix_net"
 		Dir["#{folder_density_host_p}/*"].each do |folder|
 			tag = File.basename(folder).split('/')[-1]
 
 			folder_plot_p = folder + "/plot"
 			FileUtils::mkdir_p folder_plot_p
 
-			density_file_p = folder_plot_p + "/density.csv"
+			density_file_p = folder_plot_p + "/density_ipv4.csv"
 			generate_density_file(density_file_p, folder, intensity_lines_a)
 
-			density_cdf_file_p = folder_plot_p + "/density_cdf.csv"
-			generate_density_cdf_file(density_cdf_file_p, folder)
+			density_cdf_file_p = folder_plot_p + "/density_cdf_ipv4.csv"
+			generate_density_cdf_file(density_cdf_file_p, folder )
 
 			gnuplot_p = folder_plot_p + "/plot.gp"
 			gnuplot_f = File.open(gnuplot_p, 'w')
@@ -1028,7 +1076,7 @@ set ytics nomirror
 ### NET Density
 set autoscale
 set ylabel 'Unbalanced net keys'
-set output '#{folder_plot_p}/net_density_#{tag}.eps'
+set output '#{folder_plot_p}/net_density_ipv4_#{tag}.eps'
 set logscale y
 "
 				i = 0
@@ -1044,7 +1092,7 @@ gnuplot_f.puts "
 ### DIST I
 reset
 set autoscale
-set output '#{folder_plot_p}/net_density_cdf_#{tag}.eps'
+set output '#{folder_plot_p}/net_density_cdf_ipv4_#{tag}.eps'
 unset logscale y
 set xrange [1:10]
 
@@ -1058,7 +1106,7 @@ plot  \
 
 set yrange [0.1:100]
 set logscale y
-set output '#{folder_plot_p}/net_density_cdf_log_#{tag}.eps'
+set output '#{folder_plot_p}/net_density_cdf_log_ipv4_#{tag}.eps'
 replot
 
 "
@@ -1068,20 +1116,20 @@ replot
 
 			extract_top_prefix(folder, min_time_count, min_hit_count)
 		end
-	### density bgp ##############################################################
-		Log.debug("Process Analyser bgp prefix '#{folder_p}'")
-		folder_density_bgp_p = data_folder_p + "/analyser/prefix_bgp"
+	### density bgp IPv4 ##############################################################
+		Log.debug("Process Analyser bgp prefix IPv4 '#{folder_p}'")
+		folder_density_bgp_p = data_folder_p + "/analyser/IPv4/prefix_bgp"
 		Dir["#{folder_density_bgp_p}/*"].each do |folder|
 			tag = File.basename(folder).split('/')[-1]
 
 			folder_plot_p = folder + "/plot"
 			FileUtils::mkdir_p folder_plot_p
 
-			density_file_p = folder_plot_p + "/density.csv"
+			density_file_p = folder_plot_p + "/density_ipv4.csv"
 			generate_density_file(density_file_p, folder, intensity_lines_a)
 
-			density_cdf_file_p = folder_plot_p + "/density_cdf.csv"
-			generate_density_cdf_file(density_cdf_file_p, folder)
+			density_cdf_file_p = folder_plot_p + "/density_cdf_ipv4.csv"
+			generate_density_cdf_file(density_cdf_file_p, folder + "/IPv4")
 
 			gnuplot_p = folder_plot_p + "/plot.gp"
 			gnuplot_f = File.open(gnuplot_p, 'w')
@@ -1094,7 +1142,7 @@ set ytics nomirror
 
 ### BGP Density
 set autoscale
-set output '#{folder_plot_p}/bgp_density_#{tag}.eps'
+set output '#{folder_plot_p}/bgp_density_ipv4_#{tag}.eps'
 set logscale y
 "
 				i = 0
@@ -1111,7 +1159,7 @@ gnuplot_f.puts "
 reset
 set autoscale
 set ylabel 'Unbalanced host keys'
-set output '#{folder_plot_p}/bgp_density_cdf_#{tag}.eps'
+set output '#{folder_plot_p}/bgp_density_cdf_ipv4_#{tag}.eps'
 unset logscale y
 set xrange [1:10]
 
@@ -1125,7 +1173,215 @@ plot  \
 
 set yrange [0.1:100]
 set logscale y
-set output '#{folder_plot_p}/bgp_density_cdf_log_#{tag}.eps'
+set output '#{folder_plot_p}/bgp_density_cdf_log_ipv4_#{tag}.eps'
+replot
+
+"
+				gnuplot_f.flush
+				gnuplot_f.close
+	`gnuplot #{gnuplot_p}`
+
+			extract_top_prefix(folder, min_time_count, min_hit_count)
+		end
+
+
+### density host IPv6 ###############################################################
+		Log.debug("Process Analyser host prefix IPv6 '#{folder_p}'")
+		folder_density_host_p = data_folder_p + "/analyser/IPv6/prefix_host"
+		Dir["#{folder_density_host_p}/*"].each do |folder|
+			tag = File.basename(folder).split('/')[-1]
+
+			folder_plot_p = folder + "/plot"
+			FileUtils::mkdir_p folder_plot_p
+
+
+			density_file_p = folder_plot_p + "/density_ipv6.csv"
+			generate_density_file(density_file_p, folder, intensity_lines_a)
+
+			density_cdf_file_p = folder_plot_p + "/density_cdf_ipv6.csv"
+			generate_density_cdf_file(density_cdf_file_p, folder + "/IPv6")
+
+
+			gnuplot_p = folder_plot_p + "/plot.gp"
+			gnuplot_f = File.open(gnuplot_p, 'w')
+		gnuplot_f.puts "
+set terminal postscript eps enhanced color
+set timefmt '%s'
+set xdata time
+set xlabel 'time'
+set ytics nomirror
+
+### Host Density
+set autoscale
+set ylabel 'Unbalanced host keys'
+set output '#{folder_plot_p}/host_density_ipv6_#{tag}.eps'
+set logscale y
+
+"
+				i = 0
+				intensity_lines_a.each do |intensity|
+					if i == 0
+						gnuplot_f.puts "plot  '#{density_file_p}' u 1:#{i+2} w l t 'i:#{intensity}' \\"
+					else
+						gnuplot_f.puts ", '' u 1:($#{i+2} + 0.1) w l t 'i:#{intensity}' \\"
+					end
+					i+=1
+				end 
+gnuplot_f.puts "
+
+### DIST I
+reset
+set autoscale
+set output '#{folder_plot_p}/host_density_cdf_ipv6_#{tag}.eps'
+unset logscale y
+set xrange [1:10]
+
+plot  \
+	'#{density_cdf_file_p}' u 1:2 w l t 'P 05', \
+	'#{density_cdf_file_p}' u 1:3 w l t 'P 25', \
+	'#{density_cdf_file_p}' u 1:4 w l t 'P 50', \
+	'#{density_cdf_file_p}' u 1:5 w l t 'P 74', \
+	'#{density_cdf_file_p}' u 1:6 w l t 'P 95' \
+
+
+set yrange [0.1:100]
+set logscale y
+set output '#{folder_plot_p}/host_density_cdf_log_ipv6_#{tag}.eps'
+replot
+
+"
+				gnuplot_f.flush
+				gnuplot_f.close
+	`gnuplot #{gnuplot_p}`
+
+			extract_top_prefix(folder, min_time_count, min_hit_count)
+		end
+
+	### density net IPv6 ###############################################################
+		Log.debug("Process Analyser net prefix IPv6'#{folder_p}'")
+		folder_density_host_p = data_folder_p + "/analyser/IPv6/prefix_net"
+		Dir["#{folder_density_host_p}/*"].each do |folder|
+			tag = File.basename(folder).split('/')[-1]
+
+			folder_plot_p = folder + "/plot"
+			FileUtils::mkdir_p folder_plot_p
+
+			density_file_p = folder_plot_p + "/density_ipv6.csv"
+			generate_density_file(density_file_p, folder, intensity_lines_a)
+
+			density_cdf_file_p = folder_plot_p + "/density_cdf_ipv6.csv"
+			generate_density_cdf_file(density_cdf_file_p, folder + "/IPv6")
+
+			gnuplot_p = folder_plot_p + "/plot.gp"
+			gnuplot_f = File.open(gnuplot_p, 'w')
+		gnuplot_f.puts "
+set terminal postscript eps enhanced color
+set timefmt '%s'
+set xdata time
+set xlabel 'time'
+set ytics nomirror
+
+### NET Density
+set autoscale
+set ylabel 'Unbalanced net keys'
+set output '#{folder_plot_p}/net_density_ipv6_#{tag}.eps'
+set logscale y
+"
+				i = 0
+				intensity_lines_a.each do |intensity|
+					if i == 0
+						gnuplot_f.puts "plot  '#{density_file_p}' u 1:#{i+2} w l t 'i:#{intensity}' \\"
+					else
+						gnuplot_f.puts ", '' u 1:($#{i+2} + 0.1) w l t 'i:#{intensity}' \\"
+					end
+					i+=1
+				end 
+gnuplot_f.puts " 
+### DIST I
+reset
+set autoscale
+set output '#{folder_plot_p}/net_density_cdf_ipv6_#{tag}.eps'
+unset logscale y
+set xrange [1:10]
+
+plot  \
+	'#{density_cdf_file_p}' u 1:2 w l t 'P 05', \
+	'#{density_cdf_file_p}' u 1:3 w l t 'P 25', \
+	'#{density_cdf_file_p}' u 1:4 w l t 'P 50', \
+	'#{density_cdf_file_p}' u 1:4 w l t 'P 74', \
+	'#{density_cdf_file_p}' u 1:5 w l t 'P 95' \
+
+
+set yrange [0.1:100]
+set logscale y
+set output '#{folder_plot_p}/net_density_cdf_log_ipv6_#{tag}.eps'
+replot
+
+"
+				gnuplot_f.flush
+				gnuplot_f.close
+	`gnuplot #{gnuplot_p}`
+
+			extract_top_prefix(folder, min_time_count, min_hit_count)
+		end
+	### density bgp IPv6 ##############################################################
+		Log.debug("Process Analyser bgp prefix IPv6 '#{folder_p}'")
+		folder_density_bgp_p = data_folder_p + "/analyser/IPv6/prefix_bgp"
+		Dir["#{folder_density_bgp_p}/*"].each do |folder|
+			tag = File.basename(folder).split('/')[-1]
+
+			folder_plot_p = folder + "/plot"
+			FileUtils::mkdir_p folder_plot_p
+
+			density_file_p = folder_plot_p + "/density_ipv6.csv"
+			generate_density_file(density_file_p, folder, intensity_lines_a)
+
+			density_cdf_file_p = folder_plot_p + "/density_cdf_ipv6.csv"
+			generate_density_cdf_file(density_cdf_file_p, folder + "/IPv6")
+
+			gnuplot_p = folder_plot_p + "/plot.gp"
+			gnuplot_f = File.open(gnuplot_p, 'w')
+		gnuplot_f.puts "
+set terminal postscript eps enhanced color
+set timefmt '%s'
+set xdata time
+set xlabel 'time'
+set ytics nomirror
+
+### BGP Density
+set autoscale
+set output '#{folder_plot_p}/bgp_density_ipv6_#{tag}.eps'
+set logscale y
+"
+				i = 0
+				intensity_lines_a.each do |intensity|
+					if i == 0
+						gnuplot_f.puts "plot  '#{density_file_p}' u 1:#{i+2} w l t 'i:#{intensity}' \\"
+					else
+						gnuplot_f.puts ", '' u 1:($#{i+2} + 0.1) w l t 'i:#{intensity}' \\"
+					end
+					i+=1
+				end 
+gnuplot_f.puts "
+### DIST I
+reset
+set autoscale
+set ylabel 'Unbalanced host keys'
+set output '#{folder_plot_p}/bgp_density_cdf_ipv6_#{tag}.eps'
+unset logscale y
+set xrange [1:10]
+
+plot  \
+	'#{density_cdf_file_p}' u 1:2 w l t 'P 05', \
+	'#{density_cdf_file_p}' u 1:3 w l t 'P 25', \
+	'#{density_cdf_file_p}' u 1:4 w l t 'P 50', \
+	'#{density_cdf_file_p}' u 1:4 w l t 'P 74', \
+	'#{density_cdf_file_p}' u 1:5 w l t 'P 95' \
+
+
+set yrange [0.1:100]
+set logscale y
+set output '#{folder_plot_p}/bgp_density_cdf_log_ipv6_#{tag}.eps'
 replot
 
 "
@@ -1137,194 +1393,7 @@ replot
 		end
 end
 
-def get_threshold(input,percentile)
-  theshold = 0
-  if percentile > 100
-    return(0)
-  end
-  if input.size >=0
-    input = input.sort
-    pos = input.size*percentile/100
-    pos1 = pos.floor
-    pos2 = pos.ceil
-    
-    # linear interpolation..
-    delta = input[pos2]-input[pos1]
-    threshold = input[pos1] + delta*(pos-pos1)
-  end
-  return(threshold)
-end
 
-def parse_netfile(net_folder_p)
-  start_s = 0
-  end_s = 0
-  daily = Array.new
-	nightly = Array.new
-	iter = 0
-	
-	File.open(net_folder_p + "/all.csv").each_line do |line|
-		data = line.split(', ')
-		time_s = data[0].to_i
-		if time_s > end_s
-	    end_s = time_s
-    end
-    if iter == 0
-      start_s = time_s
-    end
-    if start_s > time_s
-      start_s = time_s
-    end
-    
-		t = Time.at(time_s)
-		
-		balanced = data[1].to_i
-		unbalanced = data[2].to_i
-		
-		if t.hour >= 8 && < 20
-      daily.push(unbalanced)
-    else
-      nightly.push(unbalanced)
-    end
-    
-  end
-  dailythreshold = get_threshold(daily,95)
-  nightlythreshold = get_threshold(nightly,95)
-  threshold_p = net_folder_p + "/theshold.csv"
-	threshold_f = File.open(threshold_p, 'w')
-	threshold_f.puts "TIME_S, THRESHOLD VALUE"
-	File.open(net_folder_p + "/all.csv").each_line do |line|
-	  data = line.split(', ')
-		time_s = data[0].to_i
-		t = Time.at(time_s)
-		if t.hour >= 8 && < 20
-		  if data[2].to_i>dailythreshold
-        treshold_f.puts "#{time_s}, #{dailythreshold}, 1"
-      else
-        treshold_f.puts "#{time_s}, #{dailythreshold}, 0"
-      end
-    else
-		  if data[2].to_i>nightlythreshold
-        treshold_f.puts "#{time_s}, #{nightlythreshold}, 1"
-      else
-        treshold_f.puts "#{time_s}, #{nightlythreshold}, 0"
-      end
-    end
-  end
-end
-
-def parse_hostfile(host_folder_p)
-  start_s = 0
-  end_s = 0
-  daily = Array.new
-	nightly = Array.new
-	iter = 0
-	
-	File.open(host_folder_p + "/all.csv").each_line do |line|
-		data = line.split(', ')
-		time_s = data[0].to_i
-		if time_s > end_s
-	    end_s = time_s
-    end
-    if iter == 0
-      start_s = time_s
-    end
-    if start_s > time_s
-      start_s = time_s
-    end
-    
-		t = Time.at(time_s)
-		
-		balanced = data[1].to_i
-		unbalanced = data[2].to_i
-		
-		if t.hour >= 8 && < 20
-      daily.push(unbalanced)
-    else
-      nightly.push(unbalanced)
-    end
-    
-  end
-  dailythreshold = get_threshold(daily,95)
-  nightlythreshold = get_threshold(nightly,95)
-  threshold_p = host_folder_p + "/theshold.csv"
-	threshold_f = File.open(threshold_p, 'w')
-	threshold_f.puts "TIME_S, THRESHOLD VALUE"
-	File.open(host_folder_p + "/all.csv").each_line do |line|
-	  data = line.split(', ')
-		time_s = data[0].to_i
-		t = Time.at(time_s)
-		if t.hour >= 8 && < 20
-		  if data[2].to_i>dailythreshold
-        treshold_f.puts "#{time_s}, #{dailythreshold}, 1"
-      else
-        treshold_f.puts "#{time_s}, #{dailythreshold}, 0"
-      end
-    else
-		  if data[2].to_i>nightlythreshold
-        treshold_f.puts "#{time_s}, #{nightlythreshold}, 1"
-      else
-        treshold_f.puts "#{time_s}, #{nightlythreshold}, 0"
-      end
-    end
-  end
-end
-
-def parse_bgpfile(bgp_folder_p)
-  start_s = 0
-  end_s = 0
-  daily = Array.new
-	nightly = Array.new
-	iter = 0
-	
-	File.open(bgp_folder_p + "/all.csv").each_line do |line|
-		data = line.split(', ')
-		time_s = data[0].to_i
-		if time_s > end_s
-	    end_s = time_s
-    end
-    if iter == 0
-      start_s = time_s
-    end
-    if start_s > time_s
-      start_s = time_s
-    end
-    
-		t = Time.at(time_s)
-		
-		balanced = data[1].to_i
-		unbalanced = data[2].to_i
-		
-		if t.hour >= 8 && < 20
-      daily.push(unbalanced)
-    else
-      nightly.push(unbalanced)
-    end
-    
-  end
-  dailythreshold = get_threshold(daily,95)
-  nightlythreshold = get_threshold(nightly,95)
-  threshold_p = bgp_folder_p + "/theshold.csv"
-	threshold_f = File.open(threshold_p, 'w')
-	threshold_f.puts "TIME_S, THRESHOLD VALUE, EXCEEDED"
-	File.open(bgp_folder_p + "/all.csv").each_line do |line|
-	  data = line.split(', ')
-		time_s = data[0].to_i
-		t = Time.at(time_s)
-		if t.hour >= 8 && < 20
-		  if data[2].to_i>dailythreshold
-        treshold_f.puts "#{time_s}, #{dailythreshold}, 1"
-      else
-        treshold_f.puts "#{time_s}, #{dailythreshold}, 0"
-      end
-    else
-		  if data[2].to_i>nightlythreshold
-        treshold_f.puts "#{time_s}, #{nightlythreshold}, 1"
-      else
-        treshold_f.puts "#{time_s}, #{nightlythreshold}, 0"
-      end
-    end
-  end
-end
 
 ################################################################################
 ######## MAIN ##################################################################
@@ -1356,13 +1425,14 @@ end
 
 if (
 	ARGV[0] == nil or 
-	File.directory?(ARGV[0]) == false or 
-	File.directory?(ARGV[0]+"/connection_matrix") == false
+	File.directory?(ARGV[0]) == false 
+	#or File.directory?(ARGV[0]+"/connection_matrix") == false
 )
 	puts "Usage <extract connectivity folder>"
 	exit
 end
 process(ARGV[0])
+#process_analyser(ARGV[0])
 
 =begin
 analyser_tags_a = [
