@@ -86,53 +86,42 @@ class Analyser
 	def statistics_data_to_csv(export_time_s)
 		s = ''
 		s += "#{export_time_s}, "
-
 		s += "#{@stat_cons_processed4}, "
-
 		s += "#{@stat_cons_if_invalid4}, "
 		s += "#{@stat_cons_if_zero4}, "
 		s += "#{@stat_cons_if_not_monitored4}, "
 		s += "#{@stat_cons_if_monitored4}, "
-
 		s += "#{@stat_cons_state_processed4}, "
 		s += "#{@stat_cons_state_balanced4}, "
 		s += "#{@stat_cons_state_unbalanced4}, "
 		s += "#{@stat_cons_state_other4}, "
-
 		s += "#{@stat_cons_weird_cons_processed4}, "
 		s += "#{@stat_cons_weird_cons_no_rule4}, "
 		s += "#{@stat_cons_weird_cons_zero_packet4}, "
 		s += "#{@stat_cons_weird_cons_bpp4}, "
 		s += "#{@stat_cons_weird_cons_ok4}, "
-
 		s += "#{@stat_cons_signal_processed4}, "
 		s += "#{@stat_cons_signal_ok4}, "
 		s += "#{@stat_cons_signal_other4}, "
-
 		s += "#{@stat_cons_accounted_unbalanced4}, "
-		
+		#IPv6 part... offset 20
 		s += "#{@stat_cons_processed6}, "
-
 		s += "#{@stat_cons_if_invalid6}, "
 		s += "#{@stat_cons_if_zero6}, "
 		s += "#{@stat_cons_if_not_monitored6}, "
 		s += "#{@stat_cons_if_monitored6}, "
-
 		s += "#{@stat_cons_state_processed6}, "
 		s += "#{@stat_cons_state_balanced6}, "
 		s += "#{@stat_cons_state_unbalanced6}, "
 		s += "#{@stat_cons_state_other6}, "
-
 		s += "#{@stat_cons_weird_cons_processed6}, "
 		s += "#{@stat_cons_weird_cons_no_rule6}, "
 		s += "#{@stat_cons_weird_cons_zero_packet6}, "
 		s += "#{@stat_cons_weird_cons_bpp6}, "
 		s += "#{@stat_cons_weird_cons_ok6}, "
-
 		s += "#{@stat_cons_signal_processed6}, "
 		s += "#{@stat_cons_signal_ok6}, "
 		s += "#{@stat_cons_signal_other6}, "
-
 		s += "#{@stat_cons_accounted_unbalanced6}, "
 
 		s += "#{@stat_delay_s}, "

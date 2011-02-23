@@ -430,7 +430,7 @@ set output '#{folder_plot_p}/overview_ipv6.eps'
 set logscale y
 set ylabel 'cons'
 plot \
-	'#{folder_p}/stat.csv' u 1:($2 + 0.1) w filledcurve x1 fs pattern 0 lc 3 t 'ALL', \
+	'#{folder_p}/stat.csv' u 1:($20 + 0.1) w filledcurve x1 fs pattern 0 lc 3 t 'ALL', \
 	'#{folder_p}/stat.csv' u 1:($26 + $37 + 0.1) w filledcurve x1 fs pattern 0 lc 2 t 'balanced', \
 	'#{folder_p}/stat.csv' u 1:($37 + 0.1) w filledcurve x1 fs pattern 0 lc 1 t 'unbalanced accounted signal'
 
@@ -929,7 +929,7 @@ plot \
 											data_h[prefix] = [1, unbalanced]
 									else
 											data_h[prefix][0] += 1
-											data_h[prefix][1] += unbalanced if 	data_h[prefix][1] < unbalanced
+											data_h[prefix][1] += unbalanced if data_h[prefix][1] < unbalanced
 									end
 								end
 							end
@@ -1398,7 +1398,7 @@ end
 ################################################################################
 ######## MAIN ##################################################################
 ################################################################################
-def process(data_folder_p)
+<def process(data_folder_p)
 	Log.debug("Process data from folder #{data_folder_p}")
 
 	process_summary(data_folder_p)

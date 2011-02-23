@@ -36,7 +36,7 @@ require_relative 'Analyser'
 
 # Process Monitor
 require_relative 'ProcessMonitor'
-
+require_relative 'helper_cdf'
 # some general code
 IPV4_Reg = Regexp.new('^([0-9]{1,3})\.([0-9]{1,3})\.([0-9]{1,3})\.([0-9]{1,3})')
 def get_ipv4_n(ip_s)
