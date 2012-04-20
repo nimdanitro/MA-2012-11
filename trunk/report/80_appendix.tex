@@ -1,0 +1,20 @@
+%!TEX root = ./main.tex
+
+\chapter{Appendix}
+\label{appendix}
+\section{Prefix Files for FACT}
+
+Switchextract is a neat little perl script for generating the required prefix files for the FilterInOut and the Analyser of FACT. It may be found in the tool folder of the FACT sourcecode. For correctly using these perl script, the following preliminary work have to be done:
+\begin{enumerate}
+	\item Download and install bgpdump from the RIPE RIS project.
+	\item Download the bgpdump file of the desired date from a suitable route collector - the best from the default free rrc00.ripe.net.
+	\item Adjust your own AS number within the perl script switchextract.pl, i.e. replace 559 at line 24 with your own AS number.
+\end{enumerate}
+
+Then the following steps must be executed:
+\begin{enumerate}
+	\item Create a file bgpdump.txt with bgpdump: \newline\texttt{bgpdump bview.XXXXXX.XXXX.gz -m > bgpdump.txt}
+	\item Call the perl script switchextract.pl: \newline\texttt{perl switchextract.pl bgpdump.txt prefixes.txt}
+	\item prefixes.txt has to be moved or linked to the analyser configuration folder of FACT
+	\item switch\_prefixes.txt is needed by the FilterInOut and has to be moved or linked to the configuration folder of FilterInOut.
+\end{enumerate}

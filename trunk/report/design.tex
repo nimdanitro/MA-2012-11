@@ -1,0 +1,264 @@
+%%%%% ------------------------------------------------%%%%%
+%%%%% graphic engine
+%%%%% ------------------------------------------------%%%%%
+%% Dual Mode
+%%
+%% Put the pic in the './images' folder. Use the Makefile
+%% to convert the images to eps and pdf files. Then
+%% the needed pic are selected automaticly by the
+%% selected engine (pdf or eps)
+%%
+\usepackage{graphicx}
+\graphicspath{{images_pdf/},{images_eps/}}
+%\usepackage{chicago}
+\usepackage{amsmath}
+\usepackage{subfig}
+
+%\usepackage{psfig}
+%\usepackage{fullpage}
+%%% EPS only mode
+% \usepackage[final]{graphicx}
+% \DeclareGraphicsExtensions{.eps}
+% \graphicspath{{images_eps/}}
+%%
+%%% PDF only mode
+%\usepackage[final]{graphicx}
+%\DeclareGraphicsExtensions{.pdf}
+%\graphicspath{{images_pdf/}}
+%%%%% ------------------------------------------------%%%%%
+
+
+%%%%% ------------------------------------------------%%%%%
+%%%%% font
+%%%%% ------------------------------------------------%%%%%
+%\usepackage{type1cm}
+
+%(Times Roman) verwenden (veraltet, durch die folgenden ersetzt)
+%\RequirePackage{times}
+
+\RequirePackage{mathptmx}
+\RequirePackage[scaled=.90]{helvet}
+\RequirePackage{courier}
+
+% Set fonts types for text ...
+%\renewcommand{\rmdefault}{phv}  % Helvetica for roman type as well as sf
+%\renewcommand{\ttdefault}{pcr}  % use Courier for fixed pitch, if needed
+
+\def\fontdefault{phv} % use let or phv
+
+%% set the default font
+%%--------------------------
+% uerschriften formatieren ...
+\usepackage{caption}
+\renewcommand\sfdefault{\fontdefault }
+\renewcommand\familydefault{\sfdefault}
+\renewcommand{\captionfont}    {\fontfamily{\fontdefault}\selectfont \sffamily}
+\setkomafont{pagenumber}       {\fontfamily{\fontdefault}\selectfont \sffamily}
+\setkomafont{caption}          {\fontfamily{\fontdefault}\selectfont \sffamily}
+\renewcommand{\sectfont}       {\fontfamily{\fontdefault} \bfseries \sffamily}
+
+
+%% Set Region
+\usepackage[english]{babel}
+\usepackage[utf8x]{inputenc}
+
+\usepackage[Sonny]{fncychap}
+
+\usepackage{listings}
+
+\lstset{ %
+	language=Python,                % choose the language of the code
+	basicstyle=\footnotesize,       % the size of the fonts that are used for the code
+	numbers=left,                   % where to put the line-numbers
+	numberstyle=\footnotesize,      % the size of the fonts that are used for the line-numbers
+	stepnumber=1,                  % the step between two line-numbers. If it's 1 each line will be numbered
+	numbersep=5pt,                  % how far the line-numbers are from the code
+	%backgroundcolor=\color{white},  % choose the background color. You must add \usepackage{color}
+	showspaces=false,               % show spaces adding particular underscores
+	showstringspaces=false,         % underline spaces within strings
+	showtabs=false,                 % show tabs within strings adding particular underscores
+	frame=single,                   % adds a frame around the code
+	tabsize=2,                      % sets default tabsize to 2 spaces
+	captionpos=b,                   % sets the caption-position to bottom
+	breaklines=true,                % sets automatic line breaking
+	breakatwhitespace=false,        % sets if automatic breaks should only happen at whitespace
+	escapeinside={\%*}{*)}          % if you want to add a comment within your code
+}
+
+%%%%% ------------------------------------------------%%%%%
+%%%%% Page layout
+%%%%% ------------------------------------------------%%%%%
+
+%% Set length parameter to A4
+%\usepackage{a4}
+
+%----------------------------------------------------------
+% Change page size
+%----------------------------------------------------------
+%\addtolength{\textwidth}{2cm}
+%\addtolength{\textheight}{2cm}
+%\addtolength{\oddsidemargin}{-1.0cm}
+%\addtolength{\evensidemargin}{-1.0cm}
+%\addtolength{\topmargin}{-1.5cm}
+
+% \addtolength{\textwidth}{1cm}
+% \addtolength{\textheight}{1cm}
+% \addtolength{\oddsidemargin}{-1.0cm}
+% \addtolength{\evensidemargin}{-1.0cm}
+% \addtolength{\topmargin}{-0.5cm}
+
+\usepackage[right       = 3.0cm,
+            left        = 3.0cm,
+            top         = 3.5cm,
+            bottom      = 3.5cm,
+            headheight  = 1.2cm,
+            headsep     = 0.5cm,
+            foot        = 1.0cm,
+            footskip    = 0.8cm]{geometry}
+%% Header
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+
+%\usepackage{epstopdf}
+
+% \renewcommand{\sectionmark}[1]{\markright{\thesection\ #1}}
+% \fancyhf{}
+% \fancyhead[LE,RO]{\bfseries\thepage}
+% \fancyhead[LO]{\bfseries\rightmark}
+% \fancyhead[RE]{\bfseries\leftmark}
+%
+% \renewcommand{\headrulewidth}{0.5pt}
+% \addtolength{\headheight}{0.5pt}
+% \fancypagestyle{plain}{%
+%    \fancyhf{}
+%    \fancyfoot[C]{\bfseries \thepage}
+%    \fancyhead{}%get rid of headers on plain pages
+%    \renewcommand{\headrulewidth}{0pt} % an the line
+% }
+%
+% \setlength{\parindent}{0in}
+% \let\margin\marginpar
+% \newcommand\myMargin[1]{\margin{\raggedright\scriptsize #1}}
+% \renewcommand{\marginpar}[1]{\myMargin{#1}}
+%
+
+
+% create header and footer
+%--------------------------
+\fancypagestyle{body}
+{
+    \fancyhf{}
+    \fancyhead[RO,LE]{\nouppercase{\rightmark} \vspace{2mm} \hrule}
+    \fancyfoot[RO,LE]{\hrule \vspace{2mm} \thepage }
+    \fancyfoot[LO,RE]{ \vspace{2mm} Daniel Aschwanden }
+    \renewcommand{\footrulewidth}{0pt}
+    \renewcommand{\headrulewidth}{0pt}
+}
+
+\fancypagestyle{foot}
+{
+    \fancyhf{}
+    \fancyhead[RO,LE]{\vspace{2mm} \hrule}
+    \fancyfoot[RO,LE]{\hrule \vspace{2mm} }
+    \renewcommand{\footrulewidth}{0pt}
+    \renewcommand{\headrulewidth}{0pt}
+}
+
+\fancypagestyle{plain} % first page of chapter
+{
+    \fancyhf{}
+    \fancyhead[RO,LE]{\hrule}
+    \fancyfoot[RO,LE]{\hrule \vspace{2mm} \thepage }
+    \fancyfoot[LO,RE]{\hrule \vspace{2mm} Daniel Aschwanden }
+    \renewcommand{\footrulewidth}{0pt}
+    \renewcommand{\headrulewidth}{0pt}
+}
+% configure layout
+%--------------------------
+\usepackage{titlesec}
+
+\parindent0mm
+\parskip2mm
+\titlespacing{\section}         {1pt}{*2}{*1}
+\titlespacing{\subsection}      {1pt}{*2}{*0}
+\titlespacing{\subsubsection}   {1pt}{*2}{*0}
+
+
+%%%%% ------------------------------------------------%%%%%
+%%%%% My Commands
+%%%%% ------------------------------------------------%%%%%
+\newcommand{\clearemptydoublepage}{\newpage{\pagestyle{empty}\cleardoublepage}}
+
+\def\fig{Fig. }
+
+
+%%------------------Unknown things ... ------------------%%
+
+%\usepackage{float}
+%\usepackage{longtable}
+
+\usepackage{verbatim}
+\usepackage{listings}
+\usepackage{url}
+%\usepackage{hyperref}
+%\usepackage{varioref}
+
+% The paralist package provides new list environments for itemized, description, and enumerated lists. With the package, lists can be typeset within paragraphs, as paragraphs in themselves, and in a compressed format. The package allows adjustment of the space between list items in the compressed format. The package also provides arguments for formatting labels in most of the list environments. The package incudes a configuration (.cfg) file that makes standard list environments typeset as if they were the compressed list environments defined by the package. Although the .cfg file isn't part of the default package, the package allows adding a .cfg file. The package may conflict with the babel package.
+%\usepackage{paralist}
+
+%\usepackage{psfig}
+%\usepackage{url}
+
+%The portland package implements changing from portrait to landscape orientation and back within your SWP or SW document. No special drivers are required, but you may need to change the orientation settings for your printer so that your document prints properly. If you have a single page with an orientation different from that of the rest of the document, you may need to print it separately after changing the printer settings accordingly.
+
+%\usepackage{portland}
+%\usepackage{lscape}
+%%-lpr \usepackage{verbatim}
+%\usepackage{moreverb}
+
+% Write draft on pages ...
+%\usepackage[first,bottomafter,light,dvips]{draftcopy}
+%\draftcopyName{Draft v0.1}{120}
+
+% ????
+%\def\tenrm{\fontsize{10}{12}\normalfont\rmfamily\selectfont}
+%\def\BibTeX{{\rmfamily B\kern-.05em{\scshape i\kern-.025em b}\kern-.08em \TeX}}
+
+
+
+%\newcommand{\?}{\discretionary{/}{}{/}}
+%\newcommand{\liter}[0]{/home/ruf/Lib/Bibl/}
+%\newcommand{\fref}[1]{\mbox{Figur~\ref{#1}}}
+
+
+
+
+%\hyphenation{Lukas not-to-hyphen-else-where}
+
+% \newcommand{\Appendix}[2][?]
+% {
+%  \refstepcounter{section}
+%  \addcontentsline{toc}{appendix}
+%  {
+%    \protect\numberline{\appendixname~\thesection} %1
+%  }
+%  {
+%    \flushright\large\bfseries\appendixname\ \thesection\par
+%    \nohypens\centering#1\par
+%  }
+%  \vspace{\baselineskip}
+% }
+
+
+
+%\newcommand\WARN{\myMargin{WARNING}}
+%\newcommand\FIX{\myMargin{FIX}}
+%\newcommand\UNCLEAR{\myMargin{NOT CLEAR}}
+%\newcommand\PROBLEM{\myMargin{PROBLEM}}
+%\newcommand\CHECK{\myMargin{CHECK}}
+%\newcommand\NEW{\myMargin{NEW}}
+%\newcommand\NOTE{\myMargin{NOTE}}
+%\newcommand\CHANGE{\myMargin{CHANGE}}
+%\newcommand\REMARK{\myMargin{REMARK}}
+%\newcommand\THINK{\myMargin{REALLY}}
