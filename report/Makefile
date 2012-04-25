@@ -27,11 +27,11 @@ clean:
 	/usr/bin/find . -name "*.bbl" -exec /bin/rm {} \;
 	/usr/bin/find . -name "*.blg" -exec /bin/rm {} \;
 	/usr/bin/find . -name "*.dvi" -exec /bin/rm {} \;
-	/usr/bin/find . -name "*.pdf" -exec /bin/rm {} \;
-	/usr/bin/find . -name "*.ps" -exec /bin/rm {} \;
 	/usr/bin/find . -name "*.lof" -exec /bin/rm {} \;
 	/usr/bin/find . -name "*.log" -exec /bin/rm {} \;
 	/usr/bin/find . -name "*.lot" -exec /bin/rm {} \;
 	/usr/bin/find . -name "*.toc" -exec /bin/rm {} \;
 	/usr/bin/find . -name "*.bak" -exec /bin/rm {} \;
 	/usr/bin/find . -name "*~" -exec /bin/rm {} \;
+	/usr/bin/find . -maxdepth 1 -name "*.pdf" -exec /bin/rm {} \;
+	/usr/bin/find . -maxdepth 1 -name "*.ps" -exec /bin/rm {} \;
