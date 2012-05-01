@@ -1,5 +1,8 @@
 TEX_SOURCES = \
-	    main.tex
+	    *.tex \
+      images/*.eps \
+      images/*.pdf
+
 
 all: main.pdf
 
