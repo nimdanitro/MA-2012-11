@@ -6,8 +6,10 @@
 %\usepackage{config}
 \usepackage{pdflscape}
 \usepackage{algpseudocode}
-\usepackage[square]{natbib}
+\usepackage[longnamesfirst,sort,square]{natbib}
+%\usepackage{apacite}
 \usepackage{hyperref}
+\usepackage{glossaries} 
 \usepackage[colorinlistoftodos]{todonotes}
 \usepackage{amsmath}
 \usepackage{multirow}
@@ -19,6 +21,7 @@
 
 \frenchspacing
 \sloppy
+\makeglossaries
 
 \parskip1ex
 
@@ -49,10 +52,11 @@
 \setcounter{page}{1}
 
 \input{20_introduction.tex}
+
 %\input{25_problem.tex}
 
-
-%\input{30_tasks.tex}
+% Implementation
+\input{22_flowbox.tex}
 
 
 %\input{60_results.tex}
@@ -72,13 +76,11 @@
 %
 %\include{Originalproblem}
 %\listoffigures
-%\input{90_bib.tex}
+\input{90_bib.tex}
 %\input{99_eigsterkl.tex}
+\input{glossar.tex}
 
 
-
-\bibliographystyle{plain}
-\bibliography{95_bib}
 
 \end{document}
 

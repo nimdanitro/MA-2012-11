@@ -1,0 +1,28 @@
+%!TEX root = ./main.tex
+
+\chapter{Flowbox}
+
+
+\section{Flowbox Modules}
+
+\subsection{Netflow Data Parser}
+
+\subsection{In-Out Filter}
+% configured with internal prefixes, responsible for tagging flows with direction. Setting transit and internal network traffic (in-in) as invalid (filtering away)
+
+\subsection{BiFlow Cache}
+This module is responsible for generating bidirectional flows from the incoming unidirectional flows. This is done by storing the flows in hash table with a hash key which is identical for incoming and outgoing flows. For correct operation of the biflow cache, a properly configured InOutFilter is required in front of the biflow cache since it requires that all flows must be tagged either as outgoing or as incoming. 
+
+\subsection{Fan-Out Filter}
+% scanning detection and elimination
+% state algorithm.. analog to tech report
+
+\subsection{Noise Filter}
+% remove single packet flows / unidirectional biflows...
+
+
+\subsection{Server Socket Registry}
+
+
+\subsection{Server Socket Detector}
+
