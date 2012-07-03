@@ -1,0 +1,73 @@
+\documentclass{sigcomm-alternate}
+
+\usepackage[utf8x]{inputenc}
+%\usepackage[longnamesfirst,sort,square]{natbib}
+
+
+\begin{document} 
+\title{Who Turned off the Internet?} 
+\subtitle{Mining Temporary Unreachability\\ \Large Intermediate Report }
+
+\numberofauthors{1} 
+\author{ \alignauthor Daniel Aschwanden\\
+%\affaddr{Communication Systems Group}\\
+%\affaddr{Institute TIK}\\
+\affaddr{ETH Zurich}\\
+\email{asdaniel@ee.ethz.ch}\\
+}
+
+\maketitle 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Introduction}
+% Problem: Connectivity problems exist
+The end-to-end connectivity of hosts is the key service of the Internet. However, even after 40 years of intense engineering efforts, this connectivity is temporally broken for various reasons, such as link or hardware failure, mis-configurations, or natural disasters. 
+% (Centrality Claim) Why do we care: Requires Troubleshooting Tools (TST) to minimize costs
+This shows that there is a real need for methods to systematically detect and locate Internet outages of remote autonomous systems, subnets, and even single hosts. An automated, ongoing detection and tracking of connectivity issues of the Internet is particularly interesting for Internet Service Providers as it may generate transparent outage information for customers and enables the ISP to react adequately on a detected reachability problems and prevent expensive customer debugging sessions.
+
+% (What is missing) Introduce the gap that we plan to close: 
+Researches and industrial vendors have proposed various approaches for systematically detect, locate and troubleshoot Internet outages and loss of end-to-end reachability. % State clearly what is missing
+However, most of these approaches rely on control-plane information as BGP routing messages or data-plane information achieved by active probing. Both approaches are not perfectly suitable for practical usage.
+
+% bash: control plane approaches & active probing approaches
+As shown by \cite{Bush:Optometry}, packets in the Internet do not necessarily follow the control plane due to default routes. Moreover, connectivity issues imposed by packet filtering cannot be tracked by control plane approaches \cite{Dainotti:2011:ACI}. Besides legal issues, active probing requires the cumbersome of target selection and increases the load on Internet infrastructure. Furthermore, there is still no active approach which scales well enough for the entire IPv6 address space.
+
+To fill this gap, \cite{SchatzmannPAM2011} proposed a fully passive approach relying on data plane information to identifying remote connectivity problems. The detection of an outage is consolidated by aggregating the unresponsive hosts to network and AS level and rating the severity of the events by affected users. This consolidation is required to reduce the noise of unresponsive hosts caused for example by scanning or botnets and implies an implicit prioritization of the events by the users affected. However, the drawback of this aggregation is that the approach is unaware of service or host outages which may be also important to track, especially if they are important services.
+
+Nevertheless, FACT's outage detection is solely based on traffic to TCP port 80 in the hope that the process listening to port 80 is a stable service, e.g. a web server. Since TCP traffic to port 80 is sometimes used by various application protocols different than HTTP, e.g. Skype, to traverse firewall and NAT devices, this assumption is not true in general. Depending on the kind of service or application, the characteristics of its stability and uptime differ significantly, i.e. if a host is a web server providing important content which should be up most of the time, or in the case of a Skype super-node, which are systematically changing over time. However, from a flow perspective the connections to a Skype super-node or to a web server look very similar and are often indistinguishable.
+
+For this reason, the services behind the traffic which FACT is using for outage detection have to be monitored on a longer time scale and are characterized by its stability, relevance and popularity. Afterwards, from these characterized services a smart selection of stable and representative targets is created and fed into FACT for tracking remote connectivity issues. To this end, the observed traffic used for the outage detection can be generalized such that not only traffic to TCP port 80 is considered anymore. 
+
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Related Work}
+
+
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Approach}
+
+
+%%%%%%%%%%%%%%%%%%%%%
+\section{Preliminary Results}
+
+% Two column figure
+% \begin{figure*}
+% \centering
+% %\includegraphics[width=18cm]{Images/Wustrow_spatial.pdf}
+% \caption{Traffic composition and volume of the three network telescopes. Source: Wustrow et al.}
+% \label{fig:Wustrow_spatial}
+% \end{figure*}
+
+% one column figure
+% \begin{figure}
+% \centering
+% %\includegraphics[width=8cm]{Images/Pang_bigexploits.pdf}
+% \caption{The four dominant exploits as observed by Pang et al.}
+% \label{fig:Pang_bigexploits}
+% \end{figure}
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\bibliographystyle{abbrv} 
+%\bibliographystyle{apalike} 
+\bibliography{95_bib}
+\end{document}
