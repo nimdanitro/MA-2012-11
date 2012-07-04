@@ -4,9 +4,9 @@ TEX_SOURCES = \
       images/*.pdf
 
 
-all: main.pdf
+all: main.pdf report
 
-pdf: main.pdf
+pdf: main.pdf report
 
 ps: main.ps
 
@@ -14,16 +14,16 @@ ispell::
 	ispell -d american $(TEX_SOURCES)
 
 main.dvi: $(TEX_SOURCES) 95_bib.bib
-	latex main
-	bibtex main
-	latex main
-	latex main
+	latexmk -dvi main.tex
 
-main.ps: main.dvi
-	dvips -Ppdf -G0 -t a4 main.dvi
+main.ps: main.tex $(TEX_SOURCES) 95_bib.bib
+	latexmk -ps main.tex
 
-main.pdf: main.ps
-	ps2pdf -dPDFSETTINGS=/printer -dCompatibilityLevel=1.3 -dEmbedAllFonts=true -dSubsetFonts=true -dEPSCrop=true $< $@
+main.pdf: main.tex $(TEX_SOURCES) 95_bib.bib
+	latexmk -pdf main.tex
+
+report: intermediate_report.tex $(TEX_SOURCES) 95_bib.bib
+	latexmk -pdf intermediate_report.tex
 
 clean:
 	/usr/bin/find . -name "*.aux" -exec /bin/rm {} \;
@@ -38,3 +38,4 @@ clean:
 	/usr/bin/find . -name "*~" -exec /bin/rm {} \;
 	/usr/bin/find . -maxdepth 1 -name "*.pdf" -exec /bin/rm {} \;
 	/usr/bin/find . -maxdepth 1 -name "*.ps" -exec /bin/rm {} \;
+	latexmk -CA
