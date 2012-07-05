@@ -1,28 +1,39 @@
 %!TEX root = ./main.tex
 
-\chapter{Flowbox}
+\chapter{Approach}
 
 
-\section{Flowbox Modules}
+\section{Data}
+% briefly describe the Switch network and its topology..
+% traffic volume and netflow data unsampled!
 
-\subsection{Netflow Data Parser}
+\section{Methodology}
 
-\subsection{In-Out Filter}
+\subsection{Detection of Server Sockets}
+
+
+
+\subsection{Preprocessing}
 % configured with internal prefixes, responsible for tagging flows with direction. Setting transit and internal network traffic (in-in) as invalid (filtering away)
 
-\subsection{BiFlow Cache}
+\subsection{Connection Cache}
 This module is responsible for generating bidirectional flows from the incoming unidirectional flows. This is done by storing the flows in hash table with a hash key which is identical for incoming and outgoing flows. For correct operation of the biflow cache, a properly configured InOutFilter is required in front of the biflow cache since it requires that all flows must be tagged either as outgoing or as incoming. 
 
-\subsection{Fan-Out Filter}
+\subsection{Noise Cancellation}
+\subsubsection{Fan-Out Filter}
 % scanning detection and elimination
 % state algorithm.. analog to tech report
-
-\subsection{Noise Filter}
+\subsubsection{Noise Filter}
 % remove single packet flows / unidirectional biflows...
 
+\subsection{Detection of Server Sockets}
+\subsubsection{Server Socket Detector}
 
-\subsection{Server Socket Registry}
+\subsubsection{Server Socket Registry}
 
+\subsection{Monitoring of Server Sockets}
+\subsubsection{Server Socket Stability Tracker}
+\subsubsection{Server Socket Selector}
 
-\subsection{Server Socket Detector}
+\subsection{Connectivity Issue Detection}
 
