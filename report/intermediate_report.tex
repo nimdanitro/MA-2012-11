@@ -192,17 +192,14 @@ network outage alerts based on single host outages of unstable services.
 \section{Preliminary Results} 
 Currently the server socket detection and a first version of the 
 stability and popularity analysis component is implemented. In the 
-rest of this section, we shortly discuss the some Preliminary 
-results 
+rest of this section, some preliminary results are shortly discussed. 
 
-\begin{figure*}[ht!]
-\centering \includegraphics[width=18cm]{images/RATIO_VTS_External.pdf}
-\caption{CCDF of availability with respect to visibility}
-\label{fig:RatioVTS} \end{figure*} The server socket detection and
-the ongoing monitoring thereof are already implemented. A one-week
-long netflow data trace of the SWITCH network of november 2010 is used to test this
+A one-week long netflow data trace of the SWITCH network of november 2010 is used to test the
 implementation. This trace contains around $21.4$ billion flows and
 the implementation detected $1'728'118$ different external server sockets.
+
+Table \ref{tab:socketsall} shows the share of identified server sockets by port. Besides the dominating share
+of server socket with port 80 and 53, representing more than $50\%$ of all detected external server sockets,
 
 \begin{table}[h!]
 	\centering
@@ -230,8 +227,6 @@ other & 39.69\% \\
 \label{tab:socketsall}
 \caption{Identified external server sockets by port}
 \end{table}
-
-
 
 Figure \ref{fig:RatioVTS} shows a complementary cumulative distribution
 function of the availability of server sockets with respect to their
