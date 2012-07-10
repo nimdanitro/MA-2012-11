@@ -191,16 +191,19 @@ Finally, FACT has to be adopted to optimally use the preselected server
 sockets for tracking only relevant connectivity issues by reducing
 network outage alerts based on single host outages of unstable services.
 
-
 \section{Preliminary Results} 
+Currently the server socket detection and a first version of the 
+stability and popularity analysis component is implemented. In the 
+rest of this section, we shortly discuss the some Preliminary 
+results 
 
-\begin{figure*}[ht!]
-\centering \includegraphics[width=18cm]{images/RATIO_VTS_External.pdf}
-\caption{CCDF of availability with respect to visibility}
-\label{fig:RatioVTS} \end{figure*} The server socket detection and
-the ongoing monitoring thereof are already implemented. A one-week
-long netflow data trace of november 2010 was used to test this
-implementation.
+
+
+is analysis of monitoring thereof are 
+already implemented. A one-week long netflow data trace of November 
+2010 was used to test this implementation. 
+
+
 
 Figure \ref{fig:RatioVTS} shows a complementary cumulative distribution
 function of the availability of server sockets with respect to their
@@ -225,5 +228,14 @@ long data trace deduce that the chosen approach is promising with
 respect to noise reduction of FACT and to enhance FACT's reliability
 on single host outages.
 
+\begin{figure*}[ht!]
+\centering \includegraphics[width=18cm]{images/RATIO_VTS_External.pdf}
+\caption{CCDF of availability with respect to visibility}
+\label{fig:RatioVTS}
+\end{figure*}
+
+
 \bibliographystyle{abbrv} %\bibliographystyle{apalike}
-\bibliography{95_bib} \end{document}
+\bibliography{95_bib}
+
+\end{document}
