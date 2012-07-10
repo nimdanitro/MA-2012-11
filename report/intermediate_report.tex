@@ -76,26 +76,79 @@ the forward-path. It is not generally true to deduce that forward-path
 reachability implies return-path reachability as well, since there may be
 intermittent problems caused by suboptimal routing \cite{Bush:Optometry}.
 
-To fill this gap, \cite{SchatzmannPAM2011} proposed the fully passive approach called FACT relying on flow level information to identify remote connectivity problems. The basic idea of FACT is to match the corresponding outgoing and incoming flow to a bidirectional connection. Then the remaining unidirectional connections or unresponsive connections are extracted and investigated. The detection of an outage is consolidated by aggregating these unresponsive connections to host, network and AS level and rating the severity of the events by affected users. This consolidation is required to reduce the noise of unresponsive connections caused for example by scanning or botnets and implies an implicit prioritization of events which affect many internal network users. 
+To fill this gap, \cite{SchatzmannPAM2011} proposed the fully
+passive approach called FACT relying on flow level information to
+identify remote connectivity problems. The basic idea of FACT is to
+match the corresponding outgoing and incoming flow to a bidirectional
+connection. Then the remaining unidirectional connections or unresponsive
+connections are extracted and investigated. The detection of an outage
+is consolidated by aggregating these unresponsive connections to host,
+network and AS level and rating the severity of the events by affected
+users. This consolidation is required to reduce the noise of unresponsive
+connections caused for example by scanning or botnets and implies an
+implicit prioritization of events which affect many internal network
+users.
 
-However, the drawback of this aggregation is that the approach is too coarse grained to track service outages which may be also important, especially if they are important services.
+However, the drawback of this aggregation is that the approach is too
+coarse grained to track service outages which may be also important,
+especially if they are important services.
 
-Furthermore, FACT's outage detection is solely based on traffic to TCP port 80 in the hope that the process listening to port 80 is a stable service, e.g. a web server. Since TCP traffic to port 80 is sometimes used by various application protocols different than HTTP, e.g. Skype, to traverse firewall and NAT devices, this assumption is not true in general. Depending on the kind of service or application, the characteristics of its stability and uptime differ significantly, i.e. if a host is a web server providing important content which should be up most of the time, or in the case of a Skype super-node, which is systematically changing over time. However, from a flow perspective the connections to a Skype super-node or to a web server look very similar and are often indistinguishable.
+Furthermore, FACT's outage detection is solely based on traffic to
+TCP port 80 in the hope that the process listening to port 80 is a
+stable service, e.g. a web server. Since TCP traffic to port 80 is
+sometimes used by various application protocols different than HTTP,
+e.g. Skype, to traverse firewall and NAT devices, this assumption is
+not true in general. Depending on the kind of service or application,
+the characteristics of its stability and uptime differ significantly,
+i.e. if a host is a web server providing important content which should
+be up most of the time, or in the case of a Skype super-node, which is
+systematically changing over time. However, from a flow perspective the
+connections to a Skype super-node or to a web server look very similar
+and are often indistinguishable.
 
-For this reason, the services behind the traffic which FACT is using for outage detection have to be monitored on a longer time scale and characterized by its stability, relevance and popularity. Afterwards, from these characterized services a smart selection of stable and representative targets is created and fed into FACT for tracking remote connectivity issues. To this end, the observed traffic used for the outage detection can be generalized such that not only traffic to TCP port 80 is considered anymore. 
+For this reason, the services behind the traffic which FACT is using
+for outage detection have to be monitored on a longer time scale and
+characterized by its stability, relevance and popularity. Afterwards,
+from these characterized services a smart selection of stable and
+representative targets is created and fed into FACT for tracking remote
+connectivity issues. To this end, the observed traffic used for the
+outage detection can be generalized such that not only traffic to TCP
+port 80 is considered anymore.
 
-To sum up, the overall goal of this thesis is to extend FACT with a service monitoring and classification functionality to employ a third level of noise reduction besides user aggregation and traffic preselection. In fact, this functionality should enable FACT to track only relevant connectivity issues which are related to a stable service, as the web server listening on TCP port 80 and not the Skype super-node listening on TCP port 80.
+To sum up, the overall goal of this thesis is to extend FACT with
+a service monitoring and classification functionality to employ a
+third level of noise reduction besides user aggregation and traffic
+preselection. In fact, this functionality should enable FACT to track
+only relevant connectivity issues which are related to a stable service,
+as the web server listening on TCP port 80 and not the Skype super-node
+listening on TCP port 80.
 
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Approach}
 
-In a first step, the server socket detection is implemented. The challenge of the server socket detection lies in the fact that the netflow data does not provide enough precise timing information to determine which flow is originated from the client and thus determine the server's socket. Therefore, the server socket detection is achieved by the assumption that server sockets act as concentrators in the sense that several clients have connections to the identical server socket.
+In a first step, the server socket detection is implemented. The
+challenge of the server socket detection lies in the fact that the
+netflow data does not provide enough precise timing information to
+determine which flow is originated from the client and thus determine
+the server's socket. Therefore, the server socket detection is achieved
+by the assumption that server sockets act as concentrators in the sensei
+that several clients have connections to the identical server socket.
 
-Secondly, the previously detected server sockets are continually monitored and especially the successful and unsuccessful connection attempts are recorded. Furthermore, these information are used to update the statistical information of visibility, popularity and stability.
+Secondly, the previously detected server sockets are continually
+monitored and especially the successful and unsuccessful connection
+attempts are recorded. Furthermore, these information are used to update
+the statistical information of visibility, popularity and stability.
 
-In a third step, the number of server sockets have to be reduced and selected in a smart way such that FACT is able to use these sockets for outage tracking. In particular, the server sockets coverage of the Internet address space has to be optimized. It makes no sense to select only the most popular sockets if they are all located in the same /24 network. 
+In a third step, the number of server sockets have to be reduced and
+selected in a smart way such that FACT is able to use these sockets
+for outage tracking. In particular, the server sockets coverage of the
+Internet address space has to be optimized. It makes no sense to select
+only the most popular sockets if they are all located in the same /24
+network.
 
-Finally, FACT has to be adopted to optimally use the preselected server sockets for tracking only relevant connectivity issues by reducing network outage alerts based on single host outages of unstable services. 
+Finally, FACT has to be adopted to optimally use the preselected server
+sockets for tracking only relevant connectivity issues by reducing
+network outage alerts based on single host outages of unstable services.
 
 
 %%%%%%%%%%%%%%%%%%%%%
