@@ -96,48 +96,64 @@ connections caused for example by scanning or botnets and implies an
 implicit prioritization of events which affect many internal network
 users.
 
-To further improve the analyis results of FACT Schatzmann et al. 
-proposed in \cite{MyPhDThesis} to exclude certain types of 
-internet services that are not presitently reachable. For example, 
-Skype or 
+To further improve the reporting functionalities of FACT Schatzmann et
+al. proposed in \cite{MyPhDThesis} to treat certain types of Internet
+services differently that don't require constant reachability.
+For example, Skype or Bitrorrent applications that are executed on
+client machines such as Destops, Laptops, or Smartphons are possible
+only reachable for limited time during a day. This characteristic is
+caused by the fact that these machines are often disconnected for the
+network to save power or due to user mobility effects. However, this
+temporal unreachability is not noted as a problem by the end-users.
+Therefore this issues should be tagged by FACT with a low severity (low
+priority for the operator). To achieve this Schatzmann et al. presented
+in \cite{MyPhDThesis} a hybrid service classification system to label
+the type service such as http, skype, or bittorrent provided by host
+requiring only limited processing and collection efforts.
 
+In this work, we plan to enrich the reporting functionalities of FACT
+with a other key aspect namely the knowledge about the past stability,
+popularity characteristics of remote sites. In more detail, we plan to
+analyses the stability, popularity characteristics of remote sites over
+longer time scales and use this information within FACT to further
+improve the prioritization of connectivity issues.  As example, a
+remote web server used only by a few users that is often unreachable
+(overloaded, used for testing) should not have the same weight within
+the prioritization algorithm of FACT like a popular content distribution
+host that was always reachable over the past.
 
+%However, the drawback of this aggregation is that the approach is too
+%coarse grained to track service outages which may be also important,
+%especially if they are important services.
 
-
-
-However, the drawback of this aggregation is that the approach is too
-coarse grained to track service outages which may be also important,
-especially if they are important services.
-
-Furthermore, FACT's outage detection is solely based on traffic to
-TCP port 80 in the hope that the process listening to port 80 is a
-stable service, e.g. a web server. Since TCP traffic to port 80 is
-sometimes used by various application protocols different than HTTP,
-e.g. Skype, to traverse firewall and NAT devices, this assumption is
-not true in general. Depending on the kind of service or application,
-the characteristics of its stability and uptime differ significantly,
-i.e. if a host is a web server providing important content which should
-be up most of the time, or in the case of a Skype super-node, which is
-systematically changing over time. However, from a flow perspective the
-connections to a Skype super-node or to a web server look very similar
-and are often indistinguishable.
-
-For this reason, the services behind the traffic which FACT is using
-for outage detection have to be monitored on a longer time scale and
-characterized by its stability, relevance and popularity. Afterwards,
-from these characterized services a smart selection of stable and
-representative targets is created and fed into FACT for tracking remote
-connectivity issues. To this end, the observed traffic used for the
-outage detection can be generalized such that not only traffic to TCP
-port 80 is considered anymore.
-
+%Furthermore, FACT's outage detection is solely based on traffic to
+%TCP port 80 in the hope that the process listening to port 80 is a
+%stable service, e.g. a web server. Since TCP traffic to port 80 is
+%sometimes used by various application protocols different than HTTP,
+%e.g. Skype, to traverse firewall and NAT devices, this assumption is
+%not true in general. Depending on the kind of service or application,
+%the characteristics of its stability and uptime differ significantly,
+%i.e. if a host is a web server providing important content which should
+%be up most of the time, or in the case of a Skype super-node, which is
+%systematically changing over time. However, from a flow perspective the
+%connections to a Skype super-node or to a web server look very similar
+%and are often indistinguishable.
+%
+%For this reason, the services behind the traffic which FACT is using
+%for outage detection have to be monitored on a longer time scale and
+%characterized by its stability, relevance and popularity. Afterwards,
+%from these characterized services a smart selection of stable and
+%representative targets is created and fed into FACT for tracking remote
+%connectivity issues. To this end, the observed traffic used for the
+%outage detection can be generalized such that not only traffic to TCP
+%port 80 is considered anymore.
+%
 To sum up, the overall goal of this thesis is to extend FACT with
 a service monitoring and classification functionality to employ a
 third level of noise reduction besides user aggregation and traffic
-preselection. In fact, this functionality should enable FACT to track
-only relevant connectivity issues which are related to a stable service,
-as the web server listening on TCP port 80 and not the Skype super-node
-listening on TCP port 80.
+preselection. In fact, this functionality should enable FACT to focus
+even better relevant connectivity issues which are related to a stable
+and popular service.
 
 \section{Approach}
 
