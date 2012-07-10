@@ -156,7 +156,28 @@ even better relevant connectivity issues which are related to a stable
 and popular service.
 
 \section{Approach}
-In a first step, the server socket detection is implemented. The
+To achive this goal to enrich the reporting functionalities of FACT
+with knowledge about the past stability, popularity characteristics 
+of remote sites we plan to extent FACT by using three stpes as 
+illustrated in Figure X
+
+\begin{figure*}[ht!]
+\centering \includegraphics[width=18cm]{images/RATIO_VTS_External.pdf}
+\caption{CCDF of availability with respect to visibility}
+\label{fig:RatioVTS} 
+\end{figure*}
+
+
+%In a first step, the server socket detection is implemented. The
+%challenge of the server socket detection lies in the fact that the
+%netflow data does not provide enough precise timing information to
+%determine which flow is originated from the client and thus determine
+%the server's socket. Therefore, the server socket detection is
+%achieved by the assumption that server sockets act as concentrators
+%in the sensei that several clients have connections to the identical
+%server socket.
+
+a first step,  server socket detection is implemented. The
 challenge of the server socket detection lies in the fact that the
 netflow data does not provide enough precise timing information to
 determine which flow is originated from the client and thus determine
@@ -211,7 +232,6 @@ To sum up, the results of the preliminary analysis of this one week
 long data trace deduce that the chosen approach is promising with
 respect to noise reduction of FACT and to enhance FACT's reliability
 on single host outages.
-
 
 \bibliographystyle{abbrv} %\bibliographystyle{apalike}
 \bibliography{95_bib} \end{document}
