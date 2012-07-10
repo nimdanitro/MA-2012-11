@@ -156,10 +156,9 @@ even better relevant connectivity issues which are related to a stable
 and popular service.
 
 \section{Approach}
-To achive this goal to enrich the reporting functionalities of FACT
-with knowledge about the past stability, popularity characteristics 
-of remote sites we plan to extent FACT by using three stpes as 
-illustrated in Figure X
+To achive this goal of enriching the reporting functionalities of FACT
+with knowledge about the past stability, popularity characteristics
+we plan to extent FACT by three stpes as illustrated in Figure X.
 
 \begin{figure*}[ht!]
 \centering \includegraphics[width=18cm]{images/RATIO_VTS_External.pdf}
@@ -167,24 +166,14 @@ illustrated in Figure X
 \label{fig:RatioVTS} 
 \end{figure*}
 
-
-%In a first step, the server socket detection is implemented. The
-%challenge of the server socket detection lies in the fact that the
-%netflow data does not provide enough precise timing information to
-%determine which flow is originated from the client and thus determine
-%the server's socket. Therefore, the server socket detection is
-%achieved by the assumption that server sockets act as concentrators
-%in the sensei that several clients have connections to the identical
-%server socket.
-
-a first step,  server socket detection is implemented. The
+In a first step, a server socket detection (SeSD) is implemented. The
 challenge of the server socket detection lies in the fact that the
 netflow data does not provide enough precise timing information to
 determine which flow is originated from the client and thus determine
 the server's socket. Therefore, the server socket detection is
 achieved by the assumption that server sockets act as concentrators
 in the sensei that several clients have connections to the identical
-server socket.
+server socket. This part base on the work shown in \cite{TechReport}.
 
 Secondly, the previously detected server sockets are continually
 monitored and especially the successful and unsuccessful connection
@@ -202,7 +191,10 @@ Finally, FACT has to be adopted to optimally use the preselected server
 sockets for tracking only relevant connectivity issues by reducing
 network outage alerts based on single host outages of unstable services.
 
-\section{Preliminary Results} \begin{figure*}[ht!]
+
+\section{Preliminary Results} 
+
+\begin{figure*}[ht!]
 \centering \includegraphics[width=18cm]{images/RATIO_VTS_External.pdf}
 \caption{CCDF of availability with respect to visibility}
 \label{fig:RatioVTS} \end{figure*} The server socket detection and
