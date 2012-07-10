@@ -154,15 +154,15 @@ even better on relevant connectivity issues which are related to a stable
 and popular service.
 
 \section{Approach}
-To achive this goal of enriching the reporting functionalities of FACT
+To achieve this goal of enriching the reporting functionalities of FACT
 with knowledge about the past stability, popularity characteristics
-we plan to extent FACT by three stpes as illustrated in Figure X.
+we plan to extent FACT by three steps as illustrated in Figure \ref{fig:FACT}.
 
-\begin{figure*}[ht!]
-\centering \includegraphics[width=18cm]{images/RATIO_VTS_External.pdf}
+\begin{figure}[ht!]
+\centering \includegraphics[width=9cm]{images/RATIO_VTS_External.pdf}
 \caption{CCDF of availability with respect to visibility}
-\label{fig:RatioVTS} 
-\end{figure*}
+\label{fig:FACT}
+\end{figure}
 
 In a first step, a server socket detection (SeSD) is implemented. The
 challenge of the server socket detection lies in the fact that the
@@ -195,11 +195,41 @@ stability and popularity analysis component is implemented. In the
 rest of this section, we shortly discuss the some Preliminary 
 results 
 
+\begin{figure*}[ht!]
+\centering \includegraphics[width=18cm]{images/RATIO_VTS_External.pdf}
+\caption{CCDF of availability with respect to visibility}
+\label{fig:RatioVTS} \end{figure*} The server socket detection and
+the ongoing monitoring thereof are already implemented. A one-week
+long netflow data trace of the SWITCH network of november 2010 is used to test this
+implementation. This trace contains around $21.4$ billion flows and
+the implementation detected $1'728'118$ different external server sockets.
 
-
-is analysis of monitoring thereof are 
-already implemented. A one-week long netflow data trace of November 
-2010 was used to test this implementation. 
+\begin{table}[h!]
+	\centering
+\begin{tabular}{|c|c|}
+\hline
+Port & Share\\
+\hline \hline
+80 & 32.8\% \\
+\hline
+53 & 18.7\% \\
+\hline
+443 & 3.65\% \\
+\hline
+22  & 2.37\% \\
+\hline
+25 & 1.12\% \\
+\hline
+51413 & 1.03\% \\
+\hline
+6881 & 0.64\% \\
+\hline
+other & 39.69\% \\
+\hline
+\end{tabular}
+\label{tab:socketsall}
+\caption{Identified external server sockets by port}
+\end{table}
 
 
 
