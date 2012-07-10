@@ -59,13 +59,15 @@ Finally, FACT has to be adopted to optimally use the preselected server sockets 
 
 %%%%%%%%%%%%%%%%%%%%%
 \section{Preliminary Results}
-\begin{figure}[ht!]
+\begin{figure*}[ht!]
 \centering
-\includegraphics[width=9cm]{images/prefix_failed_ipv4.eps}
-\caption{Traffic composition and volume of the three network telescopes. Source: Wustrow et al.}
-\label{fig:Wustrow_spatial}
-\end{figure}
-The server socket detection and the ongoing monitoring thereof are already implemented. A one-week long netflow data trace of november 2010 was used to test this implementation. Therefore, some interesting statistical properties of the server sockets can already be shown.
+\includegraphics[width=18cm]{images/RATIO_VTS_External.pdf}
+\caption{CCDF of availability with respect to visibility}
+\label{fig:RatioVTS}
+\end{figure*}
+The server socket detection and the ongoing monitoring thereof are already implemented. A one-week long netflow data trace of november 2010 was used to test this implementation. 
+
+Figure \ref{fig:RatioVTS} shows a complementary cumulative distribution function of the availability of server sockets with respect to their visibility. Intuitively, the server sockets which are almost always contacted by internal network users should have have a high availability, i.e. important web servers or DNS servers. As it can be seen in figure \ref{fig:RatioVTS} the curve "VTS1200" represents the sockets which are contacted in more than $99\%$ of all discrete observation periods. 
 
 
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

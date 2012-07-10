@@ -1,0 +1,10 @@
+
+data <- read.csv("ServerSocketStability_overall_external.csv")
+ecdf_ratio_100VTS <- ecdf(subset(data$TotalRatio, data$VisibleTimeSlots >=100))
+ecdf_ratio_500VTS <- ecdf(subset(data$TotalRatio, data$VisibleTimeSlots >=500))
+ecdf_ratio_1000VTS <- ecdf(subset(data$TotalRatio, data$VisibleTimeSlots >=1000))
+ecdf_ratio_1200VTS <- ecdf(subset(data$TotalRatio, data$VisibleTimeSlots >=1200))
+
+x <- seq(from=0.3, to=1, by=0.001)
+df <- data.frame( x=x, ecdf = c(ecdf_ratio_100VTS(x), ecdf_ratio_500VTS(x), ecdf_ratio_1000VTS(x), ecdf_ratio_1200VTS(x)), VisibleTimeSlots = rep(c("VTS100", "VTS500", "VTS1000", "VTS1200"), each=length(x)))
+qplot(df$x, 1-df$ecdf, geom="step", colour = df$VisibleTimeSlots, xlab="Availability", ylab="CCDF", xlim=range(0.8,1), direction= "hv")
