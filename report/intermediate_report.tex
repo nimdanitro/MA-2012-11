@@ -9,14 +9,15 @@
 
 \begin{document} 
 \title{Who Turned off the Internet?} 
-\subtitle{Mining Temporary Unreachability\\ \Large Intermediate Report }
+\subtitle{Mining Temporary Unreachability\\ \Large Intermediate Report MA-2012-11}
 
 \numberofauthors{1} 
-\author{ \alignauthor Daniel Aschwanden\\
+\author{ \alignauthor{ Daniel Aschwanden\\
 %\affaddr{Communication Systems Group}\\
 %\affaddr{Institute TIK}\\
 \affaddr{ETH Zurich}\\
 \email{asdaniel@ee.ethz.ch}\\
+}
 }
 
 \maketitle 
@@ -154,29 +155,32 @@ even better on relevant connectivity issues which are related to a stable
 and popular service.
 
 \section{Approach}
-To achieve this goal of enriching the reporting functionalities of FACT
-with knowledge about the past stability, popularity characteristics
-we plan to extent FACT by three steps as illustrated in Figure \ref{fig:FACT}.
+To achieve this goal of enhancing the reporting functionalities of FACT
+with knowledge about the past stability, and popularity characteristics,
+the following three steps are planned for extending FACT 
+as illustrated in Figure \ref{fig:FACT}.
 
 \begin{figure}[ht!]
-\centering \includegraphics[width=9cm]{images/RATIO_VTS_External.pdf}
-\caption{CCDF of availability with respect to visibility}
+\centering \includegraphics[width=9cm]{images/Approach_blockdiagram.eps}
+\caption{Interactions of new components with FACT}
 \label{fig:FACT}
 \end{figure}
 
-In a first step, a server socket detection (SeSD) is implemented. The
+
+In a first step, a server socket detector is implemented. The
 challenge of the server socket detection lies in the fact that the
 netflow data does not provide enough precise timing information to
 determine which flow is originated from the client and thus determine
 the server's socket. Therefore, the server socket detection is
 achieved by the assumption that server sockets act as concentrators
 in the sensei that several clients have connections to the identical
-server socket. This part base on the work shown in \cite{TechReport}.
+server socket and bases on the work shown in \cite{Schatzmann:Dissection,Schatzmann:Mining,Schatzmann:Tracing}.
 
 Secondly, the previously detected server sockets are continually
 monitored and especially the successful and unsuccessful connection
-attempts are recorded. Furthermore, these information are used to update
-the statistical information of visibility, popularity and stability.
+attempts are recorded by the server socket tracker. 
+Furthermore, these information are used to update the statistical 
+information of visibility, popularity and stability.
 
 In a third step, the number of server sockets have to be reduced and
 selected in a smart way such that FACT is able to use these sockets
@@ -185,59 +189,105 @@ Internet address space has to be optimized. It makes no sense to select
 only the most popular sockets if they are all located in the same /24
 network.
 
-Finally, FACT has to be adopted to optimally use the preselected server
-sockets for tracking only relevant connectivity issues by reducing
-network outage alerts based on single host outages of unstable services.
+Finally, FACT has to be adopted to optimally use the preselected and rated 
+server sockets for prioritizing relevant connectivity issues by reducing 
+outage alerts based on single host outages of unstable services.
 
 \section{Preliminary Results} 
-Currently the server socket detection and a first version of the 
-stability and popularity analysis component is implemented. In the 
+Currently, the server socket detection and a first version of the 
+server socket tracker component is implemented. In the 
 rest of this section, some preliminary results are shortly discussed. 
 
 A one-week long netflow data trace of the SWITCH network of november 2010 is used to test the
 implementation. This trace contains around $21.4$ billion flows and
 the implementation detected $1'728'118$ different external server sockets.
 
-Table \ref{tab:socketsall} shows the share of identified server sockets by port. Besides the dominating share
+Table 1 a) shows the share of all identified external server sockets by port including the top 7 ports. Besides the dominating share
 of server socket with port 80 and 53, representing more than $50\%$ of all detected external server sockets,
+the share of port 51413 an 6881, both belonging to popular BitTorrent client applications, are noteworthy. 
 
-\begin{table}[h!]
+\begin{table}[ht]
+	\begin{minipage}[b]{0.45\linewidth}
 	\centering
+	\begin{tabular}{|c|c|}
+	\hline
+	Port & Share \\
+	\hline \hline
+	80 & 32.807\%  \\
+	\hline
+	53 & 18.748\%  \\
+	\hline
+	443 & 3.647\% \\
+	\hline
+	22  & 2.365\%\\
+	\hline
+	25 & 1.116\%\\
+	\hline
+	51413 & 1.034\%\\
+	\hline
+	6881 & 0.640\% \\
+	\hline
+	other($>1024$) & 38.997\% \\ 
+	\hline
+	other($\le1024$) & 0.647\%\\
+	\hline
+	\multicolumn{2}{c}{a) all sockets}
+	\end{tabular}
+	\end{minipage}
+\hspace{0.25cm}
+\begin{minipage}[b]{0.45\linewidth}
+\centering
 \begin{tabular}{|c|c|}
-\hline
-Port & Share\\
-\hline \hline
-80 & 32.8\% \\
-\hline
-53 & 18.7\% \\
-\hline
-443 & 3.65\% \\
-\hline
-22  & 2.37\% \\
-\hline
-25 & 1.12\% \\
-\hline
-51413 & 1.03\% \\
-\hline
-6881 & 0.64\% \\
-\hline
-other & 39.69\% \\
-\hline
+	\hline
+	Port & Share \\
+	\hline \hline
+	80 & 24.834\%  \\
+	\hline
+	53 & 36.122\%  \\
+	\hline
+	443 & 2.991\% \\
+	\hline
+	22  & 0.123\%\\
+	\hline
+	25 & 1.131\%\\
+	\hline
+	51413 & 0.021\%\\
+	\hline
+	6881 & 0.006\% \\
+	\hline
+	other($>1024$) & 33.234\% \\ 
+	\hline
+	other($\le1024$) & 1.548\%\\
+	\hline
+	\multicolumn{2}{c}{b) popular sockets}
 \end{tabular}
-\label{tab:socketsall}
+\end{minipage}
+\label{tab:socketsport}
 \caption{Identified external server sockets by port}
 \end{table}
 
-Figure \ref{fig:RatioVTS} shows a complementary cumulative distribution
-function of the availability of server sockets with respect to their
-visibility. Intuitively, the server sockets which are almost always
+Furthermore, table 1 b) shows the share of the same ports of server sockets
+which are seen in at least 41\%\footnote{The diurnal network usage pattern yields an intensive network usage of around 10 hours per day: ($10/24 = 41.67\%$) } of all 5 minute observation intervals and are thus
+denoted as popular server sockets. Remarkable is that the share of ports 80 and 53
+is even more dominating with around $60\%$. Intuitively, the previously mentioned
+BitTorrent ports 51413 and 6881 are now almost negligible and thus confirming that
+these sockets are highly fluctuating with respect to their availability.
+
+For further understanding the effect of popularity on stability, the statistical 
+distribution of the availability or stability of the server sockets
+with respect to the popularity is analyzed. Therefore, complementary cumulative 
+distribution functions of four different sets of server sockets with different 
+popularities are shown in figure \ref{fig:RatioVTS}. The sets are denoted as
+"VTS\emph{X}" where \emph{X} stands for the number of time slots a server socket
+is contacted. In total there are 1213 time slots during this observation period.  
+
+Intuitively, the server sockets which are almost always
 contacted by internal network users should have a high availability,
 i.e. important web servers or DNS servers. As it can be seen in
-figure \ref{fig:RatioVTS} the curve "VTS1200", representing the
-sockets which are contacted in more than $99\%$ of all 5 minute
-long observation slots, yields a higher share on hosts with an
-availability higher than $99.5\%$. This finding is the foundation
-for this approach to track connectivity outages of important hosts.
+figure \ref{fig:RatioVTS} the distribution of the set "VTS1200", representing the
+sockets which are contacted in more than $99\%$ of all cases,
+yields a higher share of hosts with an availability higher than $99.5\%$.
+This finding is the foundation for this approach to track connectivity outages of important hosts.
 
 Despite the fact that the "VTS1200" set contains only around $0.2\%$
 of all known sockets of this observation week, they are still around
