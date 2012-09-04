@@ -48,7 +48,7 @@ information, most researchers focussed on approaches detecting
 problem related to address space, i.e. bogon advertisements
 \cite{Feamster:2005}, prefix hijacking \cite{Zhang:2010},
 or BGP misconfiguration \cite{Mahajan:2002}. Bush et
-al.\cite{Bush:Optometry} pointed out, that tracking data-plane
+al.Bush et al.\cite{Bush:Optometry} pointed out, that tracking data-plane
 reachability with control-plane information such as BGP is heavily
 inaccurate due to the effect of secret peering policies, i.e. default
 routes which allows packets to reach their destination even when a
@@ -71,8 +71,8 @@ Active probing is widely used for end-to-end reachability problem
 detection, ranging from rudimentary debugging tools as ping
 \cite{PING}, paris traceroute \cite{traceroute} or nmap \cite{Nmap}
 to highly sophisticated, automated outage detection tools as Hubble
-\cite{Katz:2008} or PlanetSeer \cite{Zhang:2004}. \cite{Bush:Optometry}
-pointed out there exist some important limitations as packet filtering
+\cite{Katz:2008} or PlanetSeer \cite{Zhang:2004}. Bush et al.\cite{Bush:Optometry}
+pointed out that there are some important limitations as packet filtering
 by firewall and NAT devices or suboptimal routing which result in
 intermittent problems as packet rerouting. Furthermore, there is
 no active probing technique known which is able to record the return
@@ -96,9 +96,9 @@ connections caused for example by scanning or botnets and implies an
 implicit prioritization of events which affect many internal network
 users.
 
-Schatzmann proposed in \cite{SchatzmanThesis2012} to differently
-treat certain types of Internet services because they do not require
-constant reachability. For example, Skype or BitTorrent applications that
+Schatzmann\cite{SchatzmanThesis2012} proposed to treat certain types 
+of Internet services differently because they do not require constant 
+reachability. For example, Skype or BitTorrent applications that
 are often executed on client machines such as Desktops, Laptops, or
 Smartphones are likely to be reachable only for a limited time during a day.
 This characteristic is caused by the fact that these machines are often
@@ -111,7 +111,7 @@ label the service type such as HTTP, Skype, or BitTorrent.
 
 In this work, the reporting functionalities of FACT are complemented by
 another major key aspect of event prioritization, namely the knowledge
-about past stability, and popularity characteristics of remote services.
+about past stability and popularity characteristics of remote services.
 
 In detail, these services are monitored and analyzed on longer time scales
 so that the deduced statistical information enables FACT improve
@@ -156,12 +156,12 @@ and popular service.
 
 \section{Approach}
 To achieve this goal of enhancing the reporting functionalities of FACT
-with knowledge about the past stability, and popularity characteristics,
+with knowledge about the past stability and popularity characteristics,
 the following three steps are planned for extending FACT 
 as illustrated in Figure \ref{fig:FACT}.
 
 \begin{figure}[ht!]
-\centering \includegraphics[width=9cm]{images/Approach_blockdiagram.eps}
+\centering \includegraphics[width=8.5cm]{images/Approach_blockdiagram.eps}
 \caption{Interactions of new components with FACT}
 \label{fig:FACT}
 \end{figure}
@@ -203,8 +203,8 @@ implementation. This trace contains around $21.4$ billion flows and
 the implementation detected $1'728'118$ different external server sockets.
 
 Table 1 a) shows the share of all identified external server sockets by port including the top 7 ports. Besides the dominating share
-of server socket with port 80 and 53, representing more than $50\%$ of all detected external server sockets,
-the share of port 51413 an 6881, both belonging to popular BitTorrent client applications, are noteworthy. 
+of server socket with port TCP80 and TCP/UDP 53, representing more than $50\%$ of all detected external server sockets,
+the share of port 51413 an 6881 (both TCP \& UDP), both belonging to popular BitTorrent client applications, are noteworthy. 
 
 \begin{table}[ht]
 	\begin{minipage}[b]{0.45\linewidth}
@@ -213,23 +213,23 @@ the share of port 51413 an 6881, both belonging to popular BitTorrent client app
 	\hline
 	Port & Share \\
 	\hline \hline
-	80 & 32.807\%  \\
+	TCP 80 & 32.80\%  \\
 	\hline
-	53 & 18.748\%  \\
+	53 & 18.75\%  \\
 	\hline
-	443 & 3.647\% \\
+	TCP 443 & 3.64\% \\
 	\hline
-	22  & 2.365\%\\
+	TCP 22  & 2.37\%\\
 	\hline
-	25 & 1.116\%\\
+	TCP 25 & 1.12\%\\
 	\hline
-	51413 & 1.034\%\\
+	51413 & 1.03\%\\
 	\hline
-	6881 & 0.640\% \\
+	6881 & 0.64\% \\
 	\hline
-	other($>1024$) & 38.997\% \\ 
+	other($>1024$) & 39.00\% \\ 
 	\hline
-	other($\le1024$) & 0.647\%\\
+	other($\le1024$) & 0.66\%\\
 	\hline
 	\multicolumn{2}{c}{a) all sockets}
 	\end{tabular}
@@ -241,23 +241,23 @@ the share of port 51413 an 6881, both belonging to popular BitTorrent client app
 	\hline
 	Port & Share \\
 	\hline \hline
-	80 & 24.834\%  \\
+	TCP 80 & 24.83\%  \\
 	\hline
-	53 & 36.122\%  \\
+	53 & 36.12\%  \\
 	\hline
-	443 & 2.991\% \\
+	TCP 443 & 2.99\% \\
 	\hline
-	22  & 0.123\%\\
+	TCP 22  & 0.12\%\\
 	\hline
-	25 & 1.131\%\\
+	TCP 25 & 1.13\%\\
 	\hline
-	51413 & 0.021\%\\
+	51413 & 0.02\%\\
 	\hline
-	6881 & 0.006\% \\
+	6881 & 0.01\% \\
 	\hline
-	other($>1024$) & 33.234\% \\ 
+	other($>1024$) & 33.23\% \\ 
 	\hline
-	other($\le1024$) & 1.548\%\\
+	other($\le1024$) & 1.55\%\\
 	\hline
 	\multicolumn{2}{c}{b) popular sockets}
 \end{tabular}
@@ -274,12 +274,12 @@ BitTorrent ports 51413 and 6881 are now almost negligible and thus confirming th
 these sockets are highly fluctuating with respect to their availability.
 
 For further understanding the effect of popularity on stability, the statistical 
-distribution of the availability or stability of the server sockets
+distribution of the availability of the server sockets
 with respect to the popularity is analyzed. Therefore, complementary cumulative 
 distribution functions of four different sets of server sockets with different 
 popularities are shown in figure \ref{fig:RatioVTS}. The sets are denoted as
 "VTS\emph{X}" where \emph{X} stands for the number of time slots a server socket
-is contacted. In total there are 1213 time slots during this observation period.  
+is contacted. In total, there are 1213 time slots during this observation period.  
 
 Intuitively, the server sockets which are almost always
 contacted by internal network users should have a high availability,
@@ -290,7 +290,7 @@ yields a higher share of hosts with an availability higher than $99.5\%$.
 This finding is the foundation for this approach to track connectivity outages of important hosts.
 
 Despite the fact that the "VTS1200" set contains only around $0.2\%$
-of all known sockets of this observation week, they are still around
+of all known sockets of this observation week, it contains still around
 5000 distinct sockets.
 
 Moreover, the Internet address space coverage of these almost always
@@ -298,8 +298,7 @@ visible sockets has to be carefully reviewed.
 
 To sum up, the results of the preliminary analysis of this one week
 long data trace deduce that the chosen approach is promising with
-respect to noise reduction of FACT and to enhance FACT's reliability
-on single host outages.
+respect to event prioritization.
 
 \begin{figure*}[ht!]
 \centering \includegraphics[width=18cm]{images/RATIO_VTS_External.pdf}
