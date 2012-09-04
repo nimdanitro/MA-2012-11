@@ -1,5 +1,5 @@
 %!TEX root = ./main.tex
-\chapter{Of Server Sockets and their Stability}
+\chapter{Of Server Sockets and their Stability\label{chapter:sockets}}
 
 \section{Server Sockets}
 Since the Internet has moved from a research project to a widely used, public communication infrastructure, one of the critical success factors was its diversity with respect to network applications or services. This was heavily favored by the Internets layered design as described by the OSI model. 
@@ -19,24 +19,32 @@ Despite the definition contains the term server, the definition is not only true
 % formal definition of socket.. and its function in communication
 % formal definition of server socket
 
-\section{Detection of Server Sockets}
+\section{Detection of Server Sockets\label{section:socket_detection}}
 % problem of detection with flow-level information (timing issue + flags)
 Basically, a server socket can be identified by the fact that a client opens a socket which initiates a connection to a server socket. Usually, the client's socket is chosen at random by his operating system and the server socket should be stable over time since it must offer a specific network service or application. 
 
-Therefore, an straight-forward approach for detecting server sockets is to infer the initiator of the connection by the timing information and determine its opposite as the server socket. However, this approach requires a perfect time synchronization of all netflow exporting devices across the network. In practice, this cannot be achieved in a satisfactory and reliable way.
+A straight-forward approach for detecting server sockets is to infer the initiator of the connection by the timing information and determine its opposite as the server socket. However, this approach requires a  time synchronization of all netflow exporting devices across the network. In practice, this cannot be achieved in a satisfactory and reliable way.
 
 % connection graph idea... +image
 
 \todo{Introduce Concentrator}
 Hence, the detection of server sockets with netflow data relies on the following approach proposed by \citet{Schatzmann:Mining,Schatzmann:Dissection, Schatzmann:Tracing}. First of all, a communication graph is build. This connection graph consists of nodes each representing an unique socket. If a connection between two sockets is observed, an undirected, unweighted edge between the corresponding two nodes is assigned. This means that the neither the direction nor the weight in terms of packets or bytes are required at all to build the communication graph. 
 
-\missingfigure{Bipartite connection graph}
+\begin{figure}[ht]
+\centering 
+\missingfigure{bipartite graph}
+%\includegraphics[width=\linewidth]{image/bipartite_graph.eps}
+\caption{bipartite graph of cross-boarder connections from a socket to a socket}
+\label{fig:bipartite_graph}
+\end{figure}
+
 Since server sockets provide a network application or service, they are likely to be contacted by several clients depending on their popularity. Therefore, it can be assumed that nodes with a high degree correspond to a server sockets.
 
 % introduce minimal vertex cover problem
-
 % greedy algorithm to solve mvcp
+% recalling sockets for optimization
+% overall Algorithm of detection
 
-% Algorithm of detection
 
+\section{Stability Tracking of Server Sockets\label{section:socket_tracking}}
 
