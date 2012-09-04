@@ -47,8 +47,8 @@ data-plane and control-plane measurements. By using control-plane
 information, most researchers focussed on approaches detecting
 problem related to address space, i.e. bogon advertisements
 \cite{Feamster:2005}, prefix hijacking \cite{Zhang:2010},
-or BGP misconfiguration \cite{Mahajan:2002}. Bush et
-al.Bush et al.\cite{Bush:Optometry} pointed out, that tracking data-plane
+or BGP misconfiguration \cite{Mahajan:2002}. Bush et al.\cite{Bush:Optometry} 
+pointed out, that tracking data-plane
 reachability with control-plane information such as BGP is heavily
 inaccurate due to the effect of secret peering policies, i.e. default
 routes which allows packets to reach their destination even when a
@@ -72,7 +72,7 @@ detection, ranging from rudimentary debugging tools as ping
 \cite{PING}, paris traceroute \cite{traceroute} or nmap \cite{Nmap}
 to highly sophisticated, automated outage detection tools as Hubble
 \cite{Katz:2008} or PlanetSeer \cite{Zhang:2004}. Bush et al.\cite{Bush:Optometry}
-pointed out that there are some important limitations as packet filtering
+showed that there are some important limitations as packet filtering
 by firewall and NAT devices or suboptimal routing which result in
 intermittent problems as packet rerouting. Furthermore, there is
 no active probing technique known which is able to record the return
@@ -92,7 +92,7 @@ connections are extracted and investigated. The detection of an outage
 is consolidated by aggregating these unresponsive connections to host,
 network and AS level and rating the severity of the events by affected
 users. This consolidation is required to reduce the noise of unresponsive
-connections caused for example by scanning or botnets and implies an
+connections caused by scanning or botnets and implies an
 implicit prioritization of events which affect many internal network
 users.
 
@@ -173,7 +173,7 @@ netflow data does not provide enough precise timing information to
 determine which flow is originated from the client and thus determine
 the server's socket. Therefore, the server socket detection is
 achieved by the assumption that server sockets act as concentrators
-in the sensei that several clients have connections to the identical
+in the sense that several clients have connections to the identical
 server socket and bases on the work shown in \cite{Schatzmann:Dissection,Schatzmann:Mining,Schatzmann:Tracing}.
 
 Secondly, the previously detected server sockets are continually
@@ -183,7 +183,7 @@ Furthermore, these information are used to update the statistical
 information of visibility, popularity and stability.
 
 In a third step, the number of server sockets have to be reduced and
-selected in a smart way such that FACT is able to use these sockets
+selected such that FACT is able to use these sockets
 for outage tracking. In particular, the server sockets coverage of the
 Internet address space has to be optimized. It makes no sense to select
 only the most popular sockets if they are all located in the same /24
@@ -203,7 +203,7 @@ implementation. This trace contains around $21.4$ billion flows and
 the implementation detected $1'728'118$ different external server sockets.
 
 Table 1 a) shows the share of all identified external server sockets by port including the top 7 ports. Besides the dominating share
-of server socket with port TCP80 and TCP/UDP 53, representing more than $50\%$ of all detected external server sockets,
+of server socket with port TCP 80 and TCP/UDP 53, representing more than $50\%$ of all detected external server sockets,
 the share of port 51413 an 6881 (both TCP \& UDP), both belonging to popular BitTorrent client applications, are noteworthy. 
 
 \begin{table}[ht]

@@ -46,7 +46,7 @@
 	<key>Creator</key>
 	<string>Daniel Aschwanden</string>
 	<key>DisplayScale</key>
-	<string>1 0/72 in = 1 0/72 in</string>
+	<string>1 0/72 in = 1.0000 in</string>
 	<key>GraphDocumentVersion</key>
 	<integer>8</integer>
 	<key>GraphicsList</key>
@@ -190,7 +190,7 @@ Data}</string>
 		</dict>
 		<dict>
 			<key>Bounds</key>
-			<string>{{321.83389956635779, 315.75949398865191}, {101, 68}}</string>
+			<string>{{326.73985883838651, 315.75731764226867}, {101, 68}}</string>
 			<key>Class</key>
 			<string>ShapedGraphic</string>
 			<key>FitText</key>
@@ -318,7 +318,7 @@ Rating}</string>
 		</dict>
 		<dict>
 			<key>Bounds</key>
-			<string>{{327.88739013671875, 386}, {178.66030883789062, 85}}</string>
+			<string>{{317.549560546875, 389.7550048828125}, {204.450439453125, 85}}</string>
 			<key>Class</key>
 			<string>ShapedGraphic</string>
 			<key>ID</key>
@@ -340,13 +340,16 @@ Rating}</string>
 			</dict>
 			<key>Text</key>
 			<dict>
+				<key>Align</key>
+				<integer>0</integer>
 				<key>Text</key>
 				<string>{\rtf1\ansi\ansicpg1252\cocoartf1138\cocoasubrtf470
-{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
-{\colortbl;\red255\green255\blue255;}
-\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
+{\fonttbl\f0\fnil\fcharset0 LucidaGrande;}
+{\colortbl;\red255\green255\blue255;\red38\green38\blue38;}
+\deftab720
+\pard\pardeftab720\sl280
 
-\f0\fs48 \cf0 Priorization}</string>
+\f0\fs48 \cf2 prioritization}</string>
 				<key>VerticalPad</key>
 				<integer>0</integer>
 			</dict>
@@ -564,9 +567,9 @@ Tracker}</string>
 			<integer>8</integer>
 			<key>Points</key>
 			<array>
-				<string>{307.9293648831316, 350.40480147932618}</string>
-				<string>{416, 351}</string>
-				<string>{416.52631456018088, 384.50134352312892}</string>
+				<string>{307.92936654294874, 350.38977472734803}</string>
+				<string>{423, 351}</string>
+				<string>{421.52097899960455, 388.26191354317501}</string>
 			</array>
 			<key>Style</key>
 			<dict>
@@ -727,9 +730,9 @@ Detector}</string>
 			<integer>29</integer>
 			<key>Points</key>
 			<array>
-				<string>{307.92929862343533, 509.30078176011631}</string>
-				<string>{418, 510.50000135316577}</string>
-				<string>{417.63739408836278, 472.49951779827848}</string>
+				<string>{307.92925447666369, 509.47962972033605}</string>
+				<string>{422, 511}</string>
+				<string>{421.01805799726833, 476.25151323823991}</string>
 			</array>
 			<key>Style</key>
 			<dict>
@@ -805,7 +808,7 @@ Detector}</string>
 	<key>MasterSheets</key>
 	<array/>
 	<key>ModificationDate</key>
-	<string>2012-07-11 07:33:31 +0000</string>
+	<string>2012-07-11 13:22:51 +0000</string>
 	<key>Modifier</key>
 	<string>Daniel Aschwanden</string>
 	<key>NotesVisible</key>
