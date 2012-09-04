@@ -1,8 +1,7 @@
 #!/usr/bin/rinterp
 
 library("ggplot2")
-data <- read.csv("traffic_stats.csv", sep=',')
-
+data <- read.csv("traffic_stats_port80.csv", sep=',')
 
 flow_stats <- rbind(
     data.frame(Type="Flows bi monitored", time=data$Time, Flows=data$FlowsBiMonitored),
@@ -33,7 +32,7 @@ ratios <- rbind(
 )
 ratios$Date <- as.POSIXct(ratios$time, origin="1970-1-1")
 
-p <- ggplot(ratios, aes(Date, Ratio, fill=Type)) + geom_area(position = 'stack') + facet_grid(direction ~ ., scales="free_y")
+p <- ggplot(ratios, aes(Date, Ratio, fill=Type)) + geom_area(position = 'stack') + facet_grid(direction ~ ., scales="free_y") + ylim(0,1)
 ggsave(file="Flows_monitor_ratio_by_type.pdf",width=12, height=10, dpi=300)
 
 # Port Heuristical Plots of unmonitored Flows
@@ -86,7 +85,7 @@ ratios <- rbind(
 )
 ratios$Date <- as.POSIXct(ratios$time, origin="1970-1-1")
 
-p <- ggplot(ratios, aes(Date, Ratio, fill=Type)) + geom_area(position = 'stack') + facet_grid(direction ~ ., scales="free_y")
+p <- ggplot(ratios, aes(Date, Ratio, fill=Type)) + geom_area(position = 'stack') + facet_grid(direction ~ ., scales="free_y") + ylim(0,1)
 ggsave(file="Bytes_monitor_ratio_by_type.pdf",width=12, height=10, dpi=300)
 
 # Port Heuristical Plots of unmonitored Bytes

@@ -1,7 +1,5 @@
-
-
 %!TEX root = ./main.tex
-\chapter{Of Server Sockets and their Stability 
+\chapter{Of Server Sockets and their Characteristics 
 \label{chapter:sockets}}
 
 \section{Server Sockets} 
@@ -19,9 +17,10 @@ depending on the actual technical context.
 Since this thesis will operate with flow-level data, layer 5-8 in the OSI model
 are invisible in the data set. Therefore, network services can be differentiated
 only by information based on layer 3 and 4 of the OSI model of the two
-connection end-points. For this reason, the following two abstractions of a
-connection end-point of a network service are defined:
+connection end-points. For this reason, the following abstractions of a
+connection end-point are defined:
 
+%%%%%%%%%%% SOCKET DEFINITION 			%%%%%%%%%%%%%%%%%%%%%%
 \parbox{\textwidth}{
 	\begin{defn}{\textbf{Socket}\\}
 		A socket is uniquely defined by the triple (\textbf{IP address}, 
@@ -30,6 +29,7 @@ connection end-point of a network service are defined:
 	\end{defn}
 }
 
+%%%%%%%%%%% SERVER SOCKET DEFINITION 	%%%%%%%%%%%%%%%%%%%%%%
 \parbox{\textwidth}{
 	\begin{defn}{\textbf{Server Socket\label{def:serversocket}}\\} 
 		A server socket is a socket with a process listening to incoming 
@@ -39,6 +39,7 @@ connection end-point of a network service are defined:
 	\end{defn}
 }
 
+%%%%%%%%%%% CLIENT SOCKET DEFINITION 	%%%%%%%%%%%%%%%%%%%%%%
 \parbox{\textwidth}{
 	\begin{defn}{\textbf{Client Socket}\\}
 		A client socket is a socket which is only used to initiate a  connection 
@@ -49,7 +50,7 @@ connection end-point of a network service are defined:
 
 In spite of the containment of the term \emph{server} in definition 
 \ref{def:serversocket}, this definition is not only valid for server-client 
-application protocols, but may also for P2P-applications. 
+application protocols, but also holds for P2P-applications.
 \todo{Explain more?}
 
 \section{Detection of Server Sockets\label{section:socket_detection}}
@@ -59,16 +60,19 @@ Basically, a \emph{server socket} can be identified by the fact that a client
 opens a socket which initiates a connection to a \emph{server socket}. Usually, 
 a \emph{client socket} is chosen at random by his operating system and the 
 \emph{server socket} should be stable over time since it must offer a specific 
-network service or application. Moreover, on each host a socket can only be assigned to one specific process per instance, i.e. a client socket connection initializing application or a \emph{server sockets} (waiting) network application. Otherwise, a socket-in-use-error is issued by the operating system. 
+network service or application. Moreover, on each host a socket can only be 
+assigned to one specific process per instance, i.e. a client socket connection 
+initializing application or a \emph{server sockets} network 
+application waiting on client connections. Otherwise, a socket-in-use-error is issued by the operating system. 
 
-A straight-forward approach for detecting server sockets is to infer the
+A straight-forward approach for detecting \emph{server sockets} is to infer the
 initiator of the connection by the timing information and determine its opposite
-as the server socket. However, this approach requires a time synchronization of
-all netflow exporting devices across the network. In practice, this cannot be
-achieved in a satisfactory and reliable way.
+as the \emph{server socket}. However, this approach requires a time 
+synchronization of all netflow exporting devices across the network. In 
+practice, this cannot be achieved in a satisfactory and reliable way.
 
 % connection graph idea... +image
-\todo{Introduce Concentrator} Hence, the detection of server sockets with
+\todo{Introduce Concentrator} Hence, the detection of \emph{server sockets} with
 netflow data relies on the following approach proposed by
 \citet{Schatzmann:Mining,Schatzmann:Dissection, Schatzmann:Tracing}. First of
 all, a communication graph is build. This connection graph consists of nodes
@@ -86,13 +90,189 @@ packets or bytes are required at all to build the communication graph.
 	\label{fig:bipartite_graph} 
 \end{figure}
 
-Since server sockets provide a network application or service, they are likely
+Since \emph{server sockets} provide a network application or service, they are likely
 to be contacted by several clients depending on their popularity. Therefore, it
-can be assumed that nodes with a high degree correspond to a server sockets.
+can be assumed that nodes with a high degree correspond to a \emph{server sockets}.
 
 % introduce minimal vertex cover problem
 % greedy algorithm to solve mvcp
+\todo{Introduce minimal vertex cover problem and overall algorithm of detection of \citet{Schatzmann:Mining,Schatzmann:Dissection, Schatzmann:Tracing}}
 % recalling sockets for optimization
 % overall Algorithm of detection
-\section{Stability Tracking of Server Sockets 
+
+\todo{detection approach chain!}
+\begin{figure}
+	[ht] \centering \missingfigure{Detection Chain}
+	
+	%\includegraphics[width=\linewidth]{image/bipartite_graph.eps}
+	\caption{Detection chain illustration} 
+	\label{fig:detection_chain} 
+\end{figure}
+
+\section{Monitoring of Server Sockets 
 \label{section:socket_tracking}}
+
+The previous section outlined the approach of detecting \emph{server sockets}. This section covers the approach of monitoring flow data and generating statistical information such that some characteristics and properties of the found \emph{server sockets} can be assessed as outlined in section \ref{section:characterization}.
+
+
+\subsection{Server Socket Statistics}
+The monitoring of the external \emph{server sockets} is done with help of the \emph{server socket registry} which is already used in the detection approach. This registry recalls all \emph{server sockets} which are known yet. Hence, all flows originated from a \emph{server socket} or flows which are destined for a \emph{server sockets} are monitored for compiling the socket statistics later used for the characterization.
+
+In contrast to the detection approach, there are no scanning or other noise filters in the processing chain, because of the fact that they will remove at least some flows, mainly unidirectional flows, which are actually relevant for the statistics.
+
+\begin{figure}
+	[ht] \centering \missingfigure{Monitoring Chain}
+	
+	%\includegraphics[width=\linewidth]{image/bipartite_graph.eps}
+	\caption{Monitoring chain illustration} 
+	\label{fig:monitoring_chain} 
+\end{figure}
+
+Since the processing is based on data containing flows which are active within a certain time slot, the statistics are accounted on a the same discrete time scale, i.e. 10 minutes. 
+At first, each flow is checked if it is a flow of a \emph{server socket}. If this is the case, the individual flow statistics are accounted to the corresponding specific server socket \textbf{statistics record}. This includes the following entries:
+\vbox{%
+\begin{itemize}
+	\item Number of bidirectional connections
+	\item Number of outgoing unidirectional connections
+	\item Number of incoming unidirectional connections
+\end{itemize}}
+
+In second step, the statistics records of each discrete time slot are aggregated in such a way that the information of the activity within a certain time slot is kept. Thus, the overall server socket statistics record contains the following entries:
+\vbox{%
+\begin{itemize}
+	\item Sum of bidirectional connections of each time slot
+	\item Sum of outgoing unidirectional connections of each time slot
+	\item Sum of incoming unidirectional connections of each time slot
+	\item Number of days with connections
+	\item Number of discrete time slots with connections
+	\item Timestamps of discrete time slots with connections
+\end{itemize}}
+
+\subsection{Traffic Statistics}
+Besides of the individual server socket statistics report, overall traffic statistics are accounted, mainly for deducing knowledge of how good the monitoring capability of the server sockets in the registry is. For this reason, each flow which belongs to a server socket which is present in the registry is denoted as monitored. Hence, flows which does not belong to a server socket are accounted as not monitored. 
+
+Moreover, all unmonitored flows can be further investigated for better understanding of the type of this unmonitored traffic. This can be done on the following three scopes: 
+\vbox{%
+\begin{itemize}
+	\item Protocol level
+	\item Port level for UDP and TCP flows
+	\item Direction
+	\item Type of connection
+\end{itemize}}
+
+The first scope, covers the problem that server sockets are only defined for protocol TCP and UDP, hence all flows with another protocol are per definition unmonitored.
+
+Secondly, for all unmonitored TCP or UDP flows there is no corresponding server socket in the registry present. There are various reasons for this, mainly related to the detection approach outlined in section \ref{section:socket_detection}. In most of the cases, the sockets are not contacted by enough clients, therefore, the are not detected as concentrators and in consequence of that not denoted as server sockets. Furthermore, scanning activity is also a major contributor to this unmonitored flows, since scanning traffic and other non-legitimate traffic is removed before the server socket detection is performed. Consequently, these scanned sockets are not detected as server sockets, in case there is no legitimate traffic towards these sockets.
+
+On the one hand, there is the possibility to account for each port the unmonitored flows which will lead to very detailed statistical information about the missed server sockets. However, this comes at the price of an inefficient processing and higher memory usage. 
+
+On the other hand, the flows can be categorized by port ranges. In this thesis, there are just two ranges defined for this categorization:
+\vbox{%
+\begin{itemize}
+	\item Low port: 0-1024
+	\item High port: 1025-65365
+\end{itemize}}
+
+These categories are further divided by the location of the socket -- internal or external. Hence, the unmonitored TCP and UDP flows or strictly speaking the corresponding socket are accounted by the four categories:
+\vbox{%
+\begin{itemize}
+	\item external port high, internal port high
+	\item external port high, internal port low
+	\item external port low, internal port high
+	\item external port low, internal port low
+\end{itemize}}
+
+\section{Characterization of Server Sockets\label{section:characterization}}
+The main interest of this thesis is to characterize \emph{server sockets} by its \textbf{stability}, its \textbf{visibility} and its \textbf{popularity}. These properties tries to address the following characteristics of a server socket:
+
+\vbox{
+\begin{itemize}
+	\item \textbf{Stability:} How stable is the \emph{server socket} regarding its responsiveness or availability? 
+	\item \textbf{Visibility:} How frequently is the \emph{server socket} contacted by other socket? 
+	\item \textbf{Popularity:} How many distinct sockets are contacting the \emph{server socket}? 
+\end{itemize}}
+
+These three characteristics are directly deducible from the statistics observed by the passive monitoring technique outlined in \ref{section:socket_tracking}. In the following, each of the three characteristics are briefly discussed.
+
+\subsection{Stability of a Server Socket}
+Because of the definition and its detection approach a \emph{server socket} is offering a bidirectional service which means that the client and the \emph{server socket} are both sending packets. Usually, a client socket is opening the connection to a \emph{server socket} which will reply in return to this request. Generally, this also holds for P2P applications as for example bit torrent. However in this case, there may be two \emph{server sockets} involved in the communication and no client socket. Therefore, a \emph{server socket} -- or the communication of it -- can be characterized as stable if all connections of this \emph{server socket} are \textbf{balanced}. 
+
+%%%%%%%%%%% Balanced Connection DEFINITION 	%%%%%%%%%%%%%%%%%%%%%%
+\parbox{\textwidth}{
+	\begin{defn}{\textbf{Balanced Connection}\\}
+		A connection between two sockets is balanced, if there is one flow originating from each socket which is destined for the other socket. Hence, the connection is bidirectional. 
+	\end{defn}
+}
+
+Thus, the overall stability \emph{server socket} or availability of its service can be approximated by the ratio of the balanced to all connections destined to this \emph{server socket}, i.e. the balanced and the unbalanced. This ratio is referred as a \emph{server socket} \textbf{stability ratio} and is mathematically defined by equation \ref{eq:ratio}.
+
+\begin{equation}
+Stability(Socket_i) = \frac{Connections_{balanced}(Socket_i)}{Connections_{balanced}(Socket_i) + Connections_{unbalanced_{in}}(Socket_i)} \label{eq:ratio}
+\end{equation}
+
+Hence, a \emph{server socket} with a stability ratio of 1 does only have bidirectional connections and thus, replies to all connection attempts. On the other side, a stability ratio of 0 indicates that there are only connections attempts by client sockets, but the server socket never replied upon these request. Unbalanced outgoing connections from the server sockets are indicating a client error or scanning activities of clients with spoofed (internal) source address which are not observed by the monitoring system. Therefore, these unbalanced outgoing connections are not considered for determining the stability ratio at all.
+
+
+\subsection{Visibility of a Server Socket}
+% discrete time slots activities of a socket, per day, per 5min slot?
+% distribution is heavy-tailed, alot of sockets only rarely connected => due to scanning? due to malware?
+
+\subsection{Popularity of a Server Socket}
+% number of connections.. degree of Server Socket
+
+
+%% statistics
+\section{Statistics\todo{Place at correct position}}
+
+\begin{table}[ht]
+	\centering
+\begin{tabular}{|c|r|r|r|r|r|}
+\hline
+\textbf{Position} & \textbf{Port} & \textbf{Protocol} & \textbf{Flows} &\textbf{ Flows in \%} & \textbf{Sockets}\\
+\hline \hline
+1  &	53		& 17 &	793851107 & 47.272216\% & 314253\\ \hline
+2  &   	80		& 6	 &	623910956 & 37.152626\% & 546735\\ \hline
+3  &  	443     & 6  &	74333936 & 4.426434\% & 59800\\ \hline
+4  &	22      & 6  &	10580812 & 0.630066\% & 40363\\ \hline
+5  & 	2703    & 6  &	10139578 & 0.603791\% & 22\\ \hline
+6  &	25      & 6  &	6943533 & 0.413473\% & 18560\\ \hline
+7  &	123     & 17 & 	4988781 & 0.297072\% & 286\\ \hline
+8  &	993     & 6  &	3844043 & 0.228905\% & 1398\\ \hline
+9  &	555     & 6  &	3290709 & 0.195955\% & 9\\ \hline
+10 &	995     & 6  &	2411245 & 0.143585\% & 654\\ \hline
+11 &   	110     & 6  &	1816240 & 0.108153\% & 1211\\ \hline
+12 &	3789    & 6  &	1796224 & 0.106961\% & 10\\ \hline
+13 &    53      & 6  &	1726716 & 0.102822\% & 1102\\ \hline
+14 &	2128    & 6  &	1677027 & 0.099864\% & 390\\ \hline
+15 &	3478    & 17 &	1607132 & 0.095701\% & 176\\ \hline
+16 &	8080    & 6  &	1362615 & 0.081141\% & 2056\\ \hline
+17 &	3128    & 6  & 	1298424 & 0.077319\% & 191\\ \hline
+18 &	5354    & 6  &	1221109 & 0.072715\% & 3\\ \hline
+19 &	8001    & 6  & 	1014631 & 0.060419\% & 58\\ \hline
+20 &	21      & 6  & 	1010771 & 0.060189\% & 1419\\ \hline
+\end{tabular}
+\caption{Top 20 port / protocol aggregated sockets by number flows}
+\end{table}
+
+\begin{table}[ht]
+	\centering
+\begin{tabular}{|l|c|r|r|r|r|}
+\hline
+\multirow{2}{*}{\textbf{Socket Set}} & \multirow{2}{*}{\textbf{Number of Sockets}}  & \multicolumn{2}{|c|}{\textbf{IPv4 /24 Networks}} & \multicolumn{2}{|c|}{\textbf{IPv6 /48 Networks}} \\
+\cline{3-6}
+& & absolute & relative & absolute & relative \\ \hline \hline
+All Server Sockets & 2129033 & 694627 & 100\% & 1231 & 100\% \\ \hline
+Port 80 & 610273 & 158765 & 22.85\% & 296 & 24.05\% \\ \hline
+Port 53 \& 80 & 939345 & 238032 & 34.27\% & 1153 & 93.66\% \\ \hline
+Port 53 \& 80 \& 443 & 1010966 & 251044 & 36.14\% & 1157 & 93.99\% \\ \hline
+
+\end{tabular}
+\caption{Coverage of server socket sets}
+\end{table}
+
+SSH TCP 22: Scanning / PW guessing, e.g. X.X.X.X, 6, 22, 1.0, 2, 1, 69.0, 0.0, 0.0
+always with 69 or 68 biflows (parallelized? recurring?) $\rightarrow$ that's way such a bad visibility! one-time shots.. /8 network is scanned! meist 3-4 timeslots und nur visibility einem Tag! 
+
+mDNS (5354) $\rightarrow$ Apple mdns resolving; mainly one socket causing this traffic pm-members.apple.com
+
+
