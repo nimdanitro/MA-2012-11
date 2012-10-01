@@ -1,9 +1,10 @@
 library("ggplot2")
 
 # Histogram plots of VTS / visibile days
-sockets <- read.csv("results-correct/ServerSocketStability_overall_external.csv", sep=",")
-p <- ggplot(sockets, aes(VisibleTimeSlots)) + geom_bar() + facet_wrap( ~ VisibleDays, scales="free")
-ggsave(file="VTS_by_visibledays.pdf", width=12, height=10, dpi=300)
+#sockets <- read.csv("results-correct/ServerSocketStability_overall_external.csv", sep=",")
+sockets <- read.csv("results-old/ServerSocketStability_overall_external.csv", sep=",")
+#p <- ggplot(sockets, aes(VisibleTimeSlots)) + geom_bar() + facet_wrap( ~ VisibleDays, scales="free")
+#ggsave(file="VTS_by_visibledays.pdf", width=12, height=10, dpi=300)
 
 sockets$Ratio <- sockets$BidirectionalFlows/(sockets$BidirectionalFlows+sockets$UnidirectionalFlowsOut)
 #sockets$Ratio <- sockets$TotalRatio
@@ -49,18 +50,40 @@ tmp_sockets <-  data.frame(
                 )
 port_max <- aggregate(data=tmp_sockets, Flows ~ Port + Protocol, sum)
 port_max_length <- aggregate(data=tmp_sockets, Flows ~ Port + Protocol, length)
-port_max$Sockets <- port_max_length$Flows
 port_max$Flows_percent <- port_max$Flows/sum(port_max$Flows)
+port_max$Sockets <- port_max_length$Flows
+port_max$Sockets_percent <- port_max$Sockets/sum(port_max$Sockets)
 port_max <- port_max[order(port_max$Flows, decreasing=TRUE),]
-top_20 <- head(port_max,20)
+top_20 <- port_max[1:20,]
+other_ports <- port_max[21:nrow(port_max),]
+high_ports <- subset(other_ports, Port > 1023 )
+high_ports_by_P <- merge(
+                            aggregate(data=high_ports, Flows ~ Protocol, sum),
+                            aggregate(data=high_ports, Sockets ~ Protocol, sum)
+                        )
+high_ports_by_P$Port <- rep("high", times=nrow(high_ports_by_P))
+high_ports_by_P$Flows_percent <- high_ports_by_P$Flows/sum(port_max$Flows)
+high_ports_by_P$Sockets_percent <- high_ports_by_P$Sockets/sum(port_max$Sockets)
+low_ports <- subset(other_ports, Port <= 1023 )
+low_ports_by_P <- merge(
+                            aggregate(data=low_ports, Flows ~ Protocol, sum),
+                            aggregate(data=low_ports, Sockets ~ Protocol, sum)
+                        )
+low_ports_by_P$Port <- rep("low", times=nrow(low_ports_by_P))
+low_ports_by_P$Flows_percent <- low_ports_by_P$Flows/sum(port_max$Flows)
+low_ports_by_P$Sockets_percent <- low_ports_by_P$Sockets/sum(port_max$Sockets)
 
 # Plot the Stability of the top 20 ports
-tmp_sockets <- subset(sockets, Port %in% sort(top_20$Port))
-p <- ggplot(tmp_sockets, aes(factor(Port), Ratio), xlab="Port")
+tmp_sockets1 <- subset(sockets, Port %in% sort(top_20$Port))
+tmp_sockets1$Port <- as.character(tmp_sockets1$Port)
+tmp_sockets2 <- subset(sockets, !(Port %in% sort(top_20$Port)))
+tmp_sockets2$Port <- rep("other",times=nrow(tmp_sockets2))
+tmp_sockets <- rbind(tmp_sockets1, tmp_sockets2)
+p <- ggplot(tmp_sockets, aes(Port, Ratio), xlab="Port")
 p + geom_boxplot(outlier.size = 1, size=0.25, aes(fill=factor(Protocol))) + scale_fill_hue(name="Protocol", labels=c("TCP", "UDP")) + xlab("Port") + ylab("Availability / Stability")
 ggsave(file="top20_ratio_box.pdf", width=12, height=8, dpi=300)
 
 # Plot the Visibility of the top 20 ports
-p <- ggplot(tmp_sockets, aes(factor(Port), VisibleDays))
+p <- ggplot(tmp_sockets, aes(Port, VisibleDays))
 p + geom_boxplot(outlier.size = 1, size =0.25, aes(fill=factor(Protocol))) + scale_fill_hue(name="Protocol", labels=c("TCP", "UDP")) + xlab("Port") + ylab("Visibility")
 ggsave(file="top20_visibility_box.pdf", width=12, height=8, dpi=300)

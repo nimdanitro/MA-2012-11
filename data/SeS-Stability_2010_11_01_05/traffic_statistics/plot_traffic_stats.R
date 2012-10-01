@@ -1,7 +1,7 @@
 #!/usr/bin/rinterp
 
 library("ggplot2")
-data <- read.csv("traffic_stats_port80.csv", sep=',')
+data <- read.csv("traffic_stats_all.csv", sep=',')
 
 flow_stats <- rbind(
     data.frame(Type="Flows bi monitored", time=data$Time, Flows=data$FlowsBiMonitored),
