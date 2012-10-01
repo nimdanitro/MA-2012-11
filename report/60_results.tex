@@ -21,18 +21,32 @@ This event is well visible by the classical FACT, since there are quite a large 
 This specific IXP partitioning event is clearly visible in figure  \ref{fig:AMS_IX_FACT_REF} from 05.00 UTC to 08:15 UTC with almost 20 unreachable BGP prefixes affecting more than 10 internal clients and almost 200 unreachable BGP prefixes in total. However, as discussed in chapter \ref{Introduction}, those unreachable prefixes affecting only 1 client are not reliable observations, thus of limited interest representing a kind of observation noise of FACT.
 
 \begin{figure}
-	[hb] \centering 
-	\includegraphics[width=\linewidth]{images/events/2010_03_25/bgp_log_port80_ref.eps}
+	[htbp] \centering 
+	\includegraphics[width=0.75\linewidth]{images/events/2010_03_25/bgp_log_port80_ref.eps}
 	\caption{Unreachable BGP prefixes detected by the classical FACT traffic preselection based on the port-based heuristic.} 
 	\label{fig:AMS_IX_FACT_REF} 
 \end{figure}
 
 \subsubsection{Server Socket Approach}
 \begin{figure}
-	[hb] \centering 
-	\includegraphics[width=\linewidth]{images/events/2010_03_25/bgp_log_allPort80SES.eps}
+	[htbp] \centering 
+	\includegraphics[width=0.75\linewidth]{images/events/2010_03_25/bgp_log_allPort80SES.eps}
 	\caption{Unreachable BGP prefixes detected by the modified FACT traffic preselection based on all port 80 server sockets.} 
 	\label{fig:AMS_IX_FACT_allSES80} 
+\end{figure}
+
+\begin{figure}
+	[htbp] \centering 
+	\includegraphics[width=0.75\linewidth]{images/events/2010_03_25/bgp_log_port80_Set_stab_0_vts_2.eps}
+	\caption{Unreachable BGP prefixes detected by the modified FACT traffic preselection based on all port 80 server sockets with visibility of at least 2 days.} 
+	\label{fig:AMS_IX_FACT_allSES80VTS2} 
+\end{figure}
+
+\begin{figure}
+	[htbp] \centering 
+	\includegraphics[width=0.75\linewidth]{images/events/2010_03_25/bgp_log_port80_Set_stab_9_vts_2.eps}
+	\caption{Unreachable BGP prefixes detected by the modified FACT traffic preselection based on all port 80 server sockets with visibility of at least 2 days and stability ratio of at least $90\%$.} 
+	\label{fig:AMS_IX_FACT_allSES80VTS2} 
 \end{figure}
 
 
@@ -52,6 +66,17 @@ This specific IXP partitioning event is clearly visible in figure  \ref{fig:AMS_
 
 \subsection{RIPE / DUKE BGP Experiments 2010-08-27}
 % PAM-PAPER: On August 27, 2010, some parts of the Internet became disconnected for some 30 minutes due to an experiment with new BGP attributes by RIPE and Duke University [12]. FACT reveals that at around 08:45 the number of popular unresponsive /24 networks indeed doubled. According to Fig. 5(b), for some BGP prefixes more than 15 internal hosts failed to establish connectivity. Yet, overall our analysis reveals that the impact of this incident on SWITCH and its customers was quite limited compared to the public attention that this event obtained.
+
+An experiment with new BGP attributes jointly performed by RIPE and the Duke 
+University on August 27, 2010, resulted in several unreachable prefixes. These 
+new kind of attributes has never been announced on the Internet before,  
+although it was in accordance with the BGP specification\citep{ripe_duke}.
+
+These new kind of attributes uncovered and triggered a bug in some Cisco BGP 
+Routers known as \emph{Cisco IOS XR Software Border Gateway Protocol Vulnerability(SA-20100827-BGP)}\citep{cisco_vulnerability}. In particular, the announcements with the new attributes were corrupted 
+by the Cisco Routers and send to their peers. Consequently, their peers detected 
+the corruption and dropped the entire peering session\citep{ripe_duke}.
+
 
 \subsubsection{Heuristic Approach}
 
