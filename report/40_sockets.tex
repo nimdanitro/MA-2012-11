@@ -60,9 +60,29 @@ Therefore, it can be assumed that nodes with a high degree correspond to a \emph
 
 % introduce minimal vertex cover problem
 % greedy algorithm to solve mvcp
-\todo{Introduce minimal vertex cover problem and overall algorithm of detection of \citet{Schatzmann:Mining,Schatzmann:Dissection, Schatzmann:Tracing}}
 % recalling sockets for optimization
-
+\begin{algorithm}[t!]
+\caption{Detection of server sockets by \citet{Schatzmann:Mining,Schatzmann:Dissection, Schatzmann:Tracing}}
+\label{alg:service_tracing_ss-detection}
+\begin{algorithmic}
+\STATE
+\STATE compute list $SS_{in}$ \COMMENT{int. sockets sorted by \# ext. clients}
+\STATE compute list $SS_{out}$ \COMMENT{ext. sockets sorted by \# int. clients}
+\STATE
+\WHILE{(deg($SS_{out}[0]$) $ > 2 $ \OR deg($SS_{in}[0]$)$ > 2$)}
+    \WHILE {(deg($SS_{in}[0]$) $ > $ deg($SS_{out}[0]$))}
+        \STATE $ss$ = $SS_{in}[0]$ \COMMENT{classify $ss$ as internal server socket}
+        \STATE remove $ss$ from $SS_{in}$
+        \STATE update deg() for all entries of $SS_{in}$
+    \ENDWHILE
+    \WHILE{(deg($SS_{out}[0]$) $ \geq $ deg($SS_{in}[0]$))}
+        \STATE $ss$ = $SS_{out}[0]$ \COMMENT{classify $ss$ as external server socket}
+        \STATE remove $ss$ from $SS_{out}$
+        \STATE update deg() for all entries of $SS_{out}$
+    \ENDWHILE
+\ENDWHILE
+\end{algorithmic}
+\end{algorithm}
 
 % overall Algorithm of detection
 \todo{detection approach chain!} 
