@@ -342,19 +342,6 @@ This section covers a detailed analysis of server socket found during a week lon
 	\end{tabular}
 	\caption{Top 20 port / protocol aggregated sockets by number flows} 
 \end{table}
-\begin{table}
-	[ht] \centering 
-	\begin{tabular}
-		{|l|c|r|r|r|r|} \hline \multirow{2}{*}{\textbf{Socket Set}} & \multirow{2}{*}{\textbf{Number of Sockets}} & \multicolumn{2}{|c|}{\textbf{IPv4 /24 Networks}} & \multicolumn{2}{|c|}{\textbf{IPv6 /48 Networks}} \\
-		\cline{3-6} & & absolute & relative & absolute & relative \\
-		\hline \hline All Server Sockets & 2129033 & 694627 & 100\% & 1231 & 100\% \\
-		\hline Port 80 & 610273 & 158765 & 22.85\% & 296 & 24.05\% \\
-		\hline Port 53 \& 80 & 939345 & 238032 & 34.27\% & 1153 & 93.66\% \\
-		\hline Port 53 \& 80 \& 443 & 1010966 & 251044 & 36.14\% & 1157 & 93.99\% \\
-		\hline 
-	\end{tabular}
-	\caption{Coverage of server socket sets} 
-\end{table}
 
 SSH TCP 22: Scanning / PW guessing, e.g. X.X.X.X, 6, 22, 1.0, 2, 1, 69.0, 0.0, 0.0 always with 69 or 68 biflows (parallelized? recurring?) $\rightarrow$ that's way such a bad visibility! one-time shots.. /8 network is scanned! meist 3-4 timeslots und nur visibility einem Tag! 
 
