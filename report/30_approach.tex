@@ -7,7 +7,7 @@
 \section{Methodology
 \label{section:methodology}}
 
-To achieve the goal of enhancing the traffic preseleciton of FACT with
+To achieve the goal of enhancing the traffic preselection of FACT with
 knowledge about the past stability and popularity characteristics, the following
 three steps are planned for extending FACT as illustrated in figure
 \ref{fig:FACT}.
@@ -35,11 +35,12 @@ Furthermore, these information are used to update the statistical information of
 visibility, popularity and stability. Section \ref{section:socket_tracking}
 covers this step in detail.
 
-In a third step, the number of server sockets have to be reduced and selected
-such that FACT is able to use these sockets for outage tracking. In particular,
-the server sockets coverage of the Internet address space has to be optimized.
-It makes no sense to select only the most popular sockets if they are all
-located in the same /24 network.
+In a third step, the number of server sockets have to be reduced by selecting a 
+set of suitable server sockets such that FACT is able to use these sockets for 
+outage tracking. In particular, the server socket sets coverage of the Internet 
+address space has to be assessed, because it makes for example no sense to 
+select only the most popular sockets if they are all located in the same /24 
+network.
 
 Finally, FACT has to be adopted to optimally use the preselected and rated
 server sockets for prioritizing relevant connectivity issues by reducing outage
@@ -54,6 +55,13 @@ Research and Education Network (NREN). Mainly government institutions,
 universities, research labs are connected to the internet by \citet{switch}\citep{Schatzmann:Mining}.
 
 The \citet{switch} network is with approximately 250'000 network users in 2010 comparable with a mid sized ISP. Currently, there are around 2.4 million IPv4 addresses, a /32 IPv6 and a /40 IPv6 network announced via BGP\citep{Schatzmann:Tracing}.
+
+\begin{figure}[h] 
+	\centering
+	\includegraphics[width=12cm]{images/network_overview.eps}
+	\caption{Overview of the SWITCH network \citep{SchatzmanThesis2012}} 
+	\label{fig:switch_nework}
+\end{figure}
 
 \citet{switch} is capturing flow level data at all external interfaces of their border routers by 2003 in form of unsampled NetFlow data -- from 2003-2008 in version 5 and in version 9 after 2008\citep{Schatzmann:Tracing}.
 High traffic peak rates of more than 80'000 flows per second, 3 million packets per second and more than 20Gbit/s require hardware-based flow collection cards. TCP flags are not available in the flow level information because of some limitations of these hardware components. The generated flow data is collected and stored at a central data repository.

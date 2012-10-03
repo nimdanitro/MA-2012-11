@@ -27,8 +27,11 @@ Table \ref{table:ses_set_coverage} shows the coverage of each set with respect t
 
 \todo{state that socket sets are from november 2010, events are before! due to lack of time to do detection for each event }
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% EVENT 1: AMS-IX PARTITIONING
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Event 1: Partitioned Internet Exchange Point}
-% PAM-PAPER: On March 23, 2010: After scheduled maintenance by AMS-IX, SWITCH’s connection to that exchange point came back with only partial connectivity. Some next-hops learned via the route servers weren’t reachable, creating black holes. The next morning, several customers complained about external services being unreachable. Overall, it took more than four hours until the problem was finally solved by resetting a port.
 
 The IXP \citet{AMS-IX}(AMS-IX) performed on March 23, 2010 a scheduled maintenance. When its connection to \citet{switch} came back, there was only a partial connectivity through this IXP, since some next-hops learned via their route servers were not properly reachable, thus traffic towards these networks are black-holed.\citep{SchatzmannPAM2011}
 
@@ -93,9 +96,11 @@ Despite that fact, that the \emph{AllPort80SeS} set is not optimized at all, it 
 \end{figure}
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% EVENT 2: TIER-1 BLACK-HOLING
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage
 \section{Event 2: Reverse path traffic black-holing}
-% PAM-PAPER: On May 18, 2010, all services in an external /24 network were not accessible from SWITCH between 08:30 and 08:45. According to the oper- ators of SWITCH, this problem was most likely due to a tier-1 provider that black-holed parts of the reverse traffic towards SWITCH. Yet, at this time the operators could only speculate how many hosts and customers, or even other /24 networks were affected by this problem. Applying FACT we confirm that the reported /24 network is indeed reported as unreachable at around 08:30. Surprisingly, FACT reveals that the overall number of unreachable hosts and /24 networks has doubled compared to the time before 08:30 while the number of unresponsive BGP prefixes is increased by a factor of even 6, see Fig. 5(a). Moreover, the reported /24 network is not even in the top ten list of the most popular unresponsive networks. This suggests that the impact of this event has been more serious than previously believed.
 
 On May 18, 2010, the operators of the SWITCH network were assigned to investigate an reported issue that all services in an external /24 network were not accessible from the SWITCH network between 08:30 and 08:45 UTC. According to SWITCH, the problem was most likely due to an issue of an tier-1 provider which black-holed parts of the reverse traffic towards the SWITCH network\citep{SchatzmannPAM2011}.
 
@@ -149,11 +154,11 @@ Unfortunately, the operators were neither able to tell how many internal users w
 	\label{fig:TIER1_FACT_popularVTS2STAB9} 
 \end{figure}
 
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% EVENT 3: RIPE / DUKE BGP EXPERIMENT
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage
 \section{Event 3: RIPE / DUKE BGP Experiments}
-
-% PAM-PAPER: On August 27, 2010, some parts of the Internet became disconnected for some 30 minutes due to an experiment with new BGP attributes by RIPE and Duke University [12]. FACT reveals that at around 08:45 the number of popular unresponsive /24 networks indeed doubled. According to Fig. 5(b), for some BGP prefixes more than 15 internal hosts failed to establish connectivity. Yet, overall our analysis reveals that the impact of this incident on SWITCH and its customers was quite limited compared to the public attention that this event obtained.
 
 An experiment with new BGP attributes jointly performed by RIPE and the Duke 
 University on August 27, 2010, resulted in several unreachable prefixes\citep{SchatzmannPAM2011}. These 
@@ -164,7 +169,6 @@ These new kind of attributes uncovered and triggered a bug in some Cisco BGP
 Routers known as the \emph{Cisco IOS XR Software Border Gateway Protocol Vulnerability (SA-20100827-BGP)}\citep{cisco_vulnerability}. In particular, the announcements with the new attributes were corrupted 
 by the Cisco Routers and send to their peers. Consequently, their peers detected 
 the corruption and dropped the entire peering session\citep{ripe_duke}.
-
 
 \subsection{Heuristic Approach}
 

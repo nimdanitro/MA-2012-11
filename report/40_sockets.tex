@@ -88,10 +88,9 @@ Therefore, it can be assumed that nodes with a high degree correspond to a \emph
 \end{algorithm}
 
 \begin{figure}
-	[ht] \centering \missingfigure{Detection Chain}
-	
-	%\includegraphics[width=\linewidth]{images/detection_chain.eps}
-	\caption{Detection chain illustration} 
+	[ht] \centering
+	\includegraphics[width=\linewidth]{images/Detection_chain.eps}
+	\caption{Processing chain for server socket detection} 
 	\label{fig:detection_chain} 
 \end{figure}
 
@@ -168,7 +167,7 @@ On the other hand, the flows can be categorized by port ranges. In this thesis, 
 \end{itemize}
 }
 
-These categories are further divided by the location of the socket -- internal or external. Hence, the unmonitored TCP and UDP flows or strictly speaking the corresponding socket are accounted by the four categories:
+These categories are further divided by the location of the socket -- internal or external. Hence, the unmonitored TCP and UDP flows or strictly speaking the corresponding sockets are accounted by the following four categories:
 
 \vbox{
 
@@ -289,6 +288,13 @@ This section covers a detailed analysis of server socket found during a week lon
 	\label{fig:vts_by_visibledays} 
 \end{figure}
 
+\begin{figure}
+	[ht] \centering 
+	\includegraphics[width=\linewidth]{images/visibiliy_stability_map.pdf}
+	\caption{Sockets by their ranked visibility and their stability} 
+	\label{fig:rankedPopularity} 
+\end{figure}
+
 \subsubsection{Stability}
 
 
@@ -311,6 +317,13 @@ This section covers a detailed analysis of server socket found during a week lon
 \end{landscape}
 
 \subsubsection{Popularity}
+\begin{figure}
+	[ht] \centering 
+	\includegraphics[width=\linewidth]{images/popularity_stability_map.pdf}
+	\caption{Sockets by their ranked popularity and their stability} 
+	\label{fig:rankedPopularity} 
+\end{figure}
+
 
 \begin{landscape}
 \begin{figure}
