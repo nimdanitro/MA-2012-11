@@ -140,7 +140,7 @@ Unfortunately, the operators were neither able to tell how many internal users w
 \end{figure}
 
 \begin{figure}
-	[ht] \centering 
+	[p] \centering 
 	\includegraphics[width=0.75\linewidth]{images/events/2010_05_18/bgp_log_all_external.eps}
 	\caption{Event 2: Unreachable BGP prefixes detected by the modified FACT traffic preselection based on all detected server sockets} 
 	\label{fig:TIER1_FACT_allSES} 
@@ -148,7 +148,7 @@ Unfortunately, the operators were neither able to tell how many internal users w
 
 
 \begin{figure}
-	[ht] \centering 
+	[p] \centering 
 	\includegraphics[width=0.75\linewidth]{images/events/2010_05_18/bgp_log_Set_var_0_1_stab_9_vts_2.eps}
 	\caption{Event 2: Unreachable BGP prefixes detected by the modified FACT traffic preselection based on the $70\%$ most popular server sockets limited to those with a visibility of at least 2 days and stability ratio of at least $90\%$.} 
 	\label{fig:TIER1_FACT_popularVTS2STAB9} 
@@ -172,5 +172,49 @@ the corruption and dropped the entire peering session\citep{ripe_duke}.
 
 \subsection{Heuristic Approach}
 
+\begin{figure}
+	[p] \centering 
+	\includegraphics[width=0.75\linewidth]{images/events/2010_08_27/bgp_log_port80_ref.eps}
+	\caption{Event 3: Unreachable BGP prefixes detected by the classical FACT traffic preselection based on the port-based heuristic.} 
+	\label{fig:RIPE_FACT_REF} 
+\end{figure}
+
 \subsection{Server Socket Approach}
+
+\begin{figure}
+	[p] \centering 
+	\includegraphics[width=0.75\linewidth]{images/events/2010_08_27/bgp_log_allPort80SES.eps}
+	\caption{Event 3: Unreachable BGP prefixes detected by the modified FACT traffic preselection based on all port 80 server sockets.} 
+	\label{fig:RIPE_FACT_allSES80} 
+\end{figure}
+
+
+\begin{figure}
+	[p] \centering 
+	\includegraphics[width=0.75\linewidth]{images/events/2010_08_27/bgp_log_port80_Set_stab_0_vts_2.eps}
+	\caption{Event 3: Unreachable BGP prefixes detected by the modified FACT traffic preselection based on all port 80 server sockets with visibility of at least 2 days.} 
+	\label{fig:RIPE_FACT_allSES80VTS2} 
+\end{figure}
+
+\begin{figure}
+	[p] \centering 
+	\includegraphics[width=0.75\linewidth]{images/events/2010_08_27/bgp_log_port80_Set_stab_9_vts_2.eps}
+	\caption{Event 3: Unreachable BGP prefixes detected by the modified FACT traffic preselection based on all port 80 server sockets with visibility of at least 2 days and stability ratio of at least $90\%$.} 
+	\label{fig:RIPE_FACT_allSES80VTS2STAB9} 
+\end{figure}
+
+\begin{figure}
+	[p] \centering 
+	\includegraphics[width=0.75\linewidth]{images/events/2010_08_27/bgp_log_all_external.eps}
+	\caption{Event 3: Unreachable BGP prefixes detected by the modified FACT traffic preselection based on all detected server sockets} 
+	\label{fig:RIPE_FACT_allSES} 
+\end{figure}
+
+\begin{figure}
+	[p] \centering 
+	\includegraphics[width=0.75\linewidth]{images/events/2010_08_27/bgp_log_Set_var_0_1_stab_9_vts_2.eps}
+	\caption{Event 3: Unreachable BGP prefixes detected by the modified FACT traffic preselection based on the $70\%$ most popular server sockets limited to those with a visibility of at least 2 days and stability ratio of at least $90\%$.} 
+	\label{fig:RIPE_FACT_popularVTS2STAB9} 
+\end{figure}
+
 
