@@ -9,8 +9,9 @@
 
 To achieve the goal of enhancing the traffic preselection of FACT with
 knowledge about the past stability and popularity characteristics, the following
-three steps are planned for extending FACT as illustrated in figure
+three steps are planned for extending FACT as illustrated in figure 
 \ref{fig:FACT}.
+
 \begin{figure}
 	[ht] \centering
 	\includegraphics[width=8.5cm]{images/Approach_blockdiagram.eps}
@@ -21,7 +22,7 @@ three steps are planned for extending FACT as illustrated in figure
 In a first step, a server socket detector is implemented. The challenge of the
 server socket detection lies in the fact that the netflow data does not provide
 enough precise timing information to determine which flow is originated from the
-client and thus determine the server's socket. Therefore, the server socket
+client and thereof deducing the server's socket. Therefore, the server socket
 detection is achieved by the assumption that server sockets act as concentrators
 in the sense that several clients have connections to the identical server
 socket and bases on the work shown in
@@ -40,11 +41,9 @@ set of suitable server sockets such that FACT is able to use these sockets for
 outage tracking. In particular, the server socket sets coverage of the Internet 
 address space has to be assessed, because it makes for example no sense to 
 select only the most popular sockets if they are all located in the same /24 
-network.
-
-Finally, FACT has to be adopted to optimally use the preselected and rated
-server sockets for prioritizing relevant connectivity issues by reducing outage
-alerts based on single host outages of unstable services.
+network which is discussed in more detail in section \ref{section:ses_selection}. Consequently, FACT has to be adopted to optimally use the preselected 
+and rated server sockets for prioritizing relevant connectivity issues by 
+reducing outage alerts based on single host outages of unstable services. This step is further discussed in chapter \ref{chapter:integration}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Data
@@ -63,10 +62,10 @@ The \citet{switch} network is with approximately 250'000 network users in 2010 c
 	\label{fig:switch_nework}
 \end{figure}
 
-\citet{switch} is capturing flow level data at all external interfaces of their border routers by 2003 in form of unsampled NetFlow data -- from 2003-2008 in version 5 and in version 9 after 2008\citep{Schatzmann:Tracing}.
+Figure \ref{fig:switch_nework} is providing an overview of the SWITCH network. Currently, SWITCH has 15 upstreams and peering links and is capturing flow level data at all external interfaces of their border routers by 2003 in form of unsampled NetFlow data -- from 2003-2008 in version 5 and in version 9 after 2008\citep{Schatzmann:Tracing}.
 High traffic peak rates of more than 80'000 flows per second, 3 million packets per second and more than 20Gbit/s require hardware-based flow collection cards. TCP flags are not available in the flow level information because of some limitations of these hardware components. The generated flow data is collected and stored at a central data repository.
 
-Figure \ref{fig:switch_nework}
+
 
 % briefly describe the Switch network and its topology..
 % traffic volume and netflow data unsampled!
