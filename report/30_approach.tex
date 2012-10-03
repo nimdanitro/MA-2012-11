@@ -66,38 +66,9 @@ The \citet{switch} network is with approximately 250'000 network users in 2010 c
 \citet{switch} is capturing flow level data at all external interfaces of their border routers by 2003 in form of unsampled NetFlow data -- from 2003-2008 in version 5 and in version 9 after 2008\citep{Schatzmann:Tracing}.
 High traffic peak rates of more than 80'000 flows per second, 3 million packets per second and more than 20Gbit/s require hardware-based flow collection cards. TCP flags are not available in the flow level information because of some limitations of these hardware components. The generated flow data is collected and stored at a central data repository.
 
+Figure \ref{fig:switch_nework}
+
 % briefly describe the Switch network and its topology..
 % traffic volume and netflow data unsampled!
 % see tech report 338 for numbers and layout?! evtl actual numbers (2012)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Flowbox
-\label{section:flowbox}}
-
-Flowbox is a modular flow processing library developed by the Communication Systems Group (CSG) at ETH Zurich. It aims to allow an easy composition of individual flow processing components for common processing tasks. Moreover, it provides an easy interface for developing own components for specialized tasks that rely on other processing components of Flowbox.
-
-Generally, there are two flow data formats, an unidirectional flow (\emph{Flow}) and bidirectional flow (\emph{BiFlow}). A bunch of such flow records are put into containers -- either \emph{FlowContainer} or \emph{BiFlowContainers}. Those containers are then passed to buffers (\emph{FlowContainerBuffer} or \emph{BiFlowContainerBuffer}) interconnecting the individual processing blocks.
-
-These processing blocks can be grouped into the three groups, Flow Reader, Caches, and Filters. The individual blocks which are available by September 2012 are briefly described in the following:
-
-\subsection{Flow Readers}
-
-\subsubsection{NetFlowV5 Parser} 
-\subsubsection{NetFlowV9 Parser}
-\subsubsection{CSG Flow Parser} 
-
-
-% configured with internal prefixes, responsible for tagging flows with direction. Setting transit and internal network traffic (in-in) as invalid (filtering away)
-\subsection{Caches}
-\subsubsection{BiFlowCache} This module is responsible for generating
-bidirectional flows from incoming unidirectional flows. This is done by
-storing the flows in hash table with a hash key which is identical for incoming
-and outgoing flows and thus matching the corresponding reverse flows. For proper operation of the \emph{BiFlowCache}, a properly configured \emph{InOutFilter} is required in front of the BiFlowCache, since it is necessary that the direction of all flows must be tagged either as outgoing or as incoming and that only cross-border flows are processed.
-
-\subsubsection{ConnectionCache}
-
-\subsection{Filters}
-\subsubsection{InOutFilter}
-\subsubsection{IP Filter} 
-\subsubsection{Noise Filter} 
-\subsubsection{Fan-Out Filter}
-
