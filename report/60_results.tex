@@ -49,6 +49,13 @@ This specific IXP partitioning event is clearly visible in figure  \ref{fig:AMS_
 \subsection{Server Socket Approach}
 For evaluating the server socket bases approach, several different server socket sets are choosen, since this socket set selection process is an optimization problem as outlined in chapter \ref{chapter:integration}.
 
+Firstly, a FACT is operated with a server socket set denoted as \emph{AllPort80SeS}, including all detected server socket listening on port 80. This socket set can directly be compared to the old heuristic approach, since it monitors a majority of those traffic as well. 
+
+As figure \ref{fig:AMS_IX_FACT_allSES80} shows, the real event lasting from 05.00 UTC to 08:15 UTC is clearly visible equally well as in the heuristic approach from figure \ref{fig:AMS_IX_FACT_REF}. However, the server socket based approach reduces the red part indicating the number of unreachable prefixes affecting only a single internal user by at least an order of magnitude. Hence,  the event is now clearly standing out of the \emph{background event detection noise}.
+
+Despite that fact, that the \emph{AllPort80SeS} set is not optimized at all, it outperformed the traditional approach in terms of noise reduction without significantly worsen the real event detection. This confirms the assumption that a high number of unreachable prefixes affecting only a single internal user is caused by malware and p2p churn.
+
+
 \begin{figure}
 	[p] \centering 
 	\includegraphics[width=0.75\linewidth]{images/events/2010_03_25/bgp_log_allPort80SES.eps}
@@ -56,11 +63,6 @@ For evaluating the server socket bases approach, several different server socket
 	\label{fig:AMS_IX_FACT_allSES80} 
 \end{figure}
 
-Firstly, a FACT is operated with a server socket set denoted as \emph{AllPort80SeS}, including all detected server socket listening on port 80. This socket set can directly be compared to the old heuristic approach, since it monitors a majority of those traffic as well. 
-
-As figure \ref{fig:AMS_IX_FACT_allSES80} shows, the real event lasting from 05.00 UTC to 08:15 UTC is clearly visible equally well as in the heuristic approach from figure \ref{fig:AMS_IX_FACT_REF}. However, the server socket based approach reduces the red part indicating the number of unreachable prefixes affecting only a single internal user by at least an order of magnitude. Hence,  the event is now clearly standing out of the \emph{background event detection noise}.
-
-Despite that fact, that the \emph{AllPort80SeS} set is not optimized at all, it outperformed the traditional approach in terms of noise reduction without significantly worsen the real event detection. This confirms the assumption that a high number of unreachable prefixes affecting only a single internal user is caused by malware and p2p churn.
 
 \begin{figure}
 	[p] \centering 
@@ -76,9 +78,15 @@ Despite that fact, that the \emph{AllPort80SeS} set is not optimized at all, it 
 	\label{fig:AMS_IX_FACT_allSES80VTS2STAB9} 
 \end{figure}
 
+\begin{figure}
+	[p] \centering 
+	\includegraphics[width=0.75\linewidth]{images/events/2010_03_25/bgp_log_all_external.eps}
+	\caption{Event 1: Unreachable BGP prefixes detected by the modified FACT traffic preselection based on all detected server sockets} 
+	\label{fig:AMS_IX_FACT_allSES} 
+\end{figure}
 
 \begin{figure}
-	[ht] \centering 
+	[p] \centering 
 	\includegraphics[width=0.75\linewidth]{images/events/2010_03_25/bgp_log_Set_var_0_1_stab_9_vts_2.eps}
 	\caption{Event 1: Unreachable BGP prefixes detected by the modified FACT traffic preselection based on the $70\%$ most popular server sockets limited to those with a visibility of at least 2 days and stability ratio of at least $90\%$.} 
 	\label{fig:AMS_IX_FACT_popularVTS2STAB9} 
@@ -89,13 +97,62 @@ Despite that fact, that the \emph{AllPort80SeS} set is not optimized at all, it 
 \section{Event 2: Reverse path traffic black-holing}
 % PAM-PAPER: On May 18, 2010, all services in an external /24 network were not accessible from SWITCH between 08:30 and 08:45. According to the oper- ators of SWITCH, this problem was most likely due to a tier-1 provider that black-holed parts of the reverse traffic towards SWITCH. Yet, at this time the operators could only speculate how many hosts and customers, or even other /24 networks were affected by this problem. Applying FACT we confirm that the reported /24 network is indeed reported as unreachable at around 08:30. Surprisingly, FACT reveals that the overall number of unreachable hosts and /24 networks has doubled compared to the time before 08:30 while the number of unresponsive BGP prefixes is increased by a factor of even 6, see Fig. 5(a). Moreover, the reported /24 network is not even in the top ten list of the most popular unresponsive networks. This suggests that the impact of this event has been more serious than previously believed.
 
+On May 18, 2010, the operators of the SWITCH network were assigned to investigate an reported issue that all services in an external /24 network were not accessible from the SWITCH network between 08:30 and 08:45 UTC. According to SWITCH, the problem was most likely due to an issue of an tier-1 provider which black-holed parts of the reverse traffic towards the SWITCH network\citep{SchatzmannPAM2011}.
+
+Unfortunately, the operators were neither able to tell how many internal users were affected nor how many external networks were unreachable during this period of time. However with the help of FACT, this issue can be further assessed with respect to the severity of the event\citep{SchatzmannPAM2011}.
 
 \subsection{Heuristic Approach}
 
+\begin{figure}
+	[p] \centering 
+	\includegraphics[width=0.75\linewidth]{images/events/2010_05_18/bgp_log_port80_ref.eps}
+	\caption{Event 2: Unreachable BGP prefixes detected by the classical FACT traffic preselection based on the port-based heuristic.} 
+	\label{fig:TIER1_FACT_REF} 
+\end{figure}
+
 \subsection{Server Socket Approach}
+
+\begin{figure}
+	[p] \centering 
+	\includegraphics[width=0.75\linewidth]{images/events/2010_05_18/bgp_log_allPort80SES.eps}
+	\caption{Event 2: Unreachable BGP prefixes detected by the modified FACT traffic preselection based on all port 80 server sockets.} 
+	\label{fig:TIER1_FACT_allSES80} 
+\end{figure}
+
+
+\begin{figure}
+	[p] \centering 
+	\includegraphics[width=0.75\linewidth]{images/events/2010_05_18/bgp_log_port80_Set_stab_0_vts_2.eps}
+	\caption{Event 2: Unreachable BGP prefixes detected by the modified FACT traffic preselection based on all port 80 server sockets with visibility of at least 2 days.} 
+	\label{fig:TIER1_FACT_allSES80VTS2} 
+\end{figure}
+
+\begin{figure}
+	[p] \centering 
+	\includegraphics[width=0.75\linewidth]{images/events/2010_05_18/bgp_log_port80_Set_stab_9_vts_2.eps}
+	\caption{Event 2: Unreachable BGP prefixes detected by the modified FACT traffic preselection based on all port 80 server sockets with visibility of at least 2 days and stability ratio of at least $90\%$.} 
+	\label{fig:TIER1_FACT_allSES80VTS2STAB9} 
+\end{figure}
+
+\begin{figure}
+	[ht] \centering 
+	\includegraphics[width=0.75\linewidth]{images/events/2010_05_18/bgp_log_all_external.eps}
+	\caption{Event 2: Unreachable BGP prefixes detected by the modified FACT traffic preselection based on all detected server sockets} 
+	\label{fig:TIER1_FACT_allSES} 
+\end{figure}
+
+
+\begin{figure}
+	[ht] \centering 
+	\includegraphics[width=0.75\linewidth]{images/events/2010_05_18/bgp_log_Set_var_0_1_stab_9_vts_2.eps}
+	\caption{Event 2: Unreachable BGP prefixes detected by the modified FACT traffic preselection based on the $70\%$ most popular server sockets limited to those with a visibility of at least 2 days and stability ratio of at least $90\%$.} 
+	\label{fig:TIER1_FACT_popularVTS2STAB9} 
+\end{figure}
+
 
 \newpage
 \section{Event 3: RIPE / DUKE BGP Experiments}
+
 % PAM-PAPER: On August 27, 2010, some parts of the Internet became disconnected for some 30 minutes due to an experiment with new BGP attributes by RIPE and Duke University [12]. FACT reveals that at around 08:45 the number of popular unresponsive /24 networks indeed doubled. According to Fig. 5(b), for some BGP prefixes more than 15 internal hosts failed to establish connectivity. Yet, overall our analysis reveals that the impact of this incident on SWITCH and its customers was quite limited compared to the public attention that this event obtained.
 
 An experiment with new BGP attributes jointly performed by RIPE and the Duke 

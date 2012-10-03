@@ -59,8 +59,11 @@ This approach is able to detect \emph{server sockets} which are offering not onl
 Therefore, it can be assumed that nodes with a high degree correspond to a \emph{server sockets}.
 
 % introduce minimal vertex cover problem
+\todo{Introduce Minimal vertex cover problem + recall + greedy algorithm}
+
 % greedy algorithm to solve mvcp
 % recalling sockets for optimization
+\todo{Describe me!}
 \begin{algorithm}[t!]
 \caption{Detection of server sockets by \citet{Schatzmann:Mining,Schatzmann:Dissection, Schatzmann:Tracing}}
 \label{alg:service_tracing_ss-detection}
@@ -84,12 +87,10 @@ Therefore, it can be assumed that nodes with a high degree correspond to a \emph
 \end{algorithmic}
 \end{algorithm}
 
-% overall Algorithm of detection
-\todo{detection approach chain!} 
 \begin{figure}
 	[ht] \centering \missingfigure{Detection Chain}
 	
-	%\includegraphics[width=\linewidth]{image/bipartite_graph.eps}
+	%\includegraphics[width=\linewidth]{images/detection_chain.eps}
 	\caption{Detection chain illustration} 
 	\label{fig:detection_chain} 
 \end{figure}
@@ -105,7 +106,7 @@ In contrast to the detection approach, there are no scanning or other noise filt
 \begin{figure}
 	[ht] \centering \missingfigure{Monitoring Chain}
 	
-	%\includegraphics[width=\linewidth]{image/bipartite_graph.eps}
+	%\includegraphics[width=\linewidth]{images/monitoring_chain.eps}
 	\caption{Monitoring chain illustration} 
 	\label{fig:monitoring_chain} 
 \end{figure}

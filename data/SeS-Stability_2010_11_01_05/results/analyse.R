@@ -1,13 +1,13 @@
 library("ggplot2")
 
 # Histogram plots of VTS / visibile days
-#sockets <- read.csv("results-correct/ServerSocketStability_overall_external.csv", sep=",")
-sockets <- read.csv("results-old/ServerSocketStability_overall_external.csv", sep=",")
+sockets <- read.csv("results-correct/ServerSocketStability_overall_external.csv", sep=",")
+#sockets <- read.csv("results-old/ServerSocketStability_overall_external.csv", sep=",")
 #p <- ggplot(sockets, aes(VisibleTimeSlots)) + geom_bar() + facet_wrap( ~ VisibleDays, scales="free")
 #ggsave(file="VTS_by_visibledays.pdf", width=12, height=10, dpi=300)
 
 sockets$Ratio <- sockets$BidirectionalFlows/(sockets$BidirectionalFlows+sockets$UnidirectionalFlowsOut)
-#sockets$Ratio <- sockets$TotalRatio
+#sockets$Ratio <- sockets$AverageRatio
 
 
 
@@ -87,3 +87,21 @@ ggsave(file="top20_ratio_box.pdf", width=12, height=8, dpi=300)
 p <- ggplot(tmp_sockets, aes(Port, VisibleDays))
 p + geom_boxplot(outlier.size = 1, size =0.25, aes(fill=factor(Protocol))) + scale_fill_hue(name="Protocol", labels=c("TCP", "UDP")) + xlab("Port") + ylab("Visibility")
 ggsave(file="top20_visibility_box.pdf", width=12, height=8, dpi=300)
+
+
+# PLOT THE HEAT MAP FOR SHOWING THE DIMENSIONS
+sockets$TotalFlows <- sockets$BidirectionalFlows + sockets$UnidirectionalFlowsIn
+ecdf_pop <- ecdf(sockets$TotalFlows)
+sockets$PopularityRank <- ecdf_pop(sockets$TotalFlows)
+ecdf_vis <- ecdf(sockets$VisibleTimeSlots)
+sockets$VisibilityRank <- ecdf_vis(sockets$VisibleTimeSlots)
+
+# STABILITY VISIBILIY MAP
+p <- ggplot(sockets, aes(x=AverageRatio, y=VisibilityRank))
+p + geom_bin2d(binwidth = c(0.001,0.001)) + xlab("Availability / Stability Ratio") + ylab("Ranked Visibility") + guides(fill=FALSE)
+ggsave(file="visibiliy_stability_map.pdf", width=12, height=8, dpi=300)
+
+# CREATE THE POPULARITY MAP
+p <- ggplot(sockets, aes(x=AverageRatio, y=PopularityRank))
+p + geom_bin2d(binwidth = c(0.001,0.001)) + xlab("Availability / Stability Ratio") + ylab("Ranked Popularity") + guides(fill=FALSE)
+ggsave(file="popularity_stability_map.pdf", width=12, height=8, dpi=300)
