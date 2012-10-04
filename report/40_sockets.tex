@@ -137,8 +137,23 @@ flow is required to consist of at least 1 packet for each unidirectional flow
 record.
 
 After these filtering steps, the remaining bidirectional flows are passed to the 
-server socket detector which is finally 
+server socket detector which is finally performing the server socket detection 
+approach previously discussed. Mainly, the server socket detector is build from 
+two main parts. On the one side, there is the server socket registry which is 
+containing all already known server sockets. On the other side, the detection 
+engine implements the server socket detection algorithm. 
 
+Firstly, the sockets of all bidirectional flows are queried against the current 
+server socket registry if they are already known. If this is the case, the 
+corresponding bidirectional flow records are removed and only the remaining flow 
+records are passed to the detection engine to increase the efficiency of the 
+detection algorithm. The detection engine is building the bipartite connection 
+graph and is detecting the concentrators of it. These detected server sockets 
+are then passed to the server socket registry so that these sockets may be 
+recalled afterwards. 
+
+Finally, the server socket registry is able to output all detected server 
+sockets of the observation period. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % MONITORING OF SERVER SOCKETS
@@ -152,15 +167,18 @@ statistical information such that some characteristics and properties of the
 found \emph{server sockets} can be assessed as outlined in section 
 \ref{section:characterization}.
 
-\subsection{Server Socket Statistics} The monitoring of the external \emph{server sockets} is done with help of the \emph{server socket registry} which is already used in the detection approach. This registry recalls all \emph{server sockets} which are known yet. Hence, all flows originated from a \emph{server socket} or flows which are destined for a \emph{server sockets} are monitored for compiling the socket statistics later used for the characterization.
+\subsection{Server Socket Statistics} The monitoring of the external \emph{server sockets} is done with help of the \emph{server socket registry} which is already used in the detection approach. This registry recalls all \emph{server sockets} which are known yet. 
+
+Hence, all flows originated from a \emph{server socket} or flows which are destined for a \emph{server sockets} are monitored for compiling the socket statistics later used for the characterization.
 
 In contrast to the detection approach, there are no scanning or other noise filters in the processing chain, because of the fact that they will remove at least some flows, mainly unidirectional flows, which are actually relevant for the statistics. 
 
 Since the processing is based on data containing flows which are active within a certain time slot, the statistics are accounted on a the same discrete time scale, i.e. 10 minutes. 
-At first, each flow is checked if it is a flow of a \emph{server socket}. If this is the case, the individual flow statistics are accounted to the corresponding specific server socket \textbf{statistics record}. This includes the following entries: 
-\vbox{
 
-%
+At first, each flow is checked if it is a flow of a \emph{server socket}. If this is the case, the individual flow statistics are accounted to the corresponding specific server socket \textbf{statistics record}. This includes the following entries: 
+
+
+\vbox{
 \begin{itemize}
 	\item Number of bidirectional connections 
 	\item Number of outgoing unidirectional connections 
@@ -169,9 +187,8 @@ At first, each flow is checked if it is a flow of a \emph{server socket}. If thi
 }
 
 In second step, the statistics records of each discrete time slot are aggregated in such a way that the information of the activity within a certain time slot is kept. Thus, the overall server socket statistics record contains the following entries: 
-\vbox{
 
-%
+\vbox{
 \begin{itemize}
 	\item Sum of bidirectional connections of each time slot 
 	\item Sum of outgoing unidirectional connections of each time slot 
@@ -182,18 +199,17 @@ In second step, the statistics records of each discrete time slot are aggregated
 \end{itemize}
 }
 
-\subsection{Traffic Statistics} Besides of the individual server socket statistics report, overall traffic statistics are accounted, mainly for deducing knowledge of how good the monitoring capability of the server sockets in the registry is. For this reason, each flow which belongs to a server socket which is present in the registry is denoted as monitored. Hence, flows which does not belong to a server socket are accounted as not monitored. 
+\subsection{Traffic Statistics} 
+
+Besides of the individual server socket statistics report, overall traffic statistics are accounted, mainly for deducing knowledge of how good the monitoring capability of the server sockets in the registry is. For this reason, each flow which belongs to a server socket which is present in the registry is denoted as monitored. Hence, flows which does not belong to a server socket are accounted as not monitored. 
 
 Moreover, all unmonitored flows can be further investigated for better understanding of the type of this unmonitored traffic. This can be done on the following three scopes: 
-\vbox{
-
 \begin{itemize}
 	\item Protocol level 
 	\item Port level for UDP and TCP flows 
 	\item Direction 
 	\item Type of connection 
 \end{itemize}
-}
 
 The first scope, covers the problem that server sockets are only defined for protocol TCP and UDP, hence all flows with another protocol are per definition unmonitored.
 
@@ -203,19 +219,14 @@ On the one hand, there is the possibility to account for each port the unmonitor
 
 On the other hand, the flows can be categorized by port ranges. In this thesis, there are just two ranges defined for this categorization:
 
-\vbox{
-
-%
 \begin{itemize}
 	\item Low port: 0-1024 
 	\item High port: 1025-65365 
 \end{itemize}
-}
 
 These categories are further divided by the location of the socket -- internal or external. Hence, the unmonitored TCP and UDP flows or strictly speaking the corresponding sockets are accounted by the following four categories:
 
 \vbox{
-
 \begin{itemize}
 	\item external port high, internal port high 
 	\item external port high, internal port low 
@@ -224,16 +235,17 @@ These categories are further divided by the location of the socket -- internal o
 \end{itemize}
 }
 
+
 \subsection{Implementation}
 
-\begin{figure}
-	[ht] \centering
-	
+Figure \ref{fig:monitoring_chain} is showing the modular implementation of the server socket monitoring chain. Comparing the monitoring chain to the detection chain from figure \ref{fig:detection_chain} it is clearly visible that the modules up to the bidirectional connection cache are shared. However, in the monitoring chain there are no fan-out filter and noise filter applied. This is because every traffic destined to a server socket should be considered, therefore no bidirectional flow records are filtered before accounting them. The server socket monitor
+
+\begin{figure}[hb]
+	\centering
 	\includegraphics[width=\linewidth]{images/TrackingChain.eps}
 	\caption{Server Socket monitoring chain issues statistics records} 
 	\label{fig:monitoring_chain} 
 \end{figure}
-
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
