@@ -102,7 +102,7 @@ Therefore, it can be assumed that nodes with a high degree correspond to a \emph
 \end{figure}
 
 \subsection{Implementation}
-Figure \ref{fig:detection_chain} is illustrating the processing steps of the 
+Figure \ref{fig:detection_chain} illustrates the processing steps of the 
 overall detection chain. The data parser is responsible to read the netflow data 
 either in NetFlow v5 or NetFlow v9 format. These unidirectional flow records are 
 then preprocessed by different blocks. While the input validator is performing 
@@ -253,7 +253,7 @@ All these general traffic statistics allows to deduce insights about the propert
 
 \subsection{Implementation}
 
-Figure \ref{fig:monitoring_chain} is showing the modular implementation of the 
+Figure \ref{fig:monitoring_chain} shows the modular implementation of the 
 server socket monitoring chain. Comparing the monitoring chain to the detection 
 chain from figure \ref{fig:detection_chain} it is clearly visible that the 
 modules up to the bidirectional connection cache are shared. However, in the 
@@ -350,15 +350,18 @@ However, this summing approach exacerbate the comparison between different obser
 % number of flows / clients?.. degree of Server Socket
 Besides the visibility of a server socket, its popularity is another major key characteristics. Whereas the visibility of a server socket defines how frequent in time a socket is contacted by at least one connection endpoint, the popularity of a server socket is defined by the number of connection attempts of client sockets during a certain period of time. The popularity of server socket can be deduced by various metrics as the number of flows, bytes or clients.
 
-%% statistics
-\newpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% ANALYSIS of SERVER SOCKETS IN THE WILD
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\newpage
 \section{Analysis of Server Sockets in the Wild}
 
-This section covers a detailed analysis of server socket found during a week long data trace from 2010/11/01 till 2010/11/05 -- the first 5 working days in November 2010.
+This section covers a detailed analysis of server socket found during a week long data trace from 2010/11/01 00:00:00 UTC until 2010/11/06 00:49:00 UTC, thus covering mainly the first 5 working days in November 2010.
 
 \subsection{Detected Server Sockets}
 
-% sum up of detection parameters > 2 biflows per 5min interval with more TCP packets > 3 UDP > 1
+% sum up of detection parameters > 2 biflows per 5min interval with more TCP 
+% packets > 3 UDP > 1
 For detecting the server sockets in this observation period, the previously 
 discussed detection approach was applied as illustrated by figure 
 \ref{fig:detection_chain}. In detail, the connection cache was configured to 
@@ -370,34 +373,67 @@ filter implementing the idea of \citet{Allman:2007} to mitigate the effects of
 scanning and p2p churn. This fan out filter is configured to require at least 4 
 unidirectional connections with a certain host as source and at least 2 times 
 more unidirectional connections than bidirectional connections for classifying 
-this host as a scanning host. Previous work\citep{Schatzmann:Mining,Schatzmann:Dissection, Schatzmann:Tracing} has shown that these parameters are a good choice for efficiently mitigating the scanning noise by reducing the scanning spikes of the total traffic volume. 
+this host as a scanning host. Previous 
+work\citep{Schatzmann:Mining,Schatzmann:Dissection, Schatzmann:Tracing} has 
+shown that these parameters are a good choice for efficiently mitigating the 
+scanning noise by reducing the scanning spikes of the total traffic volume. 
 
-Moreover, the noise filter is configured to filter all TCP flows with less than 3 packets in a single direction and UDP flows with less than 1 packet in a single direction. 
+Moreover, the noise filter is configured to filter all TCP flows with less than 
+3 packets in a single direction and UDP flows with less than 1 packet in a 
+single direction. 
+
+Furthermore, the server socket detector is configured to extract sockets with a 
+degree of 2 or higher as concentrators, thus defining requiring two independent 
+connections to a server sockets within 600 seconds. 
 
 % state overall number of detected external and internal server sockets during 
 % this period
+During the entire observation period of 120.8 hours, the server socket detector 
+managed to detect 1'519'363 external server sockets and 609'670 internal server 
+sockets.
 
 \subsection{Server Sockets Flows Gravity}
-% traffic statistics of server sockets detected by type and ratio of traffic towards server sockets
-
-
+% traffic statistics of server sockets detected by type and ratio of traffic 
+% towards server sockets
+In the following, the overall traffic statistics of the detected server sockets 
+are briefly discussed. Figure \ref{fig:flows_by_type} shows the absolute number 
+of flows during the entire observation period separated by the type of 
+connection. If the flow is destined to a server socket, the flow is denoted as 
+monitored, otherwise if as unmonitored. Furthermore, the type of connection also 
+considers the balance or direction of the connection, i.e. if the flow is 
+bidirectional, unidirectional outgoing or unidirectional incoming. Hence, in 
+total there are 6 possible combinations for the type of connection, allowing a 
+good interpretation of the detection approach. For easier comparison of each 
+type of connection, figure \ref{fig:monitored_flows_by_type} shows the ratio of 
+monitored and unmonitored flows by the direction. 
 \begin{figure}
 	[ht] \centering 
 	\includegraphics[width=\linewidth]{images/Flows_by_type_area_all_SeS.pdf}
-	\caption{Flows by Type} 
+	\caption{Number of flows over time by the type of connection with all detected server sockets} 
 	\label{fig:flows_by_type} 
 \end{figure}
+
+Clearly, the dominating kind of the flows are the bidirectional monitored flows 
+represented by the red area in figure \ref{fig:flows_by_type}. Comparing this 
+share with the bidirectional unmonitored flows represented by the yellow area 
+between the red and the green area, yields that the detection approach detects a 
+majority of the server sockets. This finding is even better visible on the 
+bidirectional ratio of figure \ref{fig:monitored_flows_by_type}. Depending on 
+the time of the day, the monitoring ratio of the bidirectional flows is mainly between 90\% and 97\%. There are always smaller monitoring ratios during night yielding that at night there is a higher share of unknown server sockets active than during day. A reason for this is that during night there are just not enough bidirectional flows to the same server socket during 600 seconds such that this socket is successfully detected as concentrator.
+
 
 
 \begin{figure}
 	[ht] \centering 
 	\includegraphics[width=\linewidth]{images/Flows_monitor_ratio_by_type_all_SeS.pdf}
-	\caption{Flows towards a detected server socket by type traffic} 
+	\caption{Flows towards known server sockets by traffic type with all detected server sockets} 
 	\label{fig:monitored_flows_by_type} 
 \end{figure}
 
 
-\subsection{Characterization of detected Server Sockets}
+\subsection{Characterization of Detected Server Sockets}
+
+This s
 
 \subsubsection{Visibility}
 \begin{figure}
