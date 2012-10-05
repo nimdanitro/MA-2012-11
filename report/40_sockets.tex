@@ -315,7 +315,7 @@ Thus, the overall stability \emph{server socket} or availability of its service 
 
 Hence, a \emph{server socket} with a stability ratio of 1 does only have bidirectional connections and thus, replies to all connection attempts. On the other side, a stability ratio of 0 indicates that there are only connections attempts by client sockets, but the server socket never replied upon these request. Unbalanced outgoing connections from the server sockets are indicating a client error or scanning activities of clients with spoofed (internal) source address which are not observed by the monitoring system. Therefore, these unbalanced outgoing connections are not considered for determining the stability ratio at all.
 
-\subsection{Visibility of a Server Socket}
+\subsection{Visibility of a Server Socket\label{subsection:visibility}}
 
 % discrete time slots activities of a socket, per day, per 5min slot?
 % distribution is heavy-tailed, alot of sockets only rarely connected => due to scanning? due to malware?
@@ -392,7 +392,7 @@ During the entire observation period of 120.8 hours, the server socket detector
 managed to detect 1'519'363 external server sockets and 609'670 internal server 
 sockets.
 
-\subsection{Server Sockets Flows Gravity}
+\subsection{Gravitational Forces of Server Sockets}
 % traffic statistics of server sockets detected by type and ratio of traffic 
 % towards server sockets
 In the following, the overall traffic statistics of the detected server sockets 
@@ -405,12 +405,22 @@ bidirectional, unidirectional outgoing or unidirectional incoming. Hence, in
 total there are 6 possible combinations for the type of connection, allowing a 
 good interpretation of the detection approach. For easier comparison of each 
 type of connection, figure \ref{fig:monitored_flows_by_type} shows the ratio of 
-monitored and unmonitored flows by the direction. 
+monitored and unmonitored flows by the direction.
+
+In figures \ref{fig:flows_by_type} and \ref{fig:monitored_flows_by_type}, there are two gaps visible around 2010/11/01 10:00 UTC and 2010/11/04 06:05 UTC. These gaps result from missing flow records due to router reboots, collector outages, and storage failures\citep{Schatzmann:Mining}.
+
 \begin{figure}
 	[ht] \centering 
 	\includegraphics[width=\linewidth]{images/Flows_by_type_area_all_SeS.pdf}
 	\caption{Number of flows over time by the type of connection with all detected server sockets} 
 	\label{fig:flows_by_type} 
+\end{figure}
+
+\begin{figure}[h]
+	\centering 
+	\includegraphics[width=\linewidth]{images/Flows_monitor_ratio_by_type_all_SeS.pdf}
+	\caption{Flows towards known server sockets by traffic type with all detected server sockets} 
+	\label{fig:monitored_flows_by_type} 
 \end{figure}
 
 Clearly, the dominating kind of the flows are the bidirectional monitored flows 
@@ -419,42 +429,78 @@ share with the bidirectional unmonitored flows represented by the yellow area
 between the red and the green area, yields that the detection approach detects a 
 majority of the server sockets. This finding is even better visible on the 
 bidirectional ratio of figure \ref{fig:monitored_flows_by_type}. Depending on 
-the time of the day, the monitoring ratio of the bidirectional flows is mainly between 90\% and 97\%. There are always smaller monitoring ratios during night yielding that at night there is a higher share of unknown server sockets active than during day. A reason for this is that during night there are just not enough bidirectional flows to the same server socket during 600 seconds such that this socket is successfully detected as concentrator.
+the time of the day, the monitoring ratio of the bidirectional flows is mainly 
+between 90\% and 97\%. There are always smaller monitoring ratios during night 
+yielding that at night there is a higher share of unknown server sockets active 
+than during day. A possible reason for pattern is that there are some server 
+sockets which are regularly contacted, however only by very few clients so that 
+these sockets get never more than one connection within 600 seconds. Thus, these 
+sockets are never detected as concentrators. 
 
+Similarly, if the unidirectional outgoing flows are examined by looking at figure \ref{fig:monitored_flows_by_type}, the monitored flows have predominantly a high share of around 80\% to 90\% of all unidirectional outgoing flows. Figure \ref{fig:flows_by_type} also reveals some high peaks which are probably scanning or backscatter effects which are well visible at November 03 in the night and in the afternoon by the green spikes. However, these green peaks are categorized as monitored unidirectional outgoing flows, thus they must involve at least one known server socket either located external or internal.
 
+Finally, the unidirectional incoming flows have are predominately unmonitored with around 80-97\% of unmonitored flows as it can be seen in figure \ref{fig:monitored_flows_by_type}. Contrasting the trend of the other two categories of traffic, the main reason for this contrast may be that the main part of this unidirectional incoming traffic consists of Internet background radiation \citep{Wustrow10,Pang04} as for example malware scanning. Nevertheless, this unidirectional incoming flow traffic is unimportant with respect to the scope of this thesis.
 
-\begin{figure}
-	[ht] \centering 
-	\includegraphics[width=\linewidth]{images/Flows_monitor_ratio_by_type_all_SeS.pdf}
-	\caption{Flows towards known server sockets by traffic type with all detected server sockets} 
-	\label{fig:monitored_flows_by_type} 
-\end{figure}
+In a metaphorical sense, server sockets are comparable to masses in physics which are exerting gravitational forces to other objects. Server sockets tend to attract a majority of the observed connections and thus, they are well suitable to represent a majority of the legitimate traffic which is interesting for tracking the end-to-end connectivity.
 
+\todo{Comparing with Port80 SES?!}
 
+\newpage
 \subsection{Characterization of Detected Server Sockets}
 
-This s
+As discussed in section \ref{section:characterization}, this thesis proposes to characterize server sockets according to their visibility, popularity and stability by different metrics. This section aims to deduce some statistical properties of the detected server sockets regarding these characteristics.
 
-\subsubsection{Visibility}
+\subsubsection{General Visibility of Server Sockets}
+
+According to \ref{subsection:visibility}, for defining a metric of the visibility of server sockets it is required to define the granularity of a observation period. For reasons of simplicity, two different granularities are defined. One the one hand, a day long observation period yields the number of visible days for the activity of a socket. On the other hand, an observation period of 5 minutes is chosen, since it reflects the default processing interval of FlowBox, allowing a very fine-grained, detailed resolution of a server sockets activity. This second visibility metric is referred as \emph{visible time slots(VTS)}.
+
 \begin{figure}
-	[ht] \centering 
+	[hb] \centering 
 	\includegraphics[width=\linewidth]{images/VTS_by_visibledays.pdf}
 	\caption{VTS by visible days} 
 	\label{fig:vts_by_visibledays} 
 \end{figure}
 
+Figure \ref{fig:vts_by_visibledays} shows the number of sockets by the visible time slots separated the number of visible days. The skewness of the 
+distributions for 1 to 4 visible days are is very similar. It is obvious that 
+the a socket which is visible for only one day cannot exceed 288 visible time 
+slot. Nonetheless, considering this daily scaling factor, the distributions are 
+looking very similar. Furthermore, figure \ref{fig:vts_by_visibledays} shows 
+that the most sockets in absolute terms are only active during one day and only 
+in very few visible time slots. 
+
+However, the distribution of the number of sockets with a visibility of 5 or 
+even 6 days are slightly different, since there is a higher share of sockets 
+with a relatively higher visible time slots, besides the normal scaling factor 
+of the number of visible days.
+
+\subsubsection{Visibility and Stability}
+Eventually, for selecting those server sockets which are stable and often visible it is of importance to assess the how server sockets are distributed with respect to their stability and visibility characteristic. Hence, figure \ref{fig:rankedVisibility} shows the location of each socket in the field of the ranked visibility and the stability. The ranked visibility is simply defined by the cumulative distribution function of the visibility. Thus, a socket with a ranked visibility of 80\% indicates that there are 80\% of all sockets with the same or lower visibility than this specific socket. 
+
+As figure \ref{fig:rankedVisibility} indicates, the sockets cluster around the top right corner, hence the top visible sockets tend to have a good stability as well.
+
 \begin{figure}
-	[ht] \centering 
+	[hb] \centering 
 	\includegraphics[width=\linewidth]{images/visibiliy_stability_map.pdf}
 	\caption{Sockets by their ranked visibility and their stability} 
 	\label{fig:rankedVisibility} 
 \end{figure}
 
-\subsubsection{Stability}
+
+Figures \ref{fig:ccdf_ratio_days} and \ref{fig:ccdf_ratio_vts} show a 
+complementary cumulated distribution function of the stability of server sockets 
+with different visibilities. Firstly, figure \ref{fig:ccdf_ratio_days} is using 
+the daily visibility of the sockets. The red curve represents the distribution 
+of the sockets which are seen only in one day. Not surprisingly, these group of 
+server sockets reveal the highest share of sockets with a stability of 1. This 
+is mainly due to the fact that there is a relative high number of server sockets 
+with which are active only during a relatively short period of time. This can be 
+justified by looking at figure \ref{fig:vts_by_visibledays}.
+
 
 \begin{landscape}
 \begin{figure}
-	[ht] \centering 
+	[p] \centering 
 	\includegraphics[width=\linewidth]{images/CCDF_ratio_days.pdf}
 	\caption{CCDF of the availability by visible days} 
 	\label{fig:ccdf_ratio_days} 
@@ -463,14 +509,17 @@ This s
 
 \begin{landscape}
 \begin{figure}
-	[ht] \centering 
+	[p] \centering 
 	\includegraphics[width=\linewidth]{images/CCDF_ratio_VTS.pdf}
 	\caption{CCDF of the availability by visible time slots} 
 	\label{fig:ccdf_ratio_vts} 
 \end{figure}
 \end{landscape}
 
-\subsubsection{Popularity}
+\subsubsection{Popularity and Stability}
+Similarly to the visibility, the server sockets characteristics of popularity and stability are briefly assessed in the following. The ranked popularity is defined in the same way as the ranked visibility. To be precise, the ranked popularity is defined as the cumulative distribution function of the popularity in terms of flows. Hence, a server socket with a ranked popularity of 80\% signifies that there are 80\% of all server socket with a lower or equal popularity as this specific socket.
+
+
 \begin{figure}
 	[ht] \centering 
 	\includegraphics[width=\linewidth]{images/popularity_stability_map.pdf}
@@ -481,7 +530,7 @@ This s
 
 \begin{landscape}
 \begin{figure}
-	[ht] \centering 
+	[hb] \centering 
 	\includegraphics[width=\linewidth]{images/top20_ratio_box.pdf}
 	\caption{Boxer plot of the availability / stability of the top 20 traffic port server sockets} 
 	\label{fig:top20_ratio_box} 
@@ -490,7 +539,7 @@ This s
 
 \begin{landscape}
 \begin{figure}
-	[ht] \centering 
+	[p] \centering 
 	\includegraphics[width=\linewidth]{images/top20_visibility_box.pdf}
 	\caption{Boxer plot of visibility in days of the top 20 traffic port server sockets}
 	\label{fig:top20_visibledays_box}
