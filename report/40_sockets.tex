@@ -263,13 +263,6 @@ therefore no bidirectional flow records are filtered before accounting them. The
 server socket monitor is accounting the general traffic statistics as well as 
 the individual server socket statistics.
 
-\begin{figure}[hb]
-	\centering
-	\includegraphics[width=\linewidth]{images/TrackingChain.eps}
-	\caption{Processing chain for the server socket monitoring} 
-	\label{fig:monitoring_chain} 
-\end{figure}
-
 First of all, the bidirectional flow records are separated into those belonging 
 to a known server socket, denoted as monitored traffic, and those not belonging 
 known server socket, denoted as unmonitored traffic. To be more precisely, this 
@@ -279,6 +272,13 @@ and unmonitored traffic for generate the overall traffic statistics.
 Furthermore, it examines the unmonitored traffic even more closely for deducing 
 the knowledge about the other traffic statistic scopes as protocol, direction 
 ports and type of connection.\todo{Correct?!}
+
+\begin{figure}[hb]
+	\centering
+	\includegraphics[width=\linewidth]{images/TrackingChain.eps}
+	\caption{Processing chain for the server socket monitoring} 
+	\label{fig:monitoring_chain} 
+\end{figure}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % CHARACTERIZATION SERVERSOCKETS

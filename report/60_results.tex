@@ -6,23 +6,41 @@
 
 In order to evaluate the effect of server socket based traffic preselection, three known events were analyzed with the old port-based heuristic of FACT as well as with the new server socket based approach. Then, both results are compared and the effect of the traffic preselection on the noise of the results is qualitatively discussed.
 
-Table \ref{tab:ses_sets} shows the coverage of each set with respect to their IP space coverage in absolute and relative terms. 
 
-% state the sets which are what coverage in terms of /24, IP SPACE v4/v6
-\todo{FIXME!!}
 \begin{table}
 	[ht] \centering 
 	\begin{tabular}
-		{|l|c|r|r|r|r|} \hline \multirow{2}{*}{\textbf{Socket Set}} & \multirow{2}{*}{\textbf{Number of Sockets}} & \multicolumn{2}{|c|}{\textbf{IPv4 Space}} & \multicolumn{2}{|c|}{\textbf{IPv6 Space}} \\
-		\cline{3-6} & & absolute & relative & absolute & relative \\
-		\hline \hline All Server Sockets & 2129033 & 694627 & 100\% & 1231 & 100\% \\
-		\hline Port 80 & 610273 & 158765 & 22.85\% & 296 & 24.05\% \\
-		\hline Port 53 \& 80 & 939345 & 238032 & 34.27\% & 1153 & 93.66\% \\
-		\hline Port 53 \& 80 \& 443 & 1010966 & 251044 & 36.14\% & 1157 & 93.99\% \\
+		{|c|c|c|c|c|} \hline \textbf{Socket Set} & \textbf{Ports} & \textbf{min Stability} & \textbf{min Visibility} & \textbf{min Popularity} \\
+		\hline 
+		\hline A & all & 0 & 0 & 0\\
+		\hline B & all & 0.9 & 2 days & 0.3 \\
+		\hline C & 80 & 0 & 0 & 0 \\
+		\hline D & 80 & 0 & 2 days & 0 \\
+		\hline E & 80 & 0.9 & 2 days & 0 \\
 		\hline 
 	\end{tabular}
 	\caption{Coverage of server socket sets}
 	\label{tab:ses_sets}
+\end{table}
+
+Table \ref{tab:ses_sets_coverage} shows the coverage of each set with respect to their IP space coverage in absolute and relative terms. 
+
+% state the sets which are what coverage in terms of /24, IP SPACE v4/v6
+\begin{table}
+	[ht] \centering 
+	\begin{tabular}
+		{|c|c|r|r|r|r|} \hline \multirow{2}{*}{\textbf{Socket Set}} & \multirow{2}{*}{\textbf{Number of Sockets}} & \multicolumn{2}{|c|}{\textbf{IPv4 Space}} & \multicolumn{2}{|c|}{\textbf{IPv6 Space}} \\
+		\cline{3-6} & & absolute & relative & absolute & relative \\
+		\hline 
+		\hline A &  &  & 100\% 	& & 100\% \\
+		\hline B &  &  & \% 	& & \% \\
+		\hline C &  &  & \% 	& & \% \\
+		\hline D &  &  & \% 	& & \% \\
+		\hline E &  &  & \% 	& & \% \\
+		\hline 
+	\end{tabular}
+	\caption{Coverage of server socket sets}
+	\label{tab:ses_sets_coverage}
 \end{table}
 
 \todo{state that socket sets are from november 2010, events are before! due to lack of time to do detection for each event }
