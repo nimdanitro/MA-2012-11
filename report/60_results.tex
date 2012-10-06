@@ -4,13 +4,32 @@
 %** Results.tex: What were the results achieved including an evaluation
 \chapter{Evaluation\label{chapter:results}}
 
-In order to evaluate the effect of server socket based traffic preselection, three known events were analyzed with the old port-based heuristic of FACT as well as with the new server socket based approach. Then, both results are compared and the effect of the traffic preselection on the noise of the results is qualitatively discussed.
+In order to evaluate the effect of server socket based traffic preselection, 
+three known events were analyzed with the old port-based heuristic of FACT as 
+well as with the new server socket based approach. Then, the results are 
+compared and the effect of the traffic preselection on the noise of results 
+is qualitatively discussed.
 
+The three well known events which are used in this evaluation are already 
+discussed in detail by \citet{SchatzmannPAM2011}. However, due to the lack of 
+long enough data traces before each event required for detecting the server 
+sockets, this evaluation relies on the detected server sockets of November 2010.  
+Nevertheless, from an operational point of view it seems that server sockets 
+from November are representative for the three events as well. 
+
+For evaluating the server socket based approach, five different example socket 
+sets are created. Table \ref{tab:ses_sets} provides a brief overview of the 
+sets. Set \emph{A} consists of all detected server socket, Set \emph{B} is 
+restricted to those socket with a ranked popularity of at least 30\%, a 
+visibility of 2 days and a minimal stability ratio of 90\% and a maximal 
+variance of the stability of 0.1. Hence, the set \emph{B} applies some limiting 
+conditions on stability, visibility and popularity. 
+Set \emph{C} contains all external port 80 server sockets, allowing a direct comparison to the old port-based heuristic of FACT. Furthermore, set \emph{D} reduces set \emph{C} to those sockets which are visible on more than 2 days. Finally, set \emph{E} is imposing a condition on the stability of the sockets from set \emph{D}.
 
 \begin{table}
 	[ht] \centering 
 	\begin{tabular}
-		{|c|c|c|c|c|} \hline \textbf{Socket Set} & \textbf{Ports} & \textbf{min Stability} & \textbf{min Visibility} & \textbf{min Popularity} \\
+		{|c|c|c|c|c|} \hline \textbf{Socket Set} & \textbf{Ports} & \textbf{min. Stability} & \textbf{min. Visibility} & \textbf{min. Popularity} \\
 		\hline 
 		\hline A & all & 0 & 0 & 0\\
 		\hline B & all & 0.9 & 2 days & 0.3 \\
@@ -19,32 +38,38 @@ In order to evaluate the effect of server socket based traffic preselection, thr
 		\hline E & 80 & 0.9 & 2 days & 0 \\
 		\hline 
 	\end{tabular}
-	\caption{Coverage of server socket sets}
+	\caption{Overview of evaluated server socket sets}
 	\label{tab:ses_sets}
 \end{table}
 
 Table \ref{tab:ses_sets_coverage} shows the coverage of each set with respect to their IP space coverage in absolute and relative terms. 
 
+
 % state the sets which are what coverage in terms of /24, IP SPACE v4/v6
 \begin{table}
-	[ht] \centering 
+	[ht] \centering
 	\begin{tabular}
 		{|c|c|r|r|r|r|} \hline \multirow{2}{*}{\textbf{Socket Set}} & \multirow{2}{*}{\textbf{Number of Sockets}} & \multicolumn{2}{|c|}{\textbf{IPv4 Space}} & \multicolumn{2}{|c|}{\textbf{IPv6 Space}} \\
 		\cline{3-6} & & absolute & relative & absolute & relative \\
+		\hline A & 1862389 &  & 100\% 	& & 100\% \\
+		\hline B & 320531  & 1060083001 & \% & $2.693×10^{30}$ & \% \\
+		\hline C & 602111  & 1027865637 & \% & $1.629×10^{31}$ & \% \\
+		\hline D & 418912  & 862625441  & \% & $1.408x10^{31}$ & \% \\
+		\hline E & 384164  & 831321169  & \% & $8.804x10^{30}$ & \% \\
 		\hline 
-		\hline A &  &  & 100\% 	& & 100\% \\
-		\hline B &  &  & \% 	& & \% \\
-		\hline C &  &  & \% 	& & \% \\
-		\hline D &  &  & \% 	& & \% \\
-		\hline E &  &  & \% 	& & \% \\
-		\hline 
+		%\hline
+		% \multirow{2}{*}{\textbf{Socket Set}} & \multirow{2}{*}{\textbf{Number of Sockets}} & \multicolumn{2}{|c|}{\textbf{IPv4  /24 networks}} & \multicolumn{2}{|c|}{\textbf{IPv6 /48 networks}} \\
+		% \cline{3-6} & & absolute & relative & absolute & relative \\
+		% \hline A & 1862389 &  & 100\% 	& & 100\% \\
+		% \hline B & 320531  & 123432 & \% & 56  & \% \\
+		% \hline C & 602111  & 157774 & \% & 291 & \% \\
+		% \hline D & 418912  & 113697 & \% 	& 226 & \% \\
+		% \hline E & 384164  & 108835 & \% 	& 86 & \% \\
+		% \hline
 	\end{tabular}
-	\caption{Coverage of server socket sets}
+	\caption{Network coverage of the server socket sets}
 	\label{tab:ses_sets_coverage}
 \end{table}
-
-\todo{state that socket sets are from november 2010, events are before! due to lack of time to do detection for each event }
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % EVENT 1: AMS-IX PARTITIONING
@@ -118,7 +143,7 @@ Despite that fact, that the \emph{AllPort80SeS} set is not optimized at all, it 
 % EVENT 2: TIER-1 BLACK-HOLING
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage
-\section{Event 2: Reverse path traffic black-holing}
+\section{Event 2: Reverse Path Traffic Black-holing}
 
 On May 18, 2010, the operators of the SWITCH network were assigned to investigate an reported issue that all services in an external /24 network were not accessible from the SWITCH network between 08:30 and 08:45 UTC. According to SWITCH, the problem was most likely due to an issue of an tier-1 provider which black-holed parts of the reverse traffic towards the SWITCH network\citep{SchatzmannPAM2011}.
 
