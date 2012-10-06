@@ -49,9 +49,6 @@ coverage. It is remarkable that set \emph{B} achieves a higher IPv4 space
 coverage than all Port 80 socket sets despite having less sockets contained in 
 this set and imposing harder criteria on popularity and stability.  
 
-
-
-% state the sets which are what coverage in terms of /24, IP SPACE v4/v6
 \begin{table}
 	[ht] \centering
 	\begin{tabular}
@@ -99,14 +96,27 @@ This specific IXP partitioning event is clearly visible in figure  \ref{fig:AMS_
 \end{figure}
 
 \subsection{Server Socket Approach}
-For evaluating the server socket bases approach, several different server socket sets are choosen, since this socket set selection process is an optimization problem as outlined in chapter \ref{chapter:integration}.
 
-Firstly, a FACT is operated with a server socket set denoted as \emph{AllPort80SeS}, including all detected server socket listening on port 80. This socket set can directly be compared to the old heuristic approach, since it monitors a majority of those traffic as well. 
+Firstly, FACT operated with set \emph{C} containing all detected server socket listening on port 80 is inspected. This socket set can directly be compared to the old heuristic approach, since it monitors a majority of the legitimate traffic to port 80 as well. 
 
-As figure \ref{fig:AMS_IX_FACT_allSES80} shows, the real event lasting from 05.00 UTC to 08:15 UTC is clearly visible equally well as in the heuristic approach from figure \ref{fig:AMS_IX_FACT_REF}. However, the server socket based approach reduces the red part indicating the number of unreachable prefixes affecting only a single internal user by at least an order of magnitude. Hence,  the event is now clearly standing out of the \emph{background event detection noise}.
+As figure \ref{fig:AMS_IX_FACT_allSES80} shows, the real event lasting from 05.00 UTC to 08:15 UTC is clearly visible equally well as in the heuristic approach from figure \ref{fig:AMS_IX_FACT_REF}. However, the server socket based approach reduces the red part indicating the number of unreachable prefixes affecting only a single internal user by at least an order of magnitude. Hence,  the event is now clearly standing out of the \emph{background event detection noise} -- the green and red part of figure \ref{fig:AMS_IX_FACT_REF}. 
 
-Despite that fact, that the \emph{AllPort80SeS} set is not optimized at all, it outperformed the traditional approach in terms of noise reduction without significantly worsen the real event detection. This confirms the assumption that a high number of unreachable prefixes affecting only a single internal user is caused by malware and p2p churn.
+Despite that fact, that the set \emph{C} is not optimized at all with respect to 
+stability, popularity and visibility, it outperformes the traditional approach 
+in terms of noise reduction without significantly worsen the real event 
+detection. This confirms the assumption that a high number of unreachable 
+prefixes affecting only a single internal user is caused by malware and p2p 
+churn.
 
+Comparing the results from set \emph{C} to those from set \emph{D} which limits 
+the sockets by only selecting the sockets seen at least at two days, yields 
+almost no visual difference between figure \ref{fig:AMS_IX_FACT_allSES80VTS2} 
+and \ref{fig:AMS_IX_FACT_allSES80}, despite the number of sockets is reduced by 
+almost a third. However, if also the stability is considered as by set \emph{E}, 
+the red and green noise can be further reduced without significantly affecting 
+the blue and pink part of the event.
+
+If the server sockets are not anymore artificially constrained to be a port 80 socket as in the case of set \emph{A} and \emph{B}, there is a clear increase of unreachable sockets visible in figure \ref{fig:AMS_IX_FACT_allSES} with all server sockets and even in figure \ref{fig:AMS_IX_FACT_popularVTS2STAB9}. The original FACT detects up to 30 unreachable prefixes with 10 or more internal users affected, FACT with set \emph{A} and \emph{B} detect up to 112, respectively up to 72 distinct unreachable prefixes. Remarkable is that the red and green part of figure \ref{fig:AMS_IX_FACT_allSES} and \ref{fig:AMS_IX_FACT_popularVTS2STAB9} are significantly lower than in the case of the original results from figure \ref{fig:AMS_IX_FACT_REF}.
 
 \begin{figure}
 	[p] \centering 
