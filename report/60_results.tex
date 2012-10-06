@@ -133,7 +133,7 @@ the event is now clearly standing out of the \emph{background event detection
 noise} -- the green and red part of figure \ref{fig:AMS_IX_FACT_REF}. 
 
 Despite that fact, that the set \emph{C} is not optimized at all with respect to 
-stability, popularity and visibility, it outperformes the traditional approach 
+stability, popularity and visibility, it outperforms the traditional approach 
 in terms of noise reduction without significantly worsen the real event 
 detection. This confirms the assumption that a high number of unreachable 
 prefixes affecting only a single internal user is caused by malware and p2p 
@@ -224,8 +224,20 @@ Figure \ref{fig:TIER1_FACT_REF} illustrates the unreachable prefixes detected by
 	\label{fig:TIER1_FACT_REF} 
 \end{figure}
 
-
 \subsection{Server Socket Approach}
+
+Again, the results of set \emph{C} which contains all port 80 server sockets are 
+directly comparable to the port-based heuristic approach. As figure 
+\ref{fig:TIER1_FACT_allSES80} shows that the noise of the red and green area is 
+reduced by at least an order of magnitude without worsen the real event 
+detection at all.
+
+Considering the visibility of the sockets as done by set \emph{D}, does not 
+significantly change the visual appearance of the event at all as depicted by 
+figure \ref{fig:TIER1_FACT_allSES80VTS2}. However, if the stability is 
+considered as well by set \emph{E}, the noise can be further reduced. 
+
+By extending the set to all detected server sockets (set \emph{A}), 
 
 \begin{figure}
 	[p] \centering 
