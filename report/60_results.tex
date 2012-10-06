@@ -42,7 +42,13 @@ Set \emph{C} contains all external port 80 server sockets, allowing a direct com
 	\label{tab:ses_sets}
 \end{table}
 
-Table \ref{tab:ses_sets_coverage} shows the coverage of each set with respect to their IP space coverage in absolute and relative terms. 
+Table \ref{tab:ses_sets_coverage} shows the coverage of each set with respect to 
+their IP space coverage. The relative number is in relation to the total 
+coverage of the set with all server sockets representing a maximum possible 
+coverage. It is remarkable that set \emph{B} achieves a higher IPv4 space 
+coverage than all Port 80 socket sets despite having less sockets contained in 
+this set and imposing harder criteria on popularity and stability.  
+
 
 
 % state the sets which are what coverage in terms of /24, IP SPACE v4/v6
@@ -50,17 +56,17 @@ Table \ref{tab:ses_sets_coverage} shows the coverage of each set with respect to
 	[ht] \centering
 	\begin{tabular}
 		{|c|c|r|r|r|r|} \hline \multirow{2}{*}{\textbf{Socket Set}} & \multirow{2}{*}{\textbf{Number of Sockets}} & \multicolumn{2}{|c|}{\textbf{IPv4 Space}} & \multicolumn{2}{|c|}{\textbf{IPv6 Space}} \\
-		\cline{3-6} & & absolute & relative & absolute & relative \\
-		\hline A & 1862389 &  & 100\% 	& & 100\% \\
-		\hline B & 320531  & 1060083001 & \% & $2.693×10^{30}$ & \% \\
-		\hline C & 602111  & 1027865637 & \% & $1.629×10^{31}$ & \% \\
-		\hline D & 418912  & 862625441  & \% & $1.408x10^{31}$ & \% \\
-		\hline E & 384164  & 831321169  & \% & $8.804x10^{30}$ & \% \\
+	\cline{3-6} & & absolute & relative & absolute & relative \\
+		\hline A & 1862389 & 1509368214 & 100\% & $3.7013×10^{32}$ & 100\% \\
+		\hline B & 320531  & 1060083001 & 70.234\% & $2.693×10^{30}$ & 0.728\% \\
+		\hline C & 602111  & 1027865637 & 68.099\% & $1.629×10^{31}$ & 4.401\% \\
+		\hline D & 418912  & 862625441  & 57.151\% & $1.408x10^{31}$ & 3.804\% \\
+		\hline E & 384164  & 831321169  & 55.077\% & $8.804x10^{30}$ & 2.379\% \\
 		\hline 
 		%\hline
 		% \multirow{2}{*}{\textbf{Socket Set}} & \multirow{2}{*}{\textbf{Number of Sockets}} & \multicolumn{2}{|c|}{\textbf{IPv4  /24 networks}} & \multicolumn{2}{|c|}{\textbf{IPv6 /48 networks}} \\
 		% \cline{3-6} & & absolute & relative & absolute & relative \\
-		% \hline A & 1862389 &  & 100\% 	& & 100\% \\
+		% \hline A & 1862389 & 692560 & 100\% 	& 1148 & 100\% \\
 		% \hline B & 320531  & 123432 & \% & 56  & \% \\
 		% \hline C & 602111  & 157774 & \% & 291 & \% \\
 		% \hline D & 418912  & 113697 & \% 	& 226 & \% \\
