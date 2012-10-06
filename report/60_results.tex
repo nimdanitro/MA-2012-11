@@ -79,14 +79,36 @@ this set and imposing harder criteria on popularity and stability.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Event 1: Partitioned Internet Exchange Point}
 
-The IXP \citet{AMS-IX}(AMS-IX) performed on March 23, 2010 a scheduled maintenance. When its connection to \citet{switch} came back, there was only a partial connectivity through this IXP, since some next-hops learned via their route servers were not properly reachable, thus traffic towards these networks are black-holed.\citep{SchatzmannPAM2011}
+The IXP \citet{AMS-IX}(AMS-IX) performed on March 23, 2010 a scheduled 
+maintenance. When its connection to \citet{switch} came back, there was only a 
+partial connectivity through this IXP, since some next-hops learned via their 
+route servers were not properly reachable, thus traffic towards these networks 
+are black-holed.\citep{SchatzmannPAM2011}
 
-In consequence, several internal clients of the \citet{switch} network were complaining about unreachable external services on the next morning. Using classical debugging tools, it took more than four hours for fixing the problem by resetting a port.\citep{SchatzmannPAM2011}
+In consequence, several internal clients of the \citet{switch} network were 
+complaining about unreachable external services on the next morning. Using 
+classical debugging tools, it took more than four hours for fixing the problem 
+by resetting a port.\citep{SchatzmannPAM2011}
 
 \subsection{Heuristic Approach}
-This event is well visible by the classical FACT, since there are quite a large number of affected users thus favoring the user aggregation approach of detecting relevant events. Figure \ref{fig:AMS_IX_FACT_REF} shows the number of unreachable BGP prefixes over time separated by the number of affected internal clients. As previously outlined the user aggregation approach tries to prioritize severe events by determining the number of affected internal users. Hence, the severity of the events is indicated by the color of the unreachable prefixes in figure \ref{fig:AMS_IX_FACT_REF}. To be precise, the pink prefixes denotes the unreachable prefixes by at least 10 distinct internal clients, the blue respectively 5 distinct internal clients.
+This event is well visible by the classical FACT, since there are quite a large 
+number of affected users thus favoring the user aggregation approach of 
+detecting relevant events. Figure \ref{fig:AMS_IX_FACT_REF} shows the number of 
+unreachable BGP prefixes over time separated by the number of affected internal 
+clients. As previously outlined the user aggregation approach tries to 
+prioritize severe events by determining the number of affected internal users. 
+Hence, the severity of the events is indicated by the color of the unreachable 
+prefixes in figure \ref{fig:AMS_IX_FACT_REF}. To be precise, the pink prefixes 
+denotes the unreachable prefixes by at least 10 distinct internal clients, the 
+blue respectively 5 distinct internal clients.
 
-This specific IXP partitioning event is clearly visible in figure  \ref{fig:AMS_IX_FACT_REF} from 05.00 UTC to 08:15 UTC with almost 20 unreachable BGP prefixes affecting more than 10 internal clients and almost 200 unreachable BGP prefixes in total. However, as discussed in chapter \ref{Introduction}, those unreachable prefixes affecting only 1 client are not reliable observations, thus of limited interest representing a kind of observation noise of FACT.
+This specific IXP partitioning event is clearly visible in figure  
+\ref{fig:AMS_IX_FACT_REF} from 05.00 UTC to 08:15 UTC with almost 20 unreachable 
+BGP prefixes affecting more than 10 internal clients and almost 200 unreachable 
+BGP prefixes in total. However, as discussed in chapter \ref{Introduction}, 
+those unreachable prefixes affecting only 1 client are not reliable 
+observations, thus of limited interest representing a kind of observation noise 
+of FACT.
 
 \begin{figure}
 	[p] \centering 
@@ -97,9 +119,18 @@ This specific IXP partitioning event is clearly visible in figure  \ref{fig:AMS_
 
 \subsection{Server Socket Approach}
 
-Firstly, FACT operated with set \emph{C} containing all detected server socket listening on port 80 is inspected. This socket set can directly be compared to the old heuristic approach, since it monitors a majority of the legitimate traffic to port 80 as well. 
+Firstly, FACT operated with set \emph{C} containing all detected server socket 
+listening on port 80 is inspected. This socket set can directly be compared to 
+the old heuristic approach, since it monitors a majority of the legitimate 
+traffic to port 80 as well. 
 
-As figure \ref{fig:AMS_IX_FACT_allSES80} shows, the real event lasting from 05.00 UTC to 08:15 UTC is clearly visible equally well as in the heuristic approach from figure \ref{fig:AMS_IX_FACT_REF}. However, the server socket based approach reduces the red part indicating the number of unreachable prefixes affecting only a single internal user by at least an order of magnitude. Hence,  the event is now clearly standing out of the \emph{background event detection noise} -- the green and red part of figure \ref{fig:AMS_IX_FACT_REF}. 
+As figure \ref{fig:AMS_IX_FACT_allSES80} shows, the real event lasting from 
+05.00 UTC to 08:15 UTC is clearly visible equally well as in the heuristic 
+approach from figure \ref{fig:AMS_IX_FACT_REF}. However, the server socket based 
+approach reduces the red part indicating the number of unreachable prefixes 
+affecting only a single internal user by at least an order of magnitude. Hence,  
+the event is now clearly standing out of the \emph{background event detection 
+noise} -- the green and red part of figure \ref{fig:AMS_IX_FACT_REF}. 
 
 Despite that fact, that the set \emph{C} is not optimized at all with respect to 
 stability, popularity and visibility, it outperformes the traditional approach 
@@ -116,7 +147,16 @@ almost a third. However, if also the stability is considered as by set \emph{E},
 the red and green noise can be further reduced without significantly affecting 
 the blue and pink part of the event.
 
-If the server sockets are not anymore artificially constrained to be a port 80 socket as in the case of set \emph{A} and \emph{B}, there is a clear increase of unreachable sockets visible in figure \ref{fig:AMS_IX_FACT_allSES} with all server sockets and even in figure \ref{fig:AMS_IX_FACT_popularVTS2STAB9}. The original FACT detects up to 30 unreachable prefixes with 10 or more internal users affected, FACT with set \emph{A} and \emph{B} detect up to 112, respectively up to 72 distinct unreachable prefixes. Remarkable is that the red and green part of figure \ref{fig:AMS_IX_FACT_allSES} and \ref{fig:AMS_IX_FACT_popularVTS2STAB9} are significantly lower than in the case of the original results from figure \ref{fig:AMS_IX_FACT_REF}.
+If the server sockets are not anymore artificially constrained to be a port 80 
+socket as in the case of set \emph{A} and \emph{B}, there is a clear increase of 
+unreachable sockets visible in figure \ref{fig:AMS_IX_FACT_allSES} with all 
+server sockets and even in figure \ref{fig:AMS_IX_FACT_popularVTS2STAB9}. The 
+original FACT detects up to 30 unreachable prefixes with 10 or more internal 
+users affected, FACT with set \emph{A} and \emph{B} detect up to 112, 
+respectively up to 72 distinct unreachable prefixes. Remarkable is that the red 
+and green part of figure \ref{fig:AMS_IX_FACT_allSES} and 
+\ref{fig:AMS_IX_FACT_popularVTS2STAB9} are significantly lower than in the case 
+of the original results from figure \ref{fig:AMS_IX_FACT_REF}.
 
 \begin{figure}
 	[p] \centering 
@@ -161,11 +201,21 @@ If the server sockets are not anymore artificially constrained to be a port 80 s
 \newpage
 \section{Event 2: Reverse Path Traffic Black-holing}
 
-On May 18, 2010, the operators of the SWITCH network were assigned to investigate an reported issue that all services in an external /24 network were not accessible from the SWITCH network between 08:30 and 08:45 UTC. According to SWITCH, the problem was most likely due to an issue of an tier-1 provider which black-holed parts of the reverse traffic towards the SWITCH network\citep{SchatzmannPAM2011}.
+On May 18, 2010, the operators of the SWITCH network were assigned to 
+investigate an reported issue that all services in an external /24 network were 
+not accessible from the SWITCH network between 08:30 and 08:45 UTC. According to 
+SWITCH, the problem was most likely due to an issue of an tier-1 provider which 
+black-holed parts of the reverse traffic towards the SWITCH 
+network\citep{SchatzmannPAM2011}.
 
-Unfortunately, the operators were neither able to tell how many internal users were affected nor how many external networks were unreachable during this period of time. However with the help of FACT, this issue can be further assessed with respect to the severity of the event\citep{SchatzmannPAM2011}.
+Unfortunately, the operators were neither able to tell how many internal users 
+were affected nor how many external networks were unreachable during this period 
+of time. However with the help of FACT, this issue can be further assessed with 
+respect to the severity of the event\citep{SchatzmannPAM2011}.
 
 \subsection{Heuristic Approach}
+
+Figure \ref{fig:TIER1_FACT_REF} illustrates the unreachable prefixes detected by the port-based heuristic of FACT. The event is indeed visible around 08:30 UTC until 08:45 UTC as a high pink peak. There are 12 external unreachable prefixes affecting more than 10 internal users. Furthermore, a strong diurnal pattern of the red and green area is visible in figure \ref{fig:TIER1_FACT_REF}.
 
 \begin{figure}
 	[p] \centering 
@@ -173,6 +223,7 @@ Unfortunately, the operators were neither able to tell how many internal users w
 	\caption{Event 2: Unreachable BGP prefixes detected by the classical FACT traffic preselection based on the port-based heuristic.} 
 	\label{fig:TIER1_FACT_REF} 
 \end{figure}
+
 
 \subsection{Server Socket Approach}
 
@@ -220,12 +271,15 @@ Unfortunately, the operators were neither able to tell how many internal users w
 \section{Event 3: RIPE / DUKE BGP Experiments}
 
 An experiment with new BGP attributes jointly performed by RIPE and the Duke 
-University on August 27, 2010, resulted in several unreachable prefixes\citep{SchatzmannPAM2011}. These 
+University on August 27, 2010, resulted in several unreachable 
+prefixes\citep{SchatzmannPAM2011}. These 
 new kind of attributes has never been announced on the Internet before,  
 although it was in accordance with the BGP specification\citep{ripe_duke}.
 
 These new kind of attributes uncovered and triggered a bug in some Cisco BGP 
-Routers known as the \emph{Cisco IOS XR Software Border Gateway Protocol Vulnerability (SA-20100827-BGP)}\citep{cisco_vulnerability}. In particular, the announcements with the new attributes were corrupted 
+Routers known as the \emph{Cisco IOS XR Software Border Gateway Protocol 
+Vulnerability (SA-20100827-BGP)}\citep{cisco_vulnerability}. In particular, the 
+announcements with the new attributes were corrupted 
 by the Cisco Routers and send to their peers. Consequently, their peers detected 
 the corruption and dropped the entire peering session\citep{ripe_duke}.
 
