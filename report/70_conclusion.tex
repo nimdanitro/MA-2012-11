@@ -14,12 +14,13 @@ detection process may generally increase the observation coverage of FACT
 without significantly increasing the noise ratio. Hence, the practical usability 
 of FACT is increase even more.
 
-The drawback of the approach is clearly the additional resources required to 
-store the server sockets and the additional effort to detect, monitor and 
-characterize the server sockets. Nevertheless, the good results from chapter 
-\ref{chapter:results} indicates that server sockets are quite stable over time 
-and that there are even good results possible for events in March, May and 
-August 2010 with sockets detected in November 2010. 
+The drawback of the approach is clearly that additional resources are required 
+to store the server sockets and the additional effort to detect, monitor and 
+characterize the server sockets. 
+Nevertheless, the good results from chapter \ref{chapter:results} indicates that 
+server sockets are quite stable over time and that there are even good results 
+possible for events in March, May and August 2010 with sockets detected in 
+November 2010. 
 
 However, the selection of server sockets can be cumbersome and directly 
 influences the detection sensitivity of FACT. Though, even without any 
@@ -28,13 +29,32 @@ optimization the server socket approach is clearly outperforming the original po
 \section{Future Work}
 % characterize ses by time based activity (night / day, working week, weekend etc.)
 
+In the future, new characterization methods can be investigated, especially the 
+visibility allows to define different metrics, as day / night periods, working 
+week activity or weekend activity. These new metrics would allow to characterize 
+a server socket even more detailed. Thus, getting a better view on the different 
+properties of these sockets. 
+
 % smarter socket set selection => density of network by choosing only the popularst sockets of each network
+Furthermore, the server socket set selection can be further enhanced by 
+different techniques. On the one hand, the density of server socket per 
+prefix/network should be considered and examined. By deducing the number of 
+sockets required per network so that the probability of seeing traffic towards 
+this network is maximized. This would be clearly dependent on the single 
+visibility of the selected sockets within this network. Moreover, the general 
+optimization problem can be mathematically expressed by defining an objective 
+function. This optimization problem may then be solved by different approaches 
+as simulated annealing or integer linear programming. In addition, the effect of 
+the number of sockets of a set should be considered. 
+
+% consider different selection methods as clustering analysis approaches, e.g. k-means etc => distance function include also network considerations.. etc. 
+On the other hand, different selection approaches can be examined as well. Given 
+the problem scope of the socket selection based on different characteristics, 
+clustering analysis approaches are worth to be considered. 
 
 % automatization of process => danger of excluding sockets affected by events
 % => consider full last week?  
-
-% general optimization problem solving approach as simulated annealing => limit number of sockets => pareto front of sockets
-
-% consider different selection methods as clustering analysis approaches, e.g. k-means etc => distance function include also network considerations.. etc. 
+Up to now, the process of detecting, monitoring and characterizing server sockets is entirely independent from FACT, therefore, an integration of these processing chains into FACT should be considered. However, there is the danger of not selecting good sockets during potential events affecting these networks. Hence, good approaches should not considering the (network) event periods by characterizing individual server sockets.
 
 % near future public release of FlowBox and FACT
+Finally, the FlowBox library and the FACT source code are intended to be released to public in the very near future, licensed under the Gnu Public License v3. 
