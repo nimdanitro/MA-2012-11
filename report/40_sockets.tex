@@ -212,29 +212,20 @@ found \glspl{server socket} can be assessed as further outlined in section
 
 \subsection{Server Socket Statistics}
 
-The monitoring of the external 
-\glspl{server socket} is done with help of the \emph{server socket registry} 
-which is already used in the detection approach. This registry recalls all 
-\glspl{server socket} which are known yet. 
+Generally, during the monitoring steps all information required to 
+characterize the stability, visibility and popularity have to be captured. This 
+kind of information is denoted as \gls{server socket} statistics. 
 
-Hence, all flows originated from a \gls{server socket} or flows which are 
-destined for a \glspl{server socket} are monitored for compiling the socket 
-statistics later used for the characterization.
+To this end, all flows originated from a \gls{server socket} or flows which are 
+destined for a \glspl{server socket} are monitored for compiling these 
+\gls{server socket} statistics. In contrast to the detection approach, all flows 
+towards a known \gls{server socket} have to be considered, since they have to be 
+accounted to the statistics.
 
-In contrast to the detection approach, there are no scanning or other noise 
-filters in the processing chain, because of the fact that they will remove at 
-least some flows, mainly unidirectional flows, which are actually relevant for 
-the statistics. 
-
-Since the processing is based on data containing flows which are active within a 
-certain time slot, the statistics are accounted on a the same discrete time 
-scale, i.e. 10 minutes. 
-
-At first, each flow is checked if it is a flow of a \gls{server socket}. If 
-this is the case, the individual flow statistics are accounted to the 
-corresponding specific \gls{server socket} \textbf{statistics record}. This 
-includes the following entries: 
-
+Since the flow-level data is usually discretely slotted by chunks of the cache 
+duration, \gls{server socket} statistics records can be accounted on a time slot 
+basis as well. An time slot \gls{server socket} statistic record contains the 
+following information:
 \vbox{
 \begin{itemize}
 	\item number of bidirectional connections 
@@ -243,10 +234,10 @@ includes the following entries:
 \end{itemize}
 }
 
-In second step, the statistics records of each discrete time slot are aggregated 
-in such a way that the information of the activity within a certain time slot is 
-kept. Thus, the overall \gls{server socket} statistics record contains the 
-following entries: 
+In second step, the statistics records of each discrete time slot can be  
+aggregated in such a way that the information of the activity within a certain 
+time slot is kept. Thus, the overall \gls{server socket} statistics record 
+contains the following entries: 
 
 \vbox{
 \begin{itemize}
