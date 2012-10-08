@@ -13,17 +13,19 @@
 
 %\usepackage{apacite}
 \usepackage{hyperref} 
-\usepackage{glossaries}
 \usepackage[colorinlistoftodos]{todonotes} 
 \usepackage{amsmath}
 \usepackage{multirow} 
 \usepackage{color} 
 \usepackage{textcomp}
 
+% load glossaries after hyperref => links not clickable!
+\usepackage[acronym,nonumberlist]{glossaries}
+
+
 \begin{document}
 
 \frenchspacing \sloppy 
-\makeglossaries
 
 \parskip1ex
 
@@ -41,6 +43,12 @@
 %
 % Preface
 \input{17_preface.tex}
+
+%%% GLOSSARY %%%%
+\input{glossar.tex}
+\makeglossaries
+\printglossary
+\printglossary[type=\acronymtype]
 
 \tableofcontents
 
@@ -78,7 +86,6 @@
 \input{90_bib.tex}
 
 \input{99_eigsterkl.tex}
-\input{glossar.tex}
 
 \end{document}
 
