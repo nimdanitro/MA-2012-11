@@ -204,13 +204,13 @@ may be intermittent problems caused for example by suboptimal routing
 
 % Pingin' in the rain (Schulman/Spring)
 \citet{Quan12a} implemented an Internet outage detection engine which is able to
-actively probe an representative part of the Internet and correlate outage
-events with \gls{control-plane} information. This is achieved by an 
+actively probe a representative part of the Internet and correlate outage
+events with \gls{control-plane} information. This is achieved by a 
 sophisticated target selection approach. 
 However, this approach is avoiding some of the drawbacks of active probing as 
 blockage by firewalls and \gls{nat} devices by clearly state that they are able 
 to track the "analyzable" \gls{IPv4} address space of the Internet which 
-represents the space which is really scannable by active probes. 
+represents the space which is answering on their active probes. 
 The future scalability of this approach -- especially with respect to \gls{IPv6} 
 -- is questionable. 
 
@@ -219,8 +219,8 @@ Besides the big amount of different approaches using active probing, only few
 approaches are using passive monitoring for reachability tracking.
 \citet{Dainotti:2011:ACI} presented an approach for an in-depth analysis of
 connectivity outages caused by political censorship by combining observations
-from \gls{bgp} data and \gls{data-plane} information as backscatter measurements 
-of the UCSD network telescope and active probing data from Ark. Remarkable is 
+from \gls{bgp} data, \gls{data-plane} information as backscatter measurements 
+of the UCSD network telescope, and active probing measurements from the Archipelago Measurement Infrastructure. Remarkable is 
 their approach of (passively) monitoring of the unsolicited \gls{data-plane} 
 traffic that shed light on Libya's attempts on deploying packet filters for 
 enforcing the Internet censorship. 
@@ -237,20 +237,21 @@ data."\citep{Dainotti:2011:ACI}.
 % Service Detection (Active & Passive, completeness vs. scalability / importance)
 The discovery and characterization of services in the Internet is most
 successfully done on a massive scale, ironically not by researchers but by worms
-and other malware\citep{Chen:2007}. Generally, service detection methods can be
-divided into two approaches: passive monitoring and active probing. 
+and other malware\citep{Chen:2007}. Generally, service detection methods can 
+mainly be grouped into two approaches: passive monitoring and active probing. 
 
-As \citet{Bartlett07b} pointed out that active probing is able to detect all
+As \citet{Bartlett07b} pointed out, active probing is able to detect all
 visible and scannable services, which is thus invasive and legally constrained.
 On the other hand, passive monitoring is able to find transient services, but
 fails to detect idle services. In their work, they compared the "accuracy of
 passive and active approaches to service discovery and showed that they are
-complimentary"\citep{Bartlett07b}. They concluded that for best results multiple
-active scans are combined with a long lasting passive monitoring. 
+complimentary"\citep{Bartlett07b}. They concluded that best results are achieved 
+by combining a long lasting passive monitoring with multiple active scans, thus 
+forming a hybrid approach\citep{Bartlett07b}. 
 
 \citet{Leonard:2010} developed an Internet-wide service scanner called
-IRLscanner. They designed their scanner to maximize politeness at remote
-networks by smartly choose scanning rates. 
+IRLscanner. They designed their scanner to maximize politeness to remote
+networks by smartly choosing adequate scanning rates. 
 
 % Webster active / passive
 \section{Contribution 
@@ -261,6 +262,8 @@ This master thesis contributions are the following:
 	\item synthesis of the findings of this characterization for enhancing the traffic selection for tracking remote connectivity issues based on the approach of \citet{SchatzmannPAM2011} 
 \end{itemize}
 
-%\section{Outline
-%\label{sec:outline}}
-%\todo{line me out..} 
+\section{Outline
+\label{sec:outline}}
+
+\todo{Write me at last..}
+
