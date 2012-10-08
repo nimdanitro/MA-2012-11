@@ -9,7 +9,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Server Sockets} Since the Internet has moved from a research project to a widely used, public communication infrastructure, one of the critical success factors was its diversity with respect to network applications or services. This was heavily favored by the Internets layered design as described by the OSI model. 
 
-Todays network applications ranges from traditional services as web, FTP or mail to new and emerging services as video streaming and social networks. However, the term network application or service is overloaded and are differently used depending on the actual technical context.
+Todays network applications ranges from traditional services as web, \gls{FTP} or mail to new and emerging services as video streaming and social networks. However, the term network application or service is overloaded and are differently used depending on the actual technical context.
 
 Since this thesis will operate with flow-level data, layer 5-8 in the OSI model are invisible in the data set. Therefore, network services can be differentiated only by information based on layer 3 and 4 of the OSI model of the two connection end-points. For this reason, the following abstractions of a connection end-point are defined:
 
@@ -17,7 +17,7 @@ Since this thesis will operate with flow-level data, layer 5-8 in the OSI model 
 \parbox{ 
 \textwidth}{ 
 \begin{defn}
-	{\textbf{Socket}\\} A socket is uniquely defined by the triple (\textbf{IP address}, \textbf{IP protocol number} and \textbf{protocol port number}). A socket is only defined for IP protocol TCP(6) and UDP(17). 
+	{\textbf{Socket}\\} A socket is uniquely defined by the triple (\textbf{IP address}, \textbf{IP protocol number} and \textbf{protocol port number}). A socket is only defined for IP protocol \gls{TCP}(6) and \gls{UDP}(17). 
 \end{defn}
 }
 
@@ -38,7 +38,7 @@ Since this thesis will operate with flow-level data, layer 5-8 in the OSI model 
 \end{defn}
 }
 
-In spite of the containment of the term \emph{server} in definition \ref{def:serversocket}, this definition is not only valid for server-client application protocols, but also holds for P2P-applications. 
+In spite of the containment of the term \emph{server} in definition \ref{def:serversocket}, this definition is not only valid for server-client application protocols, but also holds for \gls{p2p} applications. 
 \todo{Explain more?}
 
 
@@ -62,7 +62,7 @@ Hence, the detection of \emph{server sockets} with flow data relies on the follo
 \end{figure}
 
 In consequence of the fact that \emph{server sockets} provide a network application or service, they are likely to be contacted by several clients depending on their popularity. To this end, a socket which is contacted by a certain amount of client sockets and thus have a high degree in the connection graph is defined to be a \textbf{concentrator}. These concentrators are likely to offer a network service and are thus \emph{server sockets}. 
-This approach is able to detect \emph{server sockets} which are offering not only classical client-server services,such as web, FTP, SSH, etc., but also p2p applications such as Skype, Bit-torrent super-nodes, etc. 
+This approach is able to detect \emph{server sockets} which are offering not only classical client-server services,such as web, \gls{FTP}, \gls{SSH}, etc., but also \gls{p2p} applications such as Skype, Bit-torrent super-nodes, etc. 
 Therefore, it can be assumed that nodes with a high degree correspond to a \emph{server sockets}.
 
 % introduce minimal vertex cover problem
@@ -119,20 +119,21 @@ The connection cache is responsible for summarizing all related unidirectional
 flow records into a single bidirectional flow record during an aggregation 
 period. After this caching step, these bidirectional flows are filtered by a fan 
 out filter implementing the idea of \citet{Allman:2007} to mitigate the effects 
-of scanning and p2p churn. This scanning detection filter is discussed in more 
-detail by \citet{Schatzmann:Mining,Schatzmann:Dissection, Schatzmann:Tracing}. 
+of scanning and \gls{p2p} churn. This scanning detection filter is discussed in 
+more detail by \citet{Schatzmann:Mining,Schatzmann:Dissection, 
+Schatzmann:Tracing}. 
 
 Afterwards, the remaining bidirectional flow records are again reduced by the 
 noise filter. This last filtering module is responsible to filter bidirectional 
 flow records which does not represent a correct bidirectional connection. A 
-correct bidirectional connection is simply defined as either a correct TCP 
-handshake or a reply flow as in case of UDP. Hence, the approach of deducing 
+correct bidirectional connection is simply defined as either a correct \gls{TCP} 
+handshake or a reply flow as in case of \gls{UDP}. Hence, the approach of deducing 
 correct connections is to investigate the number of packets for each direction 
 of the bidirectional flow record, i.e. the outgoing and the incoming flow 
 record, since there are only cross-border flows remaining due to the In-Out 
-filter. If a bidirectional TCP flow has in a single direction less than 3 
+filter. If a bidirectional \gls{TCP} flow has in a single direction less than 3 
 packets, the filter assumes that this flow does not represent a correct 
-connection and is filtering this record. Accordingly, a bidirectional UDP 
+connection and is filtering this record. Accordingly, a bidirectional \gls{UDP} 
 flow is required to consist of at least 1 packet for each unidirectional flow 
 record.
 
@@ -221,13 +222,13 @@ Besides of the individual server socket statistics report, overall traffic stati
 Moreover, all unmonitored flows can be further investigated for better understanding of the type of this unmonitored traffic. This can be done on the following three scopes: 
 \begin{itemize}
 	\item Protocol level 
-	\item Port level for UDP and TCP flows 
+	\item Port level for \gls{UDP} and \gls{TCP} flows 
 	\item Location of the connection end-points 
 \end{itemize}
 
-The first scope captures statistical information of the problem that server sockets are only defined for protocol TCP and UDP, hence all flows with another protocol are per definition unmonitored.
+The first scope captures statistical information of the problem that server sockets are only defined for protocol \gls{TCP} and \gls{UDP}, hence all flows with another protocol are per definition unmonitored.
 
-Secondly, there are statistics generated for all unmonitored TCP or UDP flows which don't have a corresponding server socket in the registry present. There are various reasons for this, mainly related to the detection approach outlined in section \ref{section:socket_detection}. In most of the cases, the sockets are not contacted by enough clients, therefore, the are not detected as concentrators and in consequence of that not denoted as server sockets. Furthermore, scanning activity is also a major contributor to this unmonitored flows, since scanning traffic and other non-legitimate traffic is removed before the server socket detection is performed. Consequently, these scanned sockets are not detected as server sockets, in case there is no legitimate traffic towards these sockets.
+Secondly, there are statistics generated for all unmonitored \gls{TCP} or \gls{UDP} flows which don't have a corresponding server socket in the registry present. There are various reasons for this, mainly related to the detection approach outlined in section \ref{section:socket_detection}. In most of the cases, the sockets are not contacted by enough clients, therefore, the are not detected as concentrators and in consequence of that not denoted as server sockets. Furthermore, scanning activity is also a major contributor to this unmonitored flows, since scanning traffic and other non-legitimate traffic is removed before the server socket detection is performed. Consequently, these scanned sockets are not detected as server sockets, in case there is no legitimate traffic towards these sockets.
 
 On the one hand, there is the possibility to account for each port the unmonitored flows which will lead to very detailed statistical information about the missed server sockets. However, this comes at the price of an inefficient processing and higher memory usage. 
 
@@ -238,7 +239,7 @@ On the other hand, the flows can be categorized by port ranges. In this thesis, 
 	\item High port: 1024-65365 
 \end{itemize}
 
-These categories are further divided by the location of the socket either internal or external and thus involving the third scope. Hence, the unmonitored TCP and UDP flows or strictly speaking the corresponding sockets are accounted by the following four categories:
+These categories are further divided by the location of the socket either internal or external and thus involving the third scope. Hence, the unmonitored \gls{TCP} and \gls{UDP} flows or strictly speaking the corresponding sockets are accounted by the following four categories:
 
 \vbox{
 \begin{itemize}
@@ -370,7 +371,7 @@ flow record during an aggregation interval of 600s.
 
 After this caching step, these bidirectional flows are filtered by a fan out 
 filter implementing the idea of \citet{Allman:2007} to mitigate the effects of 
-scanning and p2p churn. This fan out filter is configured to require at least 4 
+scanning and \gls{p2p} churn. This fan out filter is configured to require at least 4 
 unidirectional connections with a certain host as source and at least 2 times 
 more unidirectional connections than bidirectional connections for classifying 
 this host as a scanning host. Previous 
@@ -378,8 +379,8 @@ work\citep{Schatzmann:Mining,Schatzmann:Dissection, Schatzmann:Tracing} has
 shown that these parameters are a good choice for efficiently mitigating the 
 scanning noise by reducing the scanning spikes of the total traffic volume. 
 
-Moreover, the noise filter is configured to filter all TCP flows with less than 
-3 packets in a single direction and UDP flows with less than 1 packet in a 
+Moreover, the noise filter is configured to filter all \gls{TCP} flows with less than 
+3 packets in a single direction and \gls{UDP} flows with less than 1 packet in a 
 single direction. 
 
 Furthermore, the server socket detector is configured to extract sockets with a 
@@ -587,7 +588,7 @@ popularity as this specific socket.
 	\caption{Top 20 port / protocol aggregated sockets by number flows}
 	\label{tab:top20_ports}
 \end{table}\todo{do something with me..}
-SSH TCP 22: Scanning / PW guessing, e.g. X.X.X.X, 6, 22, 1.0, 2, 1, 69.0, 0.0, 0.0 always with 69 or 68 biflows (parallelized? recurring?) $\rightarrow$ that's way such a bad visibility! one-time shots.. /8 network is scanned! meist 3-4 timeslots und nur visibility einem Tag! \ref{tab:top20_ports}\todo{do something with me..}
+\gls{SSH} \gls{TCP} 22: Scanning / PW guessing, e.g. X.X.X.X, 6, 22, 1.0, 2, 1, 69.0, 0.0, 0.0 always with 69 or 68 biflows (parallelized? recurring?) $\rightarrow$ that's way such a bad visibility! one-time shots.. /8 network is scanned! meist 3-4 timeslots und nur visibility einem Tag! \ref{tab:top20_ports}\todo{do something with me..}
  
 
 mDNS (5354) $\rightarrow$ Apple mdns resolving; mainly one socket causing this traffic pm-members.apple.com
