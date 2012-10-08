@@ -65,8 +65,9 @@ observation coverage of this network is lost, unless there is another contacted
 socket located in this network. 
 This shows that the selection of \glspl{server socket} is cumbersome and 
 directly influences the observation capabilities of FACT. It also shows the 
-importance of the visibility and popularity characteristics of \glspl{server socket} 
-with respect to the selection in a \gls{server socket} set. 
+importance of the visibility and popularity characteristics of 
+\glspl{server socket} with respect to the selection in a \gls{server socket} 
+set. 
 
 A popular \gls{server socket} which is always contacted by at least one client 
 is able to cover the entire network, because even if this socket is not 
@@ -79,8 +80,9 @@ and only rarely visible, it will not generate a potential event, and hence, the
 event is not detected at all, even if there is a lot of unbalanced traffic 
 towards this network contained in the remaining traffic. 
 
-Therefore, the selection of the \glspl{server socket} is basically an optimization 
-problem. The goal is to select those sockets with good stability, popularity and 
+Therefore, the selection of the \glspl{server socket} is basically an 
+optimization problem. 
+The goal is to select those sockets with good stability, popularity and 
 visibility characteristic without loosing to much network coverage. This problem 
 can even be harder if the number of sockets is limited, then the socket density 
 of each network must be considered, so that only the few best sockets located in 
