@@ -314,6 +314,36 @@ clients and showing a strong diurnal pattern thereof.
 \end{figure}
 
 \subsection{Server Socket Approach} 
+
+By comparing figure \ref{fig:RIPE_FACT_REF} with 
+figure \ref{fig:RIPE_FACT_allSES80} it becomes obvious that the \gls{server 
+socket} based approach of figure \ref{fig:RIPE_FACT_allSES80} reduces the red 
+and green area by an order of magnitude without restrain the visibility of the 
+real event shown in pink from 08:50 to 09:10 UTC. The adjusted traffic selection 
+of \gls{FACT} yields exactly the same unreachable prefixes as the original 
+port-based heuristic approach. Constraining set \emph{C} by the visible days of 
+the sockets does not improve the noise reduction as figure 
+\ref{fig:RIPE_FACT_allSES80VTS2} shows. However, the number of sockets of set 
+\emph{D} is reduced by around a third, thus allowing a faster processing.
+
+If as in case of set \emph{E} also the stability is considered, the noise is 
+again reduced, although also at the cost of the event visibility. As figure 
+\ref{fig:RIPE_FACT_allSES80VTS2STAB9}, \gls{FACT} is detecting only 2 
+unreachable prefixes affecting more than 10 internal users and hence, clearly 
+missing one unreachable prefix. 
+
+On the contrary, if \gls{FACT} is using set \emph{A}, it is able to reveal 
+almost up to 20 unreachable prefixes affecting more than 10 internal users. 
+Though, this comes at the cost of a even bigger red area than in case of the 
+original port 80 based approach as it can be seen in figure 
+\ref{fig:RIPE_FACT_allSES}. Luckily, as figure 
+\ref{fig:RIPE_FACT_popularVTS2STAB9} shows \gls{FACT} is able to detect up to 14 
+distinct unreachable prefixes even with the smallest socket set. Moreover, also 
+the noise is considerably reduced compared to the port 80 based approach shown 
+in figure \ref{fig:RIPE_FACT_REF}.
+
+
+
 \begin{figure}
 	[p] \centering 
 	\includegraphics[width=0.75\linewidth]{images/events/2010_08_27/bgp_log_allPort80SES.eps} \caption{Event 3: Unreachable \gls{bgp} prefixes detected by the modified \gls{FACT} traffic preselection based on all port 80 \glspl{server socket}.} 
