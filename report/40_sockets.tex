@@ -701,15 +701,19 @@ below 90\% than sockets more often visible.
 \end{landscape}
 
 \subsubsection{Popularity and Stability}
-Similarly to the visibility, the \glspl{server socket} characteristics of popularity 
-and stability are briefly assessed in the following. The ranked popularity is 
-defined in the same way as the ranked visibility. To be precise, the ranked 
-popularity is defined as the cumulative distribution function of the popularity 
-in terms of flows. Hence, a \gls{server socket} with a ranked popularity of 80\% 
-signifies that there are 80\% of all \gls{server socket} with a lower or equal 
-popularity as this specific socket.
+Similarly to the visibility, the \glspl{server socket} characteristics of 
+popularity and stability are briefly assessed in the following. For this reason, 
+the ranked popularity is defined in the same way as the ranked visibility. 
+To be precise, the ranked popularity is defined as the cumulative distribution 
+function of the popularity in terms of flows. Hence, a \gls{server socket} with 
+a ranked popularity of 80\% signifies that there are 80\% of all \gls{server 
+socket} with a lower or equal popularity as this specific socket.
 
-\todo{describe more..}
+Figure \ref{fig:rankedPopularity} shows the \glspl{server socket} by their 
+ranked popularity and their stability ratio. Similarly to figure 
+\ref{fig:rankedVisibility}, the \glspl{server socket} tend to cluster in the top 
+right corner of figure \ref{fig:rankedPopularity}. This indicates that popular 
+sockets tend to have a good stability as well. 
 
 \todo{describe top 20 ports after getting new top 20 results for table}
 
