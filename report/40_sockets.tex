@@ -106,7 +106,6 @@ only classical client-server services running on well known ports, such as web,
 Skype and Bit-torrent super-nodes.
 
 % introduce minimal vertex cover problem
-\todo{Introduce Minimal vertex cover problem + recall + greedy algorithm}
 \todo{Describe algorithm}
 
 % greedy algorithm to solve mvcp
@@ -178,12 +177,12 @@ connection and is filtering this record. Accordingly, a bidirectional \gls{UDP}
 flow is required to consist of at least 1 packet for each direction.
 
 After these filtering steps, the remaining bidirectional flows are passed to the 
-\emph{server socket detector} which is finally performing the \gls{server socket} detection 
-approach previously discussed. Generally, the \emph{server socket detector} is build 
-from two main parts. 
+\emph{server socket detector} which is finally performing the 
+\gls{server socket} detection approach previously discussed. Generally, the 
+\emph{server socket detector} is build from two main parts. 
 On the one side, there is the \emph{server socket registry} which is 
-containing all already known \glspl{server socket}. On the other side, the detection 
-engine implements the \gls{server socket} detection algorithm. 
+containing all already known \glspl{server socket}. On the other side, the 
+detection engine implements the \gls{server socket} detection algorithm. 
 
 Firstly, the sockets of all bidirectional flows are queried against the current 
 \emph{server socket registry} for checking if they are already known. If this is 
@@ -208,7 +207,7 @@ Finally, the \emph{server socket registry} is able to output all detected
 The previous section outlined the approach of detecting \glspl{server socket}. 
 This section covers the approach of monitoring flow data and generating 
 statistical information such that some characteristics and properties of the 
-found \glspl{server socket} can be assessed as furhter outlined in section 
+found \glspl{server socket} can be assessed as further outlined in section 
 \ref{section:characterization}.
 
 \subsection{Server Socket Statistics}
@@ -233,8 +232,8 @@ scale, i.e. 10 minutes.
 
 At first, each flow is checked if it is a flow of a \gls{server socket}. If 
 this is the case, the individual flow statistics are accounted to the 
-corresponding specific \gls{server socket} \textbf{statistics record}. This includes 
-the following entries: 
+corresponding specific \gls{server socket} \textbf{statistics record}. This 
+includes the following entries: 
 
 \vbox{
 \begin{itemize}
@@ -244,7 +243,10 @@ the following entries:
 \end{itemize}
 }
 
-In second step, the statistics records of each discrete time slot are aggregated in such a way that the information of the activity within a certain time slot is kept. Thus, the overall \gls{server socket} statistics record contains the following entries: 
+In second step, the statistics records of each discrete time slot are aggregated 
+in such a way that the information of the activity within a certain time slot is 
+kept. Thus, the overall \gls{server socket} statistics record contains the 
+following entries: 
 
 \vbox{
 \begin{itemize}
@@ -276,16 +278,31 @@ following three scopes:
 	\item location of the connection end-points 
 \end{itemize}
 
-The first scope captures statistical information of the problem that \glspl{server socket} are only defined for protocol \gls{TCP} and \gls{UDP}, hence all flows with another protocol are per definition unmonitored.
+The first scope captures statistical information of the problem that 
+\glspl{server socket} are only defined for protocol \gls{TCP} and \gls{UDP}, 
+hence all flows with another protocol are per definition unmonitored.
 
-Secondly, there are statistics generated for all unmonitored \gls{TCP} or \gls{UDP} flows which do not have a corresponding \gls{server socket} in the \emph{server socket registry} present. There are various reasons for this, mainly related to the detection approach outlined in section \ref{section:socket_detection}. In most of the cases, the sockets are not contacted by enough clients, therefore, the are not detected as concentrators and in consequence of that not denoted as \glspl{server socket}. Furthermore, scanning activity is also a major contributor to this unmonitored flows, since scanning traffic and other non-legitimate traffic is removed before the \gls{server socket} detection is performed. Consequently, these scanned sockets are not detected as \glspl{server socket}, in case there is no legitimate traffic towards these sockets. Nevertheless, this scanning traffic is considered in this monitoring phase as well. 
+Secondly, there are statistics generated for all unmonitored \gls{TCP} or 
+\gls{UDP} flows which do not have a corresponding \gls{server socket} in the 
+\emph{server socket registry} present. There are various reasons for this, 
+mainly related to the detection approach outlined in section 
+\ref{section:socket_detection}. In most of the cases, the sockets are not 
+contacted by enough clients, therefore, the are not detected as concentrators 
+and in consequence of that not denoted as \glspl{server socket}. Furthermore, 
+scanning activity is also a major contributor to this unmonitored flows, since 
+scanning traffic and other non-legitimate traffic is removed before the 
+\gls{server socket} detection is performed. Consequently, these scanned sockets 
+are not detected as \glspl{server socket}, in case there is no legitimate 
+traffic towards these sockets. Nevertheless, this scanning traffic is considered 
+in this monitoring phase as well. 
 
 On the one hand, there is the possibility to account for each port the 
 unmonitored flows which will lead to very detailed statistical information about  
 missed \glspl{server socket}. However, this comes at the price of an inefficient 
 processing and higher memory usage. 
 
-On the other hand, the flows can be categorized by port ranges. In the thesis at hand, there are just two ranges defined for this categorization:
+On the other hand, the flows can be categorized by port ranges. In the thesis at 
+hand, there are just two ranges defined for this categorization:
 
 \begin{itemize}
 	\item low port: 0-1023 
@@ -320,7 +337,8 @@ the modules up to the bidirectional connection cache are shared. However, in the
 monitoring chain there are no fan-out filter and noise filter applied. This is 
 because every traffic destined to a \gls{server socket} should be considered, 
 therefore no flow records are filtered before accounting them. The 
-\emph{server socket monitor} is accounting the general traffic statistics as well as the individual \gls{server socket} statistics.
+\emph{server socket monitor} is accounting the general traffic statistics as 
+well as the individual \gls{server socket} statistics.
 
 First of all, the bidirectional flow records are separated into those belonging 
 to a known \gls{server socket}, denoted as monitored traffic, and those not 
@@ -503,7 +521,9 @@ connections to a \gls{server socket} within 600 seconds.
 
 % state overall number of detected external and internal server sockets during 
 % this period
-During the entire observation period of 120.8 hours, the \emph{server socket detector} managed to detect 1'862'389 external \glspl{server socket} and 609'670 internal \glspl{server socket}.
+During the entire observation period of 120.8 hours, the 
+\emph{server socket detector} managed to detect 1'862'389 external 
+\glspl{server socket} and 609'670 internal \glspl{server socket}.
 
 \subsection{Gravitational Forces of Server Sockets}
 % traffic statistics of server sockets detected by type and ratio of traffic 
@@ -622,9 +642,18 @@ with a relatively higher visible time slots, besides the normal scaling factor
 of the number of visible days.
 
 \subsubsection{Visibility and Stability}
-Eventually, for selecting those \glspl{server socket} which are stable and often visible it is of importance to assess how \glspl{server socket} are distributed with respect to their stability and visibility characteristic. Hence, figure \ref{fig:rankedVisibility} shows the location of each socket in the field of the ranked visibility and the stability. The ranked visibility is simply defined by the cumulative distribution function of the visibility. Thus, a socket with a ranked visibility of 80\% indicates that there are 80\% of all sockets with the same or lower visibility than this specific socket. 
+Eventually, for selecting those \glspl{server socket} which are stable and often 
+visible it is of importance to assess how \glspl{server socket} are distributed 
+with respect to their stability and visibility characteristic. Hence, figure 
+\ref{fig:rankedVisibility} shows the location of each socket in the field of the 
+ranked visibility and the stability. The ranked visibility is simply defined by 
+the cumulative distribution function of the visibility. Thus, a socket with a 
+ranked visibility of 80\% indicates that there are 80\% of all sockets with the 
+same or lower visibility than this specific socket. 
 
-As figure \ref{fig:rankedVisibility} indicates, the sockets cluster around the top right corner, hence the top visible sockets tend to have a good stability as well.
+As figure \ref{fig:rankedVisibility} indicates, the sockets cluster around the 
+top right corner, hence the top visible sockets tend to have a good stability as 
+well.
 
 \begin{figure}
 	[hb] \centering 
@@ -632,7 +661,6 @@ As figure \ref{fig:rankedVisibility} indicates, the sockets cluster around the t
 	\caption{Sockets by their ranked visibility and their stability} 
 	\label{fig:rankedVisibility} 
 \end{figure}
-
 
 Furthermore, figures \ref{fig:ccdf_ratio_days} and \ref{fig:ccdf_ratio_vts} show 
 each a complementary cumulated distribution function of the stability of server 
@@ -646,7 +674,22 @@ the fact that there is a high number of \glspl{server socket} which are active
 only during a relatively short period of time. This can be justified by looking 
 at figure \ref{fig:vts_by_visibledays}.
 
-\todo{Describe more..}
+Not surprisingly there is a higher share of sockets with a visibility of 2 days 
+with a stability ratio below 80\%. Intuitively, the sockets which have a good 
+visibility of 5 or even 6 days tend to have a high stability as well, but they 
+have a lower share of sockets which have a stability ratio of 1 than all other. 
+This means that sockets which are often visible incline to have at least some 
+unbalanced connections. 
+
+On the other side, figure \ref{fig:ccdf_ratio_vts} shows the complementary 
+cumulative distribution function of the stability ratio of sockets with 
+different absolute visible time slots. Around 99\% of all \glspl{server socket} 
+with more than 1000 visible time slots have a higher stability ratio than 95\%. 
+Although, only around 20\% of them have a stability ratio of 100\%, such that 
+they have no unbalanced connections at all.
+As in figure \ref{fig:ccdf_ratio_days}, \glspl{server socket} with a low 
+visibility incline to have a higher share of sockets with a stability ratio 
+below 90\% than sockets more often visible. 
 
 \begin{landscape}
 \begin{figure}
@@ -677,7 +720,7 @@ popularity as this specific socket.
 
 \todo{describe more..}
 
-\todo{describe top 20 ports}
+\todo{describe top 20 ports after getting new top 20 results for table}
 
 \begin{figure}
 	[ht] \centering 
@@ -686,12 +729,11 @@ popularity as this specific socket.
 	\label{fig:rankedPopularity} 
 \end{figure}
 
-
 \begin{landscape}
 	\begin{figure}
 	[p] \centering 
 	\includegraphics[width=\linewidth]{images/top20_ratio_box.pdf}
-	\caption{Boxer plot of the availability / stability of the top 20 traffic port server sockets} 
+	\caption{box-and-whisker plot of the availability / stability of the top 20 traffic port server sockets} 
 	\label{fig:top20_ratio_box} 
 \end{figure}
 \end{landscape}
@@ -700,11 +742,10 @@ popularity as this specific socket.
 \begin{figure}
 	[p] \centering 
 	\includegraphics[width=\linewidth]{images/top20_visibility_box.pdf}
-	\caption{Boxer plot of visibility in days of the top 20 traffic port server sockets}
+	\caption{box-and-whisker plot of visibility in days of the top 20 traffic port server sockets}
 	\label{fig:top20_visibledays_box}
 \end{figure}
 \end{landscape}
-
 
 \begin{table}
 	[ht] \centering 
