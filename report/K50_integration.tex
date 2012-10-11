@@ -1,4 +1,3 @@
-
 %!TEX root = ./main.tex
 %** 50_integration.tex
 \chapter{Extending FACT with Server Sockets\label{chapter:integration}}
@@ -6,7 +5,9 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Smart Traffic Selection using Server Sockets Sets
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Smart Traffic Selection using Server Sockets Sets\label{section:ses_traffic_selection}}
+\section{Smarter Traffic Selection using Server SocketsSets 
+\label{section:ses_traffic_selection}}
+
 % explain briefly the approach / adjustments to FACT
 Originally, \gls{FACT} applies a port-based heuristic for selecting the 
 examination traffic. 
@@ -42,14 +43,18 @@ adjusted traffic selection is querying the server socket registry if the
 external socket is a known \gls{server socket}. If this is the case, the flow is 
 added to the reflector traffic, otherwise to the remaining traffic. 
 
-\section{Optimal Server Sockets Sets\label{section:ses_selection}}
+\section{Selecting Suitable Server Sockets Sets\label{section:ses_selection}}
 % outline that this is a optimization problem which is approximated by several 
 % socket sets however not guaranteed to be optimal
 % coverage network space / problem space 
-By adjusting the traffic selection of \gls{FACT} with \gls{server socket} sets, some essential properties of \gls{FACT} as the observed network coverage or the event sensibility are directly dependent on properties of the chosen 
+By adjusting the traffic selection of \gls{FACT} with \gls{server socket} sets, 
+some essential properties of \gls{FACT} as the observed network coverage or the 
+event sensibility are directly dependent on properties of the chosen 
 \gls{server socket} set. 
 
-Because \gls{FACT} detects only network outage events which are firstly detected with the reflector traffic and then not whitelisted by the remaining traffic, it is able to detect only network outages of prefixes which have at least one known 
+Because \gls{FACT} detects only network outage events which are firstly detected 
+with the reflector traffic and then not whitelisted by the remaining traffic, it 
+is able to detect only network outages of prefixes which have at least one known 
 server socket that is located in this prefix. This means that FACTs observation 
 coverage of networks is completely defined by the network/prefix coverage of the 
 chosen \gls{server socket} set. 
@@ -89,4 +94,3 @@ of each network must be considered, so that only the few best sockets located in
 a single network are selected. It can even make sense to include not perfectly 
 stable sockets if they increase the network coverage, especially if they have a 
 good visibility / popularity.
-

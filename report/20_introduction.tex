@@ -1,6 +1,5 @@
 %!TEX root = ./main.tex
 \chapter{Introduction\label{Introduction}}
-\section{Motivation}
 
 % Problem: Connectivity problems exist
 The end-to-end connectivity of hosts is one of the key services of the Internet.
@@ -147,7 +146,9 @@ related to a stable and popular services.
 %The Internet is interconnecting networks all over the world since more than 40 years by 2012. The end-to-end reachability of hosts has always been a basic service of the Internet. However, this reachability is sometimes disrupted for various reasons, such as link or router collapses\citep{}, natural disasters\citep{}, political revolutions\citep{} and human errors\citep{}. There is a real need for methods to systematically detect and locate Internet outages of remote autonomous systems, subnets, and even single hosts if they are of importance. This is particularly true for \gls{isp}, as for example costum·ers are generating costs for time intensive debugging and support by complaining at the \gls{isp} for unreachable networks or the \gls{isp} is contractually liable for unreachable networks. An automated, ongoing detection and tracking of connectivity issues of the Internet may generate transparent outage information for customers and enables the \gls{isp} to react adequately on a detected reachability problems if possible, for example by changing routes in case of a failure of a transit provider. As outlined in section \ref{sec:related_work} in detail, researches and industrial vendors have proposed various approaches for systematically detect, locate and troubleshoot Internet outages and loss of end-to-end reachability. However, most of these approaches rely on \gls{control-plane} information as BGP routing messages or \gls{data-plane} information achieved by active probing. For this reason, FACT was introduced by \citet{Schatzmann:PAM} as a flow-based approach of connectivity tracking. This is a fully passive approach for identifying remote connectivity problems and relies solely on flow-level information of cross-border network traffic. This The detection of a outage is consolidated by aggregating the unresponsive hosts to network and AS level and rating the severity of the events by affected users.
 %An obvious caveat of this approach lies in the misinterpretation of service failures to host failures in case no other service is running on the observed host. This problem also exists on higher aggregation level, i.e. if a single host fails the entire network / AS is wrongly detected as down. This is even worse if this service or host is very popular with regard to internal network users. Depending on the kind of service, this may be a real problem, i.e. if this host is a web server providing important content, or may be negligible because the service or application connecting to this service is already handling this service outage as in the case of a Skype super-node. However, from a flow-point of view the connections to a Skype super-node or to a web server looks very similar and are often indistinguishable. For this reason, services have to be views at a longer time scale in order to detect services which can be characterized as stable and thus relevant for outage analysis. 
 \section{Related Work 
-\label{sec:related_work}} 
+\label{sec:related_work}}
+
+\todo{Write short Intro.. separation into two parts etc..} 
 \subsection{Reachability
 Tracking}
 
