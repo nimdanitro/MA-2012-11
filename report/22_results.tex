@@ -4,6 +4,36 @@
 \label{chapter:results}}
 
 \todo{Write introduction}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% DATA
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Data
+\label{section:data}}
+
+This thesis relies on data collected at \citet{switch}, the Swiss National Research and Education Network (NREN). 
+Mainly government institutions, universities, research labs are connected to the Internet by \citet{switch}\citep{Schatzmann:Mining}.
+
+The \citet{switch} network is with approximately 250'000 network users in 2010 comparable with a mid sized \gls{isp}. Currently, there are around 2.4 million \gls{IPv4} addresses, a /32 IPv6 and a /40 \gls{IPv6} network announced via \gls{bgp}\citep{Schatzmann:Tracing}.
+
+\begin{figure}[ht] 
+	\centering
+	\includegraphics[width=12cm]{images/network_overview.eps}
+	\caption{Overview of the SWITCH network \citep{SchatzmanThesis2012}} 
+	\label{fig:switch_nework}
+\end{figure}
+
+Figure \ref{fig:switch_nework} provides an overview of the SWITCH network. 
+Currently, SWITCH has 15 upstreams and peering links and is capturing flow level data at all external interfaces of their border routers. From 2003 to 2008 to version 5 has been used, and version 9 after 2008\citep{Schatzmann:Tracing}.
+
+High traffic peak rates of more than 80'000 flows per second, 3 million packets per second and more than 20Gbit/s require hardware-based flow collection cards\citep{Schatzmann:Tracing}. 
+\gls{TCP} flags are not available in the flow-level information because of limitations of the used hardware components\citep{Schatzmann:Tracing}. 
+The generated flow data are collected and stored in a central data repository.
+
+% briefly describe the Switch network and its topology..
+% traffic volume and netflow data unsampled!
+% see tech report 338 for numbers and layout?! evtl actual numbers (2012)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % ANALYSIS of SERVER SOCKETS IN THE WILD
@@ -17,13 +47,14 @@ This section covers an analysis of \gls{server socket} found during a week long 
 % sum up of detection parameters > 2 biflows per 5min interval with more TCP
 % packets > 3 UDP > 1
 For detecting the \glspl{server socket} in this observation period, the previously discussed detection approach was applied as illustrated by figure \ref{fig:detection_chain}.
-In detail, the connection cache was configured to summarize all related unidirectional flow records into a single bidirectional flow record during an aggregation interval of 600s.
+In detail, the connection cache was configured with a cache interval of 600 seconds and an export interval of 300 seconds. Hence, all flows active during the last 600 seconds are exported every 300 seconds. The cache interval of 600 seconds is chosen according to \citet{Schatzmann:Tracing} for making it likely to observe at least some flows to any active server socket. 
+%to summarize all related unidirectional flow records into a single bidirectional flow record during an aggregation interval of 600s.
 
 After this caching step, these bidirectional flows are filtered by a fan-out filter implementing the idea of \citet{Allman:2007} to mitigate the effects of scanning and \gls{p2p} churn. 
 This fan-out filter is configured to require at least 4 unidirectional connections with a certain host as source and at least 2 times more unidirectional connections than bidirectional connections for classifying this host as a scanning host.
 Previous work\citep{Schatzmann:Mining,Schatzmann:Dissection, Schatzmann:Tracing} has shown that these parameters are a good choice for efficiently mitigating the scanning noise so that the scanning spikes of the total traffic volume are successfully reduced.
 
-Moreover, the noise filter is configured to filter all \gls{TCP} flows with less than 3 packets in a single direction and \gls{UDP} flows with less than 1 packet in a single direction.
+Moreover, the noise filter is configured to filter all bidirectional \gls{TCP} flows with less than 3 packets in a single direction and bidirectional \gls{UDP} flows which are actually unidirectional flows and have 0 packet in a single direction.
 
 Furthermore, the \emph{server socket detector} is configured to extract sockets with a degree of 2 or higher as concentrators, thus requiring two independent connections to a \gls{server socket} within 600 seconds.
 
@@ -58,7 +89,7 @@ These gaps result from missing flow records due to router reboots, collector out
 \end{figure}
 
 Clearly, the dominating kind of the flows are the bidirectional monitored flows represented by the red area in figure \ref{fig:flows_by_type}. 
-Comparing this share with the bidirectional unmonitored flows represented by the yellow area between the red and the green area, yields that the detection approach detects a majority of the \glspl{server socket}.
+Comparing this share with the bidirectional unmonitored flows represented by the hardly visible yellow\todo{CHANGEME! IF figure \ref{fig:monitored_flows_by_type}} area between the red and the green area, yields that the detection approach detects a majority of the \glspl{server socket}.
 This finding is even better visible on the bidirectional ratio of figure \ref{fig:monitored_flows_by_type}.
 Depending on the time of the day, the monitoring ratio of the bidirectional flows is mainly between 90\% and 97\%.
 The smaller monitoring ratios during night indicates that there is a higher share of unknown \glspl{server socket} active at night than during day.
@@ -74,9 +105,12 @@ Finally, the unidirectional incoming flows have are predominately unmonitored wi
 The main reason for this contrast may be that the main part of this unidirectional incoming traffic consists of Internet background radiation \citep{Wustrow10,Pang04} due to malware or misconfiguration for example. 
 Nevertheless, this unidirectional incoming flow traffic is unimportant with respect to the scope of this thesis.
 
-In a metaphorical sense, \glspl{server socket} are comparable to masses in physics which are exerting gravitational forces to other objects. 
-\Glspl{server socket} tend to attract a majority of the observed connections. 
-Therefore, they are well suitable to represent a majority of the legitimate traffic which is interesting for tracking the end-to-end connectivity.
+To sum up, \glspl{server socket} tend to attract a majority of the observed connections, especially the bidirectional connections and the unidirectional connections which are important to the connectivity tracking. 
+Therefore, they are well suitable to represent legitimate traffic which is interesting for tracking the end-to-end connectivity.
+
+%In a metaphorical sense, \glspl{server socket} are comparable to masses in physics which are exerting gravitational forces to other objects. 
+%\Glspl{server socket} tend to attract a majority of the observed connections. 
+%Therefore, they are well suitable to represent a majority of the legitimate traffic which is interesting for tracking the end-to-end connectivity.
 
 \newpage
 \subsection{Characterization of Detected Server Sockets}
@@ -95,17 +129,17 @@ This second visibility metric is referred as \emph{visible time slots(VTS)}.
 \begin{figure}
 	[hb] \centering
 	\includegraphics[width=\linewidth]{images/VTS_by_visibledays.pdf}
-	\caption{VTS by visible days}
+	\caption{Each of the six histogram shows the number of sockets by visible time slots for the corresponding visible days}
 	\label{fig:vts_by_visibledays}
 \end{figure}
 
-Figure \ref{fig:vts_by_visibledays} shows the number of sockets by the visible time slots separated the number of visible days. 
+Figure \ref{fig:vts_by_visibledays} shows six histograms. Each of the histograms shows the visible time slots of the sockets separated by their daily visibility. This means that the histogram of all sockets with a daily visibility 1 day is the top left diagram. \todo{Describe me better!?!}
 The skewness of the distributions for 1 to 4 visible days are is very similar. 
 It is obvious that the a socket which is visible for only one day cannot exceed 288 visible time slot. 
 Nonetheless, considering this daily scaling factor, the distributions are looking very similar. 
 Furthermore, figure \ref{fig:vts_by_visibledays} shows that the most sockets in absolute terms are only active during one day and only in very few visible time slots.
 
-However, the distribution of the number of sockets with a visibility of 5 or even 6 days are slightly different, since there is a higher share of sockets with a relatively higher visible time slots, besides the normal scaling factor of the number of visible days.
+However, the distribution of the number of sockets with a visibility of 5 or even 6 days are slightly different, since there is a higher share of sockets with a relatively higher visible time slots, besides the normal scaling factor of the number of visible days. \todo{CONCLUSION!}
 
 \subsubsection{Visibility and Stability}
 Eventually, for selecting those \glspl{server socket} which are stable and often visible it is of importance to assess how \glspl{server socket} are distributed with respect to their stability and visibility characteristic.
@@ -113,7 +147,7 @@ Hence, figure \ref{fig:rankedVisibility} shows the location of each socket in th
 The ranked visibility is simply defined by the cumulative distribution function of the visibility.
 Thus, a socket with a ranked visibility of 80\% indicates that there are 80\% of all sockets with the same or lower visibility than this specific socket.
 
-As figure \ref{fig:rankedVisibility} indicates, the sockets cluster around the top right corner, hence the top visible sockets tend to have a good stability as well.
+As figure \ref{fig:rankedVisibility} indicates, the sockets cluster around the top right corner, hence the top visible sockets tend to have a good stability as well. \todo{CONCLUSION!}
 
 \begin{figure}
 	[hb] \centering
@@ -137,7 +171,7 @@ This means that sockets which are often visible incline to have at least some un
 On the other side, figure \ref{fig:ccdf_ratio_vts} shows the complementary cumulative distribution function of the stability ratio of sockets with different absolute visible time slots. 
 Around 99\% of all \glspl{server socket} with more than 1000 visible time slots have a higher stability ratio than 95\%.
 Although, only around 20\% of them have a stability ratio of 100\%, such that they have no unbalanced connections at all.
-As in figure \ref{fig:ccdf_ratio_days}, \glspl{server socket} with a low visibility incline to have a higher share of sockets with a stability ratio below 90\% than sockets more often visible.
+As in figure \ref{fig:ccdf_ratio_days}, \glspl{server socket} with a low visibility incline to have a higher share of sockets with a stability ratio below 90\% than sockets more often visible. \todo{CONCLUSION!}
 
 \begin{landscape}
 \begin{figure}
@@ -164,7 +198,7 @@ To be precise, the ranked popularity is defined as the cumulative distribution f
 Hence, a \gls{server socket} with a ranked popularity of 80\% signifies that there are 80\% of all \gls{server socket} with a lower or equal popularity as this specific socket.
 
 Figure \ref{fig:rankedPopularity} shows the \glspl{server socket} by their ranked popularity and their stability ratio. 
-Similarly to figure \ref{fig:rankedVisibility}, the \glspl{server socket} tend to cluster in the top right corner of figure \ref{fig:rankedPopularity}. This indicates that popular sockets tend to have a good stability as well.
+Similarly to figure \ref{fig:rankedVisibility}, the \glspl{server socket} tend to cluster in the top right corner of figure \ref{fig:rankedPopularity}. This indicates that popular sockets tend to have a good stability as well. \todo{CONCLUSION!}
 
 \begin{figure}
 	[ht] \centering
@@ -183,8 +217,8 @@ A box-and-whisker plot indicated with a box the range from the first quartile to
 In the middle of the box, the median is illustrated by a black line.
 The whisker is connecting the hinges to the fences which represents the upper and lower extreme value. 
 Moreover, some (statistical) outliners below or above the fences are shown by black dots.
-
 \todo{describe top 20 ports after getting new top 20 results for table}
+
 \begin{landscape}
 	\begin{figure}
 	[p] \centering
