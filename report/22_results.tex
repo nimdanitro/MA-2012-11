@@ -258,6 +258,7 @@ Moreover, some (statistical) outliners below or above the fences are shown by bl
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % FACT EVALUATION
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
 \section{Evaluation of Enhanced FACT\label{section:enhanced_FACT_eval}} 
 In order to evaluate the effect of \gls{server socket} based traffic preselection, three known events were analyzed with the old port-based heuristic of \gls{FACT} as well as with the new \gls{server socket} based approach. 
 Then, the results are compared and the effect of the traffic preselection on the noise of results is discussed qualitatively.
@@ -282,14 +283,12 @@ Hence, this set generation process generates 1000 different \glspl{server socket
 
 Since running \gls{FACT} on all three events is time and resource intensive, only 5 different sets are used with \gls{FACT} to evaluate their effects, so that \gls{FACT} is executed with all five sets on all three events. To compare the results from the socket based approach, \gls{FACT} is also executed with the old port-based heuristic approach. This results in 18 different executions of \gls{FACT}.
 
-Table \ref{tab:ses_sets} provides a brief overview of the selected sets.
+Table \ref{tab:ses_sets} provides a brief overview of the selected sets and the number of sockets contained in each set. 
 As previously mentioned, to simplify the comparison of the new \gls{server socket} approach with the old heuristic port-based approach, three of the five selected sets are generated from the second initial set, thus only including Port 80 \glspl{server socket}. In particular, set \emph{C} contains all external port 80 \glspl{server socket} and is thus the second initial set itself. 
 By manual investigation of the evaluation of the generated port 80 sets, a visibility of 2 days and a stability of 90\% represented a good compromise between number of sockets and total network coverage. 
 This set is denoted as set \emph{E}. To better understand the effect of the stability on \gls{FACT}, set \emph{D} contains only a condition on the visible days, thus allowing to compare set \emph{D} and \emph{E} for deducing the effect of imposing a stability condition. 
 Furthermore, set \emph{A} is the first initial set, containing all detected \glspl{server socket}. Again by manual investigation and comparing the IP space coverage and the number of sockets of a set, a last set is chosen with conditions imposed on visibility, stability and popularity. Set \emph{B} represented a good compromise between IP space coverage and number of sockets by requiring a popularity of 0.3. This means that the 70\% most popular sockets in term of flows are selected and then reduced by their visibility and stability as in set \emph{D} and \emph{E} to simplify their comparison. 
 
-
-\toddo{And finally five different example socket sets are selected for running with FACT}
 Set \emph{A} consists of all detected \glspl{server socket}, Set \emph{B} is restricted to those socket with a ranked popularity of at least 30\%, a visibility of 2 days and a minimal stability ratio of 90\% and a maximal variance of the stability of 0.1. 
 Hence, the set \emph{B} applies some limiting conditions on stability, visibility and popularity. 
 
@@ -299,42 +298,37 @@ Finally, set \emph{E} is imposing an additional condition on the stability of so
 \begin{table}
 	[ht] \centering 
 	\begin{tabular}
-		{|c|c|c|c|c|} \hline \textbf{Socket Set} & \textbf{Ports} & \textbf{min. Stability} & \textbf{min. Visibility} & \textbf{min. Popularity} \\
-		\hline \hline A & all & 0 & 0 & 0\\
-		\hline B & all & 0.9 & 2 days & 0.3 \\
-		\hline C & 80 & 0 & 0 & 0 \\
-		\hline D & 80 & 0 & 2 days & 0 \\
-		\hline E & 80 & 0.9 & 2 days & 0 \\
+		{|c|c|c|c|c|c|} \hline \textbf{Socket Set} & \textbf{Ports} & \textbf{min. Stability} & \textbf{min. Visibility} & \textbf{min. Popularity} & \textbf{Sockets} \\
+		\hline \hline A & all & 0 & 0 & 0 & 1862389 \\
+		\hline B & all & 0.9 & 2 days & 0.3 & 320531 \\
+		\hline C & 80 & 0 & 0 & 0 & 602111 \\
+		\hline D & 80 & 0 & 2 days & 0 & 418912 \\
+		\hline E & 80 & 0.9 & 2 days & 0 & 384164\\
 		\hline 
 	\end{tabular}
 	\caption{Overview of evaluated \gls{server socket} sets} 
 	\label{tab:ses_sets} 
 \end{table}
 
-Table \ref{tab:ses_sets_coverage} shows the network coverage of each set with respect to their IP space coverage. 
-The relative number is in relation to the total coverage of the set with all \glspl{server socket} representing a maximum possible coverage. 
-It is remarkable that set \emph{B} achieves a higher \gls{IPv4} space coverage than all port 80 socket sets despite having less sockets contained in this set and imposing harder criteria on popularity and stability. 
+Table \ref{tab:ses_sets_coverage} shows the network coverage of each set with respect to their IP space coverage. The IP space is given in absolute terms and relative to the total IP space announced via BGP that week. Moreover, there the IP space is also given in relative terms in reference to the maximum possible covered IP space of server sockets, denoted as \emph{reference} in table  \ref{tab:ses_sets_coverage}.
+
+As it can be seen in table \ref{tab:ses_sets_coverage}, \gls{FACT} is capable to observe almost 65\% of the announced IPv4 address space in November 2010. 
+Contrasting this high observation scope of IPv4 address space, only a very small partition of the IPv6 address space is observable. 
+A reason for this is, that the SWITCH backbone network was fully dual-stacked at that time, however, IPv6 traffic was in terms of flows almost negligible. Nonetheless, as IPv6 will continue to emerge in the next years, the IPv6 coverage will increase as well since the approach is not limited to IPv4 in any case. 
+
+Besides that, it is also remarkable that set \emph{B} achieves a higher \gls{IPv4} space coverage than all port 80 socket sets despite having less sockets contained in this set and imposing harder criteria on popularity, visibility and stability. 
+
 \begin{table}
 	[ht] \centering 
 	\begin{tabular}
-		{|c|c|r|r|r|r|} \hline \multirow{2}{*}{\textbf{Socket Set}} & \multirow{2}{*}{\textbf{Number of Sockets}} & \multicolumn{2}{|c|}{\textbf{IPv4 Space}} & \multicolumn{2}{|c|}{\textbf{IPv6 Space}} \\
-		\cline{3-6} & & absolute & relative & absolute & relative \\
-		\hline A & 1862389 & 1509368214 & 100\% & $3.7013×10^{32}$ & 100\% \\
-		\hline B & 320531 & 1060083001 & 70.234\% & $2.693×10^{30}$ & 0.728\% \\
-		\hline C & 602111 & 1027865637 & 68.099\% & $1.629×10^{31}$ & 4.401\% \\
-		\hline D & 418912 & 862625441 & 57.151\% & $1.408x10^{31}$ & 3.804\% \\
-		\hline E & 384164 & 831321169 & 55.077\% & $8.804x10^{30}$ & 2.379\% \\
+		{|c|c|r|r|r|r|r|} \hline \multirow{2}{*}{\textbf{Socket Set}} & \multicolumn{3}{|c|}{\textbf{IPv4 Space}} & \multicolumn{3}{|c|}{\textbf{IPv6 Space}} \\
+		\cline{2-7} & absolute & reference & relative\tablefootnote{The announced IPv4 address space of all announced BGP prefixes is 2320427389} & absolute & reference & relative\tablefootnote{The announced IPv6 address space of all announced BGP prefixes is $9.1196\cdot10^{33}$} \\
+		\hline A & 1509368214 & 100\% & 65.047\% &$3.7013\cdot10^{32}$ & 100\% & 4.059\% \\
+		\hline B & 1060083001 & 70.234\% & 45.685\% & $2.693\cdot10^{30}$ & 0.728\% & 0.030\% \\
+		\hline C & 1027865637 & 68.099\% & 44.296\%  & $1.629\cdot10^{31}$ & 4.401\% & 0.179\% \\
+		\hline D & 862625441 & 57.151\% & 37.175\% & $1.408\cdot10^{31}$ & 3.804\% & 0.154\% \\
+		\hline E & 831321169 & 55.077\% & 35.826\% & $8.804\cdot10^{30}$ & 2.379\% & 0.097\%\\
 		\hline 
-		
-		%\hline
-		% \multirow{2}{*}{\textbf{Socket Set}} & \multirow{2}{*}{\textbf{Number of Sockets}} & \multicolumn{2}{|c|}{\textbf{IPv4  /24 networks}} & \multicolumn{2}{|c|}{\textbf{IPv6 /48 networks}} \\
-		% \cline{3-6} & & absolute & relative & absolute & relative \\
-		% \hline A & 1862389 & 692560 & 100\% 	& 1148 & 100\% \\
-		% \hline B & 320531  & 123432 & \% & 56  & \% \\
-		% \hline C & 602111  & 157774 & \% & 291 & \% \\
-		% \hline D & 418912  & 113697 & \% 	& 226 & \% \\
-		% \hline E & 384164  & 108835 & \% 	& 86 & \% \\
-		% \hline
 	\end{tabular}
 	\caption{Network coverage of the \gls{server socket} sets} 
 	\label{tab:ses_sets_coverage} 
@@ -346,7 +340,7 @@ It is remarkable that set \emph{B} achieves a higher \gls{IPv4} space coverage t
 \subsection{Event 1: Partitioned Internet Exchange Point(IXP)}
 
 The IXP \citet{AMS-IX}(AMS-IX) performed on March 23, 2010 a scheduled maintenance. 
-When its connection to \citet{switch} came back, there was only a partial connectivity through this IXP, since some next-hops learned via their route servers were not properly reachable, thus traffic towards these networks are black-holed\citep{SchatzmannPAM2011}.
+When its connection to \citet{switch} came back, there was only a partial connectivity through this IXP, since some next-hops learned via their route servers were not properly reachable, thus traffic towards these networks was black-holed\citep{SchatzmannPAM2011}.
 
 In consequence, several internal clients of the \citet{switch} network were complaining about unreachable external services on the next morning. 
 Using classical debugging tools, it took more than four hours for fixing the problem by resetting a port.\citep{SchatzmannPAM2011}
@@ -374,7 +368,7 @@ As figure \ref{fig:AMS_IX_FACT_allSES80} shows, the real event lasting from 05.0
 However, the \gls{server socket} based approach reduces the red part indicating the number of unreachable prefixes affecting only a single internal user by at least an order of magnitude. 
 Hence, the event is now clearly standing out of the \emph{background event detection noise} -- the green and red part of figure \ref{fig:AMS_IX_FACT_REF}. 
 
-Despite that fact, that the set \emph{C} is not optimized at all with respect to stability, popularity and visibility, it outperforms the traditional approach in terms of noise reduction without significantly worsen the real event detection. 
+Despite the fact that the set \emph{C} is not optimized at all with respect to stability, popularity and visibility, it outperforms the traditional approach in terms of noise reduction without significantly worsen the actual event detection. 
 This confirms the assumption that a high number of unreachable prefixes affecting only a single internal user is caused by malware and \gls{p2p} churn.
 
 Comparing the results from set \emph{C} to those from set \emph{D} which limits the sockets by only selecting the sockets seen at least at two days, yields almost no visual difference between figure \ref{fig:AMS_IX_FACT_allSES80VTS2} and \ref{fig:AMS_IX_FACT_allSES80}, despite the number of sockets is reduced by almost a third. 
@@ -548,3 +542,12 @@ On the one side, constraining the sockets to be port 80 is good for comparing wi
 Thus, it is possible to get either a greater network visibility as well as a more diverse observation space. Especially in case of the RIPE/DUKE event, this produces a much better view of the event. 
 
 On the other side, constraining the sockets by their characteristics of visibility, stability and popularity allows to minimize the number of sockets removing unsuitable sockets for connectivity tracking and thus, reducing the noise of the network outage event detection.
+
+From the five evaluated \glspl{server socket} sets set \emph{D} have the least \glspl{server socket}, but provides a great visibility without generating to much noise.
+Therefore, from the five evaluated sets, set \emph{D} is the best with respect to detection performance. 
+However, as described previously the sets are chosen by manually comparing the network coverage and number of sockets, and thus, there may be other even better sets with respect to the detection performance. 
+To find these sets the approach of selecting the sockets must be formally defined, e.g., as an optimization problem, and then adequately solved.
+
+To sum up, the newly proposed approach of selecting the reflector traffic with the help of \glspl{server socket} actually decreases the detection noise and even provides a better event visibility and sensibility.
+The performance of the approach is heavily influenced by the number of \glspl{server socket} which have to be considered during the generating of a good \gls{server socket} set.
+Furthermore, this approach allows to better control the observation capabilities of \gls{FACT}, e.g., by completely excluding certain, uninteresting parts of the Internet from the observation scope.
