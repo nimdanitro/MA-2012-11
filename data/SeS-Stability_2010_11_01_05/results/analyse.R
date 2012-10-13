@@ -33,15 +33,14 @@ ecdf_df2 <- data.frame(  x=x,
                     VisibleDays = rep(c("1 day", "2 days", "3 days", "4 days", "5 days", "6 days"), each=length(x))
                 )
 
-p <- qplot(data=ecdf_df1, x, 1-ecdf_vts, geom="step", colour = VisibleTimeSlots, xlab="Availability", ylab="CCDF", xlim=range(0,1), direction= "hv") + scale_color_hue(name="Visible Time Slots")
+p <- qplot(data=ecdf_df1, x, 1-ecdf_vts, geom="step", colour = VisibleTimeSlots, xlab="Stability", ylab="CCDF", xlim=range(0,1), direction= "hv") + scale_color_hue(name="Visible Time Slots")
 ggsave(file="CCDF_ratio_VTS.pdf", width=12, height=8, dpi=300)
 
-q <- qplot(data=ecdf_df2, x, 1-ecdf_days, geom="step", colour = VisibleDays, xlab="Availability", ylab="CCDF", xlim=range(0,1), direction= "hv") + scale_color_hue(name="Visible Days")
+q <- qplot(data=ecdf_df2, x, 1-ecdf_days, geom="step", colour = VisibleDays, xlab="Stability", ylab="CCDF", xlim=range(0,1), direction= "hv") + scale_color_hue(name="Visible Days")
 ggsave(file="CCDF_ratio_days.pdf", width=12, height=8, dpi=300)
 
 d <- ggplot(subset(sockets, sockets$Port ==80), aes(Ratio, BidirectionalFlows+UnidirectionalFlowsOut))
 d + geom_point(alpha=0.2) + geom_point(data=subset(sockets, sockets$Port ==80), colour ="red", alpha=0.2) + geom_point(data=subset(sockets, sockets$Port == 53), color ="Blue", alpha=0.2)
-
 
 # aggregate the socket by port and sum their flows
 tmp_sockets <-  data.frame(
@@ -80,14 +79,13 @@ tmp_sockets2 <- subset(sockets, !(Port %in% sort(top_20$Port)))
 tmp_sockets2$Port <- rep("other",times=nrow(tmp_sockets2))
 tmp_sockets <- rbind(tmp_sockets1, tmp_sockets2)
 p <- ggplot(tmp_sockets, aes(Port, Ratio), xlab="Port")
-p + geom_boxplot(outlier.size = 1, size=0.25, aes(fill=factor(Protocol))) + scale_fill_hue(name="Protocol", labels=c("TCP", "UDP")) + xlab("Port") + ylab("Availability / Stability")
+p + geom_boxplot(outlier.size = 1, size=0.25, aes(fill=factor(Protocol))) + scale_fill_hue(name="Protocol", labels=c("TCP", "UDP")) + xlab("Port") + ylab("Stability")
 ggsave(file="top20_ratio_box.pdf", width=12, height=8, dpi=300)
 
 # Plot the Visibility of the top 20 ports
 p <- ggplot(tmp_sockets, aes(Port, VisibleDays))
 p + geom_boxplot(outlier.size = 1, size =0.25, aes(fill=factor(Protocol))) + scale_fill_hue(name="Protocol", labels=c("TCP", "UDP")) + xlab("Port") + ylab("Visibility")
 ggsave(file="top20_visibility_box.pdf", width=12, height=8, dpi=300)
-
 
 # PLOT THE HEAT MAP FOR SHOWING THE DIMENSIONS
 sockets$TotalFlows <- sockets$BidirectionalFlows + sockets$UnidirectionalFlowsIn
@@ -98,10 +96,10 @@ sockets$VisibilityRank <- ecdf_vis(sockets$VisibleTimeSlots)
 
 # STABILITY VISIBILIY MAP
 p <- ggplot(sockets, aes(x=AverageRatio, y=VisibilityRank))
-p + geom_bin2d(binwidth = c(0.001,0.001)) + xlab("Availability / Stability Ratio") + ylab("Ranked Visibility") + guides(fill=FALSE)
+p + geom_bin2d(binwidth = c(0.001,0.001)) + xlab("Stability") + ylab("Visibility Quantiles") + guides(fill=FALSE)
 ggsave(file="visibiliy_stability_map.pdf", width=12, height=8, dpi=300)
 
 # CREATE THE POPULARITY MAP
 p <- ggplot(sockets, aes(x=AverageRatio, y=PopularityRank))
-p + geom_bin2d(binwidth = c(0.001,0.001)) + xlab("Availability / Stability Ratio") + ylab("Ranked Popularity") + guides(fill=FALSE)
+p + geom_bin2d(binwidth = c(0.001,0.001)) + xlab("Stability") + ylab("Popularity Quantiles") + guides(fill=FALSE)
 ggsave(file="popularity_stability_map.pdf", width=12, height=8, dpi=300)
