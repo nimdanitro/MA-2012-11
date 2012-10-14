@@ -161,7 +161,12 @@ This means that sockets which are often visible incline to have at least some un
 On the other side, figure \ref{fig:ccdf_ratio_vts} shows the complementary cumulative distribution function of the stability ratio of sockets with different absolute visible time slots. 
 Around 99\% of all \glspl{server socket} with more than 1000 visible time slots have a higher stability ratio than 95\%. 
 Although, only around 20\% of them have a stability ratio of 100\%, i.e., they have no unbalanced connections at all. 
-As in figure \ref{fig:ccdf_ratio_days}, \glspl{server socket} with a low visibility incline to have a higher share of sockets with a stability ratio below 90\% than sockets more often visible. \todo{CONCLUSION!}
+Thus, server sockets which are suitable for connectivity tracking must not have a stability of exactly 1. 
+According to figure \ref{fig:ccdf_ratio_days}, \glspl{server socket} with a low visibility incline to have a higher share of sockets with a stability ratio below 90\% than sockets more often visible.
+Besides the average stability of a server socket, it can be interesting to consider the variance of the stability as well. 
+A low variance indicates that the socket was stable over time despite having some unidirectional connections, while a larger variance indicates some fluctuations over time. 
+Therefore, the variance as metric for the momentum of the stability may considered as well for selecting stable sockets. 
+
 \begin{landscape}
 	\begin{figure}
 		[p] \centering 
@@ -183,8 +188,8 @@ Similarly to the visibility, the \glspl{server socket} characteristics of popula
 For this reason, figure \ref{fig:rankedPopularity} shows the \glspl{server socket} by their popularity quantiles and their stability. 
 Hence, a \gls{server socket} with a popularity quantile of 80\% signifies that there are 80\% of all \gls{server socket} with a lower or equal popularity as this specific socket.
 
-
-Similarly to figure \ref{fig:rankedVisibility}, the \glspl{server socket} tend to cluster in the top right corner of figure \ref{fig:rankedPopularity}. This indicates that popular sockets tend to have a good stability as well. \todo{CONCLUSION!}
+Similarly to figure \ref{fig:rankedVisibility}, the \glspl{server socket} tend to cluster in the top right corner of figure \ref{fig:rankedPopularity}. This indicates that popular sockets tend to have a good stability as well.
+To this end, the popularity quantile is a good metric to reduce the number of sockets for selecting suitable server sockets for connectivity tracking, since there are enough popular sockets which are stable as well. 
 \begin{figure}
 	[ht] \centering 
 	\includegraphics[width=\linewidth]{images/popularity_stability_map.pdf} \caption{Sockets by their ranked popularity and their stability} 
@@ -201,7 +206,6 @@ A box-and-whisker plot indicated with a box the range from the first quartile to
 In the box, the median is illustrated by a black line. 
 The whisker is connecting the hinges to the fences which represents the upper and lower extreme value. 
 Moreover, some (statistical) outliners below or above the fences are shown by black dots. \todo{describe top 20 ports and reference table}
-
 
 \begin{table}
 	[ht] \centering 
