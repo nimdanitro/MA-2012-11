@@ -1,14 +1,11 @@
-
-
 %!TEX root = ./main.tex
 %** Results.tex: What were the results achieved including an evaluation
-\chapter{Results and Evaluation 
-\label{chapter:results}}
+\chapter{Results and Evaluation \label{chapter:results}}
 
-This chapter covers the an detailed analysis of a one-week long monitoring of server sockets in section \ref{section:analysis_in_wild}.
-This data used for this analysis is briefly described in section \ref{section:data}.
-Their statistical characteristics with respect to stability, visibility and popularity are examined. 
-Furthermore, an evaluation of the traffic preselection of \gls{FACT} based on server sockets and the effect on \gls{FACT}'s observation capabilities is done in section \ref{section:enhanced_FACT_eval}.
+This chapter covers an analysis of server sockets detected and an evaluation of the modified traffic preselection of \gls{FACT} and its effect on the event detection. 
+Section \ref{section:analysis_in_wild} covers the a detailed analysis of a one-week long monitoring of server sockets. Their statistical characteristics with respect to stability, visibility and popularity are examined. 
+The data used for this analysis is briefly described in section \ref{section:data}.
+In section \ref{section:enhanced_FACT_eval} an evaluation of the adjusted traffic preselection of \gls{FACT} based on server sockets and its effect on \gls{FACT}'s observation capabilities is done.
 Finally, section \ref{section:results} briefly summarizes the main findings of this chapter. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -17,7 +14,7 @@ Finally, section \ref{section:results} briefly summarizes the main findings of t
 \section{Data 
 \label{section:data}}
 
-This thesis relies on data collected at \citet{switch}, the Swiss National Research and Education Network (NREN). 
+This evaluation relies on data collected at \citet{switch}, the Swiss National Research and Education Network (NREN). 
 Mainly government institutions, universities, research labs are connected to the Internet by \citet{switch}\citep{Schatzmann:Mining}.
 
 The \citet{switch} network is with approximately 250'000 network users in 2010 comparable with a mid sized \gls{isp}. Currently, there are around 2.4 million \gls{IPv4} addresses, a /32 IPv6 and a /40 \gls{IPv6} network announced via \gls{bgp}\citep{Schatzmann:Tracing}.
@@ -28,7 +25,7 @@ The \citet{switch} network is with approximately 250'000 network users in 2010 c
 \end{figure}
 
 Figure \ref{fig:switch_nework} provides an overview of the SWITCH network. 
-Currently, SWITCH has 15 upstreams and peering links and is capturing flow level data at all external interfaces of their border routers. From 2003 to 2008 to version 5 has been used, and version 9 after 2008\citep{Schatzmann:Tracing}.
+Currently, SWITCH has 15 upstream and peering links and is capturing flow level data at all external interfaces of their border routers. From 2003 to 2008 version 5 has been used, and version 9 after 2008\citep{Schatzmann:Tracing}.
 
 High traffic peak rates of more than 80'000 flows per second, 3 million packets per second and more than 20Gbit/s require hardware-based flow collection cards\citep{Schatzmann:Tracing}. 
 \gls{TCP} flags are not available in the flow-level information because of limitations of the used hardware components\citep{Schatzmann:Tracing}. 
@@ -49,11 +46,11 @@ This section covers an analysis of \gls{server socket} found during a week long 
 
 % sum up of detection parameters > 2 biflows per 5min interval with more TCP
 % packets > 3 UDP > 1
-For detecting the \glspl{server socket} in this observation period, the previously discussed detection approach was applied as illustrated by figure \ref{fig:detection_chain}. 
+For detecting the \glspl{server socket} in this observation period, the previously discussed detection approach is applied as illustrated by figure \ref{fig:detection_chain}. 
 In detail, the connection cache was configured with a cache interval of 600 seconds and an export interval of 300 seconds. Hence, all flows active during the last 600 seconds are exported every 300 seconds. The cache interval of 600 seconds is chosen according to \citet{Schatzmann:Tracing} for making it likely to observe at least some flows to any active server socket. 
 
 %to summarize all related unidirectional flow records into a single bidirectional flow record during an aggregation interval of 600s.
-After this caching step, these bidirectional flows are filtered by a fan-out filter implementing the idea of \citet{Allman:2007} to mitigate the effects of scanning and \gls{p2p} churn. 
+After this caching step, the bidirectional flows are filtered by a fan-out filter implementing the idea of \citet{Allman:2007} to mitigate the effects of scanning and \gls{p2p} churn. 
 This fan-out filter is configured to require at least 4 unidirectional connections with a certain host as source and at least 2 times more unidirectional connections than bidirectional connections for classifying this host as a scanning host. 
 Previous work\citep{Schatzmann:Mining,Schatzmann:Dissection, Schatzmann:Tracing} has shown that these parameters are a good choice for efficiently mitigating the scanning noise so that the scanning spikes of the total traffic volume are successfully reduced.
 
@@ -71,12 +68,12 @@ During the entire observation period of 120.8 hours, the \emph{server socket det
 % towards server sockets
 In the following, the overall traffic statistics of the detected \glspl{server socket} are briefly discussed. Figure \ref{fig:flows_by_type} shows the absolute number of flows during the entire observation period separated by the type of connection. 
 If the flow is destined to a \gls{server socket}, the flow is denoted as monitored, otherwise as unmonitored. 
-Furthermore, the type of connection also considers the balance or direction of the connection, i.e.,if the flow is bidirectional, unidirectional outgoing or unidirectional incoming. 
-Hence, in total there are 6 possible combinations for the type of connection, allowing a good interpretation of the detection approach. 
+Furthermore, the type of connection also considers the direction of the connection, i.e., if the flow is bidirectional, unidirectional outgoing or unidirectional incoming. 
+Hence, in total there are six possible combinations for the type of connection, allowing a good interpretation of the detection approach. 
 For easier comparison of each type of connection, figure \ref{fig:monitored_flows_by_type} shows the ratio of monitored and unmonitored flows by the direction.
 
 In figures \ref{fig:flows_by_type} and \ref{fig:monitored_flows_by_type}, there are two gaps visible around 2010/11/01 10:00 UTC and 2010/11/04 06:05 UTC. 
-These gaps result from missing flow records due to router reboots, collector outages, and storage failures\citep{Schatzmann:Mining}.
+These gaps result from missing flow records resulting from router reboots, collector outages, and storage failures\citep{Schatzmann:Mining}.
 \begin{figure}
 	[ht] \centering 
 	\includegraphics[width=\linewidth]{images/Flows_by_type_area_all_SeS.pdf} \caption{Number of flows over time by the type of connection with all detected server sockets} 
@@ -88,8 +85,8 @@ These gaps result from missing flow records due to router reboots, collector out
 	\label{fig:monitored_flows_by_type} 
 \end{figure}
 
-Clearly, the dominating kind of the flows are the bidirectional monitored flows represented by the red area in figure \ref{fig:flows_by_type}. 
-Comparing this share with the bidirectional unmonitored flows represented by the hardly visible yellow\todo{CHANGEME! IF figure \ref{fig:monitored_flows_by_type}} area between the red and the green area, yields that the detection approach detects a majority of the \glspl{server socket}. 
+Clearly, the dominating kind of flows are the bidirectional monitored flows represented by the red area in figure \ref{fig:flows_by_type}. 
+Comparing this share with the bidirectional unmonitored flows represented by the hardly visible yellow \todo{CHANGEME! IF figure \ref{fig:monitored_flows_by_type}} area between the red and the green area, yields that the detection approach successfully detects a majority of the \glspl{server socket} from the bidirectional traffic. 
 This finding is even better visible on the bidirectional ratio of figure \ref{fig:monitored_flows_by_type}. 
 Depending on the time of the day, the monitoring ratio of the bidirectional flows is mainly between 90\% and 97\%. 
 The smaller monitoring ratios during night indicates that there is a higher share of unknown \glspl{server socket} active at night than during day. 
@@ -101,12 +98,12 @@ Figure \ref{fig:flows_by_type} also reveals some high peaks which are probably s
 However, these green peaks are categorized as monitored unidirectional outgoing flows. 
 Thus, they must involve at least one known \gls{server socket} either located external or internal.
 
-Finally, the unidirectional incoming flows have are predominately unmonitored with around 80-97\% of unmonitored flows as it can be seen in figure \ref{fig:monitored_flows_by_type}. 
-The main reason for this contrast may be that the main part of this unidirectional incoming traffic consists of Internet background radiation \citep{Wustrow10,Pang04} due to malware or misconfiguration for example. 
-Nevertheless, this unidirectional incoming flow traffic is unimportant with respect to the scope of this thesis.
+Finally, the unidirectional incoming flows are predominately unmonitored with around 80-97\% of unmonitored flows as it can be seen in figure \ref{fig:monitored_flows_by_type}. 
+The main reason for this contrast may be that the main part of this unidirectional incoming traffic consists of Internet background radiation \citep{Wustrow10,Pang04} resulting from malware or misconfiguration for example. 
+Nevertheless, this unidirectional incoming traffic is unimportant with respect to the scope of this thesis.
 
 To sum up, \glspl{server socket} tend to attract a majority of the observed connections, especially the bidirectional connections and the unidirectional connections which are important to the connectivity tracking. 
-Therefore, they are well suitable to represent legitimate traffic which is interesting for tracking the end-to-end connectivity.
+Therefore, they are well suitable to represent the legitimate traffic which is indeed interesting for tracking the end-to-end connectivity.
 
 %In a metaphorical sense, \glspl{server socket} are comparable to masses in physics which are exerting gravitational forces to other objects. 
 %\Glspl{server socket} tend to attract a majority of the observed connections. 
@@ -114,7 +111,7 @@ Therefore, they are well suitable to represent legitimate traffic which is inter
 \newpage 
 \subsection{Characterization of Detected Server Sockets}
 
-As discussed in section \ref{section:characterization}, this thesis proposes to characterize \glspl{server socket} according to their visibility, popularity and stability by different metrics. This section aims to deduce some statistical properties of the detected \glspl{server socket} regarding these characteristics.
+As discussed in section \ref{section:characterization}, this thesis proposes to characterize \glspl{server socket} according to their visibility, popularity and stability by different metrics. This section aims to deduce some statistical properties of these characteristics for the detected \glspl{server socket}.
 
 \subsubsection{General Visibility of Server Sockets}
 
@@ -126,24 +123,26 @@ This allows a very fine-grained, detailed resolution of a \glspl{server socket} 
 This second visibility metric is referred as \emph{visible time slots(VTS)}.
 \begin{figure}
 	[hb] \centering 
-	\includegraphics[width=\linewidth]{images/VTS_by_visibledays.pdf} \caption{Each of the six histogram shows the number of sockets by visible time slots for the corresponding visible days} 
+	\includegraphics[width=\linewidth]{images/VTS_by_visibledays.pdf} \caption{Each of the six histograms shows the number of sockets by visible time slots for each value of visible days} 
 	\label{fig:vts_by_visibledays} 
 \end{figure}
 
-Figure \ref{fig:vts_by_visibledays} shows six histograms. Each of the histograms shows the visible time slots of the sockets separated by their daily visibility. This means that the histogram of all sockets with a daily visibility 1 day is the top left diagram. \todo{Describe me better!?!} The skewness of the distributions for 1 to 4 visible days are is very similar. 
+Figure \ref{fig:vts_by_visibledays} shows six histograms. Each of the histograms shows the visible time slots of the sockets separated by their daily visibility. This means that the histogram of all sockets with a daily visibility of 1 day is the top left diagram. The skewness of the distributions for 1 to 4 visible days are is very similar. 
 It is obvious that the a socket which is visible for only one day cannot exceed 288 visible time slot. 
 Nonetheless, considering this daily scaling factor, the distributions are looking very similar. 
 Furthermore, figure \ref{fig:vts_by_visibledays} shows that the most sockets in absolute terms are only active during one day and only in very few visible time slots.
 
-However, the distribution of the number of sockets with a visibility of 5 or even 6 days are slightly different, since there is a higher share of sockets with a relatively higher visible time slots, besides the normal scaling factor of the number of visible days. \todo{CONCLUSION!}
+However, the distribution of the number of sockets with a visibility of 5 or even 6 days are slightly different, since there is a higher share of sockets with a relatively higher visible time slots, besides the normal scaling factor of the number of visible days.
+
+This is an important finding, because connectivity tracking requires sockets which tend to be often visible. Hence, with different visibility criteria those are easily extractable. 
 
 \subsubsection{Visibility and Stability} Eventually, for selecting those \glspl{server socket} which are stable and often visible it is of importance to assess how \glspl{server socket} are distributed with respect to their stability and visibility characteristic. 
 Hence, figure \ref{fig:rankedVisibility} shows the quantile of the visible time slot of each socket and their stability. 
 Thus, a socket with a visibility quantile of 80\% indicates that there are 80\% of all sockets with the same or lower visibility than this specific socket.
 
-As figure \ref{fig:rankedVisibility} indicates, the sockets cluster around the top right corner, hence the top visible sockets tend to have a good stability as well. \todo{CONCLUSION!}
-\begin{figure}
-	[hb] \centering 
+As figure \ref{fig:rankedVisibility} indicates, the sockets cluster around the top right corner, hence the top visible sockets tend to have a good stability as well. This is important with respect to the intent to use the server sockets for connectivity tracking. For this purpose, sockets which are stable and often visible are required which are indeed located in the cluster on the top right of figure \ref{fig:rankedVisibility}.
+ 
+\begin{figure}[ht] \centering 
 	\includegraphics[width=\linewidth]{images/visibiliy_stability_map.pdf} \caption{Quantiles of the visible time slots of each socket and the corresponding stability stability} 
 	\label{fig:rankedVisibility} 
 \end{figure}
@@ -166,24 +165,25 @@ As in figure \ref{fig:ccdf_ratio_days}, \glspl{server socket} with a low visibil
 \begin{landscape}
 	\begin{figure}
 		[p] \centering 
-		\includegraphics[width=\linewidth]{images/CCDF_ratio_days.pdf} \caption{CCDF of the availability by visible days} 
+		\includegraphics[width=\linewidth]{images/CCDF_ratio_days.pdf} \caption{Complementary cumulative distribution function of the availability by visible days} 
 		\label{fig:ccdf_ratio_days} 
 	\end{figure}
 \end{landscape}
 \begin{landscape}
 	\begin{figure}
 		[p] \centering 
-		\includegraphics[width=\linewidth]{images/CCDF_ratio_VTS.pdf} \caption{CCDF of the availability by visible time slots} 
+		\includegraphics[width=\linewidth]{images/CCDF_ratio_VTS.pdf} \caption{Complementary cumulative distribution function of the availability by visible time slots} 
 		\label{fig:ccdf_ratio_vts} 
 	\end{figure}
 \end{landscape}
 
-\subsubsection{Popularity and Stability} Similarly to the visibility, the \glspl{server socket} characteristics of popularity and stability are briefly assessed in the following. 
-For this reason, the ranked popularity is defined in the same way as the ranked visibility. 
-To be precise, the ranked popularity is defined as the cumulative distribution function of the popularity in terms of flows. 
-Hence, a \gls{server socket} with a ranked popularity of 80\% signifies that there are 80\% of all \gls{server socket} with a lower or equal popularity as this specific socket.
+\subsubsection{Popularity and Stability}
 
-Figure \ref{fig:rankedPopularity} shows the \glspl{server socket} by their ranked popularity and their stability ratio. 
+Similarly to the visibility, the \glspl{server socket} characteristics of popularity and stability are briefly assessed in the following. 
+For this reason, figure \ref{fig:rankedPopularity} shows the \glspl{server socket} by their popularity quantiles and their stability. 
+Hence, a \gls{server socket} with a popularity quantile of 80\% signifies that there are 80\% of all \gls{server socket} with a lower or equal popularity as this specific socket.
+
+
 Similarly to figure \ref{fig:rankedVisibility}, the \glspl{server socket} tend to cluster in the top right corner of figure \ref{fig:rankedPopularity}. This indicates that popular sockets tend to have a good stability as well. \todo{CONCLUSION!}
 \begin{figure}
 	[ht] \centering 
@@ -198,24 +198,11 @@ Hence, some statements about the characteristics relative to all other sockets c
 Basically, figure \ref{fig:top20_ratio_box} shows a box-and-whisker plot of the stability ratio of the 20 most popular ports. 
 For most of the ports two box-plots are shown, one for \gls{UDP} in blue, and the other for \gls{TCP} in red. 
 A box-and-whisker plot indicated with a box the range from the first quartile to the third quartile, also denoted as hinges, thus indicating where 50\% of all sockets of this kind are located. 
-In the middle of the box, the median is illustrated by a black line. 
+In the box, the median is illustrated by a black line. 
 The whisker is connecting the hinges to the fences which represents the upper and lower extreme value. 
-Moreover, some (statistical) outliners below or above the fences are shown by black dots. 
-\todo{describe top 20 ports after getting new top 20 results for table}
-\begin{landscape}
-	\begin{figure}
-		[p] \centering 
-		\includegraphics[width=\linewidth]{images/top20_ratio_box.pdf} \caption{box-and-whisker plot of the availability / stability of the top 20 traffic port server sockets} 
-		\label{fig:top20_ratio_box} 
-	\end{figure}
-\end{landscape}
-\begin{landscape}
-	\begin{figure}
-		[p] \centering 
-		\includegraphics[width=\linewidth]{images/top20_visibility_box.pdf} \caption{box-and-whisker plot of visibility in days of the top 20 traffic port server sockets} 
-		\label{fig:top20_visibledays_box} 
-	\end{figure}
-\end{landscape}
+Moreover, some (statistical) outliners below or above the fences are shown by black dots. \todo{describe top 20 ports and reference table}
+
+
 \begin{table}
 	[ht] \centering 
 	\begin{tabular}
@@ -249,7 +236,21 @@ Moreover, some (statistical) outliners below or above the fences are shown by bl
 	\caption{Top 20 port / protocol aggregated sockets by number flows} 
 	\label{tab:top20_ports} 
 \end{table}
-\todo{do something with me..}
+
+\begin{landscape}
+	\begin{figure}
+		[p] \centering 
+		\includegraphics[width=\linewidth]{images/top20_ratio_box.pdf} \caption{box-and-whisker plot of the availability / stability of the top 20 traffic port server sockets} 
+		\label{fig:top20_ratio_box} 
+	\end{figure}
+\end{landscape}
+\begin{landscape}
+	\begin{figure}
+		[p] \centering 
+		\includegraphics[width=\linewidth]{images/top20_visibility_box.pdf} \caption{box-and-whisker plot of visibility in days of the top 20 traffic port server sockets} 
+		\label{fig:top20_visibledays_box} 
+	\end{figure}
+\end{landscape}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % FACT EVALUATION
@@ -259,7 +260,7 @@ Moreover, some (statistical) outliners below or above the fences are shown by bl
 In order to evaluate the effect of \gls{server socket} based traffic preselection, three known events were analyzed with the old port-based heuristic of \gls{FACT} as well as with the new \gls{server socket} based approach. 
 Then, the results are compared and the effect of the traffic preselection on the noise of results is discussed qualitatively.
 
-The three well known events which are used in this evaluation are already discussed in detail by \citet{SchatzmannPAM2011}. 
+Three well known events are used in this evaluation and are already discussed in detail by \citet{SchatzmannPAM2011}. 
 However, due to the lack of long enough data traces before each event which are required for detecting the \gls{server socket}, this evaluation relies on the detected \glspl{server socket} of data trace from the first week in November 2010. 
 Nevertheless, from an operational point of view it seems that \glspl{server socket} from November are representative for the three events from March, May, and August as well.
 
@@ -277,13 +278,15 @@ The iterative generation process takes the popularity into account as well.
 Again, the popularity is varied in 10\% steps as the visibility and stability. 
 Hence, this set generation process generates 1000 different \glspl{server socket} sets and determines their IP space coverage and the number of sockets per set.
 
-Since running \gls{FACT} on all three events is time and resource intensive, only 5 different sets are used with \gls{FACT} to evaluate their effects, so that \gls{FACT} is executed with all five sets on all three events. To compare the results from the socket based approach, \gls{FACT} is also executed with the old port-based heuristic approach. This results in 18 different executions of \gls{FACT}.
+Since running \gls{FACT} for all three events is time and resource intensive, only 5 different sets are used with \gls{FACT} to evaluate their effects, so that \gls{FACT} is executed with all five sets on all three events. To compare the results from the socket based approach, \gls{FACT} is also executed with the old port-based heuristic approach. This results in 18 different executions of \gls{FACT}.
 
 Table \ref{tab:ses_sets} provides a brief overview of the selected sets and the number of sockets contained in each set. 
-As previously mentioned, to simplify the comparison of the new \gls{server socket} approach with the old heuristic port-based approach, three of the five selected sets are generated from the second initial set, thus only including Port 80 \glspl{server socket}. In particular, set \emph{C} contains all external port 80 \glspl{server socket} and is thus the second initial set itself. 
+As previously mentioned, to simplify the comparison of the new \gls{server socket} approach with the old heuristic port-based approach, three of the five selected sets are generated from the first initial set, thus only including port 80 \glspl{server socket}. In particular, set \emph{C} contains all external port 80 \glspl{server socket} and is the first initial set. 
 By manual investigation of the evaluation of the generated port 80 sets, a visibility of 2 days and a stability of 90\% represented a good compromise between number of sockets and total network coverage. 
 This set is denoted as set \emph{E}. To better understand the effect of the stability on \gls{FACT}, set \emph{D} contains only a condition on the visible days, thus allowing to compare set \emph{D} and \emph{E} for deducing the effect of imposing a stability condition. 
-Furthermore, set \emph{A} is the first initial set, containing all detected \glspl{server socket}. Again by manual investigation and comparing the IP space coverage and the number of sockets of a set, a last set is chosen with conditions imposed on visibility, stability and popularity. Set \emph{B} represented a good compromise between IP space coverage and number of sockets by requiring a popularity of 0.3. This means that the 70\% most popular sockets in term of flows are selected and then reduced by their visibility and stability as in set \emph{D} and \emph{E} to simplify their comparison. 
+Furthermore, set \emph{A} is the second initial set, containing all detected \glspl{server socket}. 
+Again, by manual investigation and comparing the IP space coverage and the number of sockets of a set, a last set is chosen with conditions imposed on visibility, stability and popularity. 
+Set \emph{B} represented a good compromise between IP space coverage and number of sockets by requiring a popularity of 0.3. This means that the 70\% most popular sockets in term of flows are selected and then reduced by their visibility and stability. An additional constraint on the stability of set \emph{B} is that the variance of the stability of a socket have to be smaller than 0.1, therefore, the stability of the selected sockets is even more constrained than for set \emph{D} and \emph{E}.
 
 Set \emph{A} consists of all detected \glspl{server socket}, Set \emph{B} is restricted to those socket with a ranked popularity of at least 30\%, a visibility of 2 days and a minimal stability ratio of 90\% and a maximal variance of the stability of 0.1. 
 Hence, the set \emph{B} applies some limiting conditions on stability, visibility and popularity. 
@@ -296,7 +299,7 @@ Finally, set \emph{E} is imposing an additional condition on the stability of so
 	\begin{tabular}
 		{|c|c|c|c|c|c|} \hline \textbf{Socket Set} & \textbf{Ports} & \textbf{min. Stability} & \textbf{min. Visibility} & \textbf{min. Popularity} & \textbf{Sockets} \\
 		\hline \hline A & all & 0 & 0 & 0 & 1862389 \\
-		\hline B & all & 0.9 & 2 days & 0.3 & 320531 \\
+		\hline B & all & 0.9\tablefootnote{additionally restricted to those sockets with a smaller variance of the stability than 0.1} & 2 days & 0.3 & 320531 \\
 		\hline C & 80 & 0 & 0 & 0 & 602111 \\
 		\hline D & 80 & 0 & 2 days & 0 & 418912 \\
 		\hline E & 80 & 0.9 & 2 days & 0 & 384164\\
@@ -306,24 +309,26 @@ Finally, set \emph{E} is imposing an additional condition on the stability of so
 	\label{tab:ses_sets} 
 \end{table}
 
-Table \ref{tab:ses_sets_coverage} shows the network coverage of each set with respect to their IP space coverage. The IP space is given in absolute terms and relative to the total IP space announced via BGP that week. Moreover, there the IP space is also given in relative terms in reference to the maximum possible covered IP space of server sockets, denoted as \emph{reference} in table  \ref{tab:ses_sets_coverage}.
+Table \ref{tab:ses_sets_coverage} shows the network coverage of each set with respect to their IP space coverage
+\footnote{The covered IP space of FACT is calculated by the number of IP addresses of all prefixes containing at least one server socket of the set loaded into FACT}. 
+The IP space is given in absolute terms and relative to the total IP space announced via BGP that week. Moreover, the IP space is also given in relative terms in reference to the maximum possible covered IP space of a server socket set, denoted as \emph{reference} in table  \ref{tab:ses_sets_coverage}.
 
 As it can be seen in table \ref{tab:ses_sets_coverage}, \gls{FACT} is capable to observe almost 65\% of the announced IPv4 address space in November 2010. 
 Contrasting this high observation scope of IPv4 address space, only a very small partition of the IPv6 address space is observable. 
 A reason for this is, that the SWITCH backbone network was fully dual-stacked at that time, however, IPv6 traffic was in terms of flows almost negligible. Nonetheless, as IPv6 will continue to emerge in the next years, the IPv6 coverage will increase as well since the approach is not limited to IPv4 in any case. 
 
-Besides that, it is also remarkable that set \emph{B} achieves a higher \gls{IPv4} space coverage than all port 80 socket sets despite having less sockets contained in this set and imposing harder criteria on popularity, visibility and stability. 
+Besides that, it is also remarkable that set \emph{B} achieves a higher \gls{IPv4} space coverage than all port 80 socket sets despite having less sockets contained in this set and imposing harder criteria on popularity, and stability. 
 
 \begin{table}
 	[ht] \centering 
 	\begin{tabular}
 		{|c|c|r|r|r|r|r|} \hline \multirow{2}{*}{\textbf{Socket Set}} & \multicolumn{3}{|c|}{\textbf{IPv4 Space}} & \multicolumn{3}{|c|}{\textbf{IPv6 Space}} \\
-		\cline{2-7} & absolute & reference & relative\tablefootnote{The announced IPv4 address space of all announced BGP prefixes is 2320427389} & absolute & reference & relative\tablefootnote{The announced IPv6 address space of all announced BGP prefixes is $9.1196\cdot10^{33}$} \\
-		\hline A & 1509368214 & 100\% & 65.047\% &$3.7013\cdot10^{32}$ & 100\% & 4.059\% \\
-		\hline B & 1060083001 & 70.234\% & 45.685\% & $2.693\cdot10^{30}$ & 0.728\% & 0.030\% \\
-		\hline C & 1027865637 & 68.099\% & 44.296\%  & $1.629\cdot10^{31}$ & 4.401\% & 0.179\% \\
-		\hline D & 862625441 & 57.151\% & 37.175\% & $1.408\cdot10^{31}$ & 3.804\% & 0.154\% \\
-		\hline E & 831321169 & 55.077\% & 35.826\% & $8.804\cdot10^{30}$ & 2.379\% & 0.097\%\\
+		\cline{2-7} & absolute & reference & relative\tablefootnote{The announced IPv4 address space of all announced BGP prefixes is $2320427389$} & absolute & reference & relative\tablefootnote{The announced IPv6 address space of all announced BGP prefixes is $9.1196\cdot10^{33}$} \\
+		\hline A & $1509368214$ & $100\%$ & $65.047\%$ & $3.7013\cdot10^{32}$ & $100\%$ & $4.059\%$ \\
+		\hline B & $1060083001$ & $70.234\%$ & $45.685\%$ & $2.693\cdot10^{30}$ & $0.728\%$ & $0.030\%$ \\
+		\hline C & $1027865637$ & $68.099\%$ & $44.296\%$  & $1.629\cdot10^{31}$ & $4.401\%$ & $0.179\%$ \\
+		\hline D & $862625441$ & $57.151\%$ & $37.175\%$ & $1.408\cdot10^{31}$ & $3.804\%$ & $0.154\%$ \\
+		\hline E & $831321169$ & $55.077\%$ & $35.826\%$ & $8.804\cdot10^{30}$ & $2.379\%$ & $0.097\%$ \\
 		\hline 
 	\end{tabular}
 	\caption{Network coverage of the \gls{server socket} sets} 
@@ -333,22 +338,22 @@ Besides that, it is also remarkable that set \emph{B} achieves a higher \gls{IPv
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % EVENT 1: AMS-IX PARTITIONING
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Event 1: Partitioned Internet Exchange Point(IXP)}
+\subsection{Event 1: Partitioned Internet Exchange Point (IXP)}
 
 The IXP \citet{AMS-IX}(AMS-IX) performed on March 23, 2010 a scheduled maintenance. 
 When its connection to \citet{switch} came back, there was only a partial connectivity through this IXP, since some next-hops learned via their route servers were not properly reachable, thus traffic towards these networks was black-holed\citep{SchatzmannPAM2011}.
 
 In consequence, several internal clients of the \citet{switch} network were complaining about unreachable external services on the next morning. 
-Using classical debugging tools, it took more than four hours for fixing the problem by resetting a port.\citep{SchatzmannPAM2011}
+Using classical debugging tools, it took more than four hours for fixing the problem by resetting a port\citep{SchatzmannPAM2011}.
 
 \subsubsection{Heuristic Approach} This event is well visible by the classical \gls{FACT}, since there are quite a large number of affected users thus favoring the user aggregation approach of detecting relevant events. 
 Figure \ref{fig:AMS_IX_FACT_REF} shows the number of unreachable \gls{bgp} prefixes over time separated by the number of affected internal clients. 
-As previously outlined the user aggregation approach tries to prioritize severe events by determining the number of affected internal users. 
+The user aggregation approach prioritizes severe events by determining the number of affected internal users. 
 Hence, the severity of the events is indicated by the color of the unreachable prefixes in figure \ref{fig:AMS_IX_FACT_REF}. 
 To be precise, the pink area visualizes the number of unreachable prefixes affecting at least 10 distinct internal clients, the blue area respectively at least 5 distinct internal clients.
 
 This specific IXP partitioning event is clearly visible in figure \ref{fig:AMS_IX_FACT_REF} from 05.00 UTC to 08:15 UTC with almost 20 unreachable \gls{bgp} prefixes affecting more than 10 internal clients and almost 200 unreachable \gls{bgp} prefixes in total. 
-However, as discussed in chapter \ref{Introduction}, those unreachable prefixes affecting only 1 client are not reliable observations and are even representing a kind of observation noise. 
+However, as discussed in chapter \ref{Introduction}, those unreachable prefixes affecting only 1 or 2 clients are not reliable observations and are even representing a kind of observation noise. 
 \begin{figure}
 	[p] \centering 
 	\includegraphics[width=0.75\linewidth]{images/events/2010_03_25/bgp_log_port80_ref.eps} \caption{Event 1: Unreachable \gls{bgp} prefixes detected by the classical \gls{FACT} traffic preselection based on the port-based heuristic.} 
@@ -357,10 +362,10 @@ However, as discussed in chapter \ref{Introduction}, those unreachable prefixes 
 
 \subsubsection{Server Socket Approach}
 
-Firstly, \gls{FACT}s results of set \emph{C}, containing all detected port 80 \glspl{server socket} are inspected. 
+At first, \gls{FACT}'s results of set \emph{C} which contains all detected port 80 \glspl{server socket} are inspected. 
 This socket set can directly be compared to the old heuristic approach, since it monitors a majority of the legitimate traffic to port 80 as well. 
 
-As figure \ref{fig:AMS_IX_FACT_allSES80} shows, the real event lasting from 05.00 UTC to 08:15 UTC is clearly visible equally well as in the heuristic approach from figure \ref{fig:AMS_IX_FACT_REF}. 
+As figure \ref{fig:AMS_IX_FACT_allSES80} shows, the actual event lasting from 05.00 UTC to 08:15 UTC is clearly visible equally well as in the heuristic approach from figure \ref{fig:AMS_IX_FACT_REF}. 
 However, the \gls{server socket} based approach reduces the red part indicating the number of unreachable prefixes affecting only a single internal user by at least an order of magnitude. 
 Hence, the event is now clearly standing out of the \emph{background event detection noise} -- the green and red part of figure \ref{fig:AMS_IX_FACT_REF}. 
 
@@ -372,7 +377,7 @@ However, if also the stability is considered as by set \emph{E}, the red and gre
 
 If the \glspl{server socket} are not anymore artificially constrained to be a port 80 \gls{server socket} as in the case of set \emph{A} and \emph{B}, there is a clear increase of unreachable sockets visible in figure \ref{fig:AMS_IX_FACT_allSES} with all server sockets and even in figure \ref{fig:AMS_IX_FACT_popularVTS2STAB9}. 
 The original \gls{FACT} detects up to 30 unreachable prefixes with 10 or more internal users affected, \gls{FACT} with set \emph{A} and \emph{B} detect up to 112, respectively up to 72 distinct unreachable prefixes. 
-Remarkable is that the red and green part of figure \ref{fig:AMS_IX_FACT_allSES} and \ref{fig:AMS_IX_FACT_popularVTS2STAB9} are significantly lower than in the case of the original results from figure \ref{fig:AMS_IX_FACT_REF}. 
+Remarkable is that the red and green part of figure \ref{fig:AMS_IX_FACT_allSES} and \ref{fig:AMS_IX_FACT_popularVTS2STAB9} are significantly lower than in the case of the original results from figure \ref{fig:AMS_IX_FACT_REF} as well. 
 \begin{figure}
 	[p] \centering 
 	\includegraphics[width=0.75\linewidth]{images/events/2010_03_25/bgp_log_allPort80SES.eps} \caption{Event 1: Unreachable \gls{bgp} prefixes detected by the modified \gls{FACT} traffic preselection based on all port 80 \glspl{server socket}.} 
@@ -405,7 +410,7 @@ Remarkable is that the red and green part of figure \ref{fig:AMS_IX_FACT_allSES}
 \newpage 
 \subsection{Event 2: Reverse Path Traffic Black-holing}
 
-On May 18, 2010, the operators of the SWITCH network were assigned to investigate an reported issue that all services in an external /24 network were not accessible from the SWITCH network between 08:30 and 08:45 UTC. 
+On May 18, 2010, the operators of the SWITCH network were assigned to investigate a reported issue that all services in an external /24 network were not accessible from the SWITCH network between 08:30 and 08:45 UTC. 
 According to SWITCH, the problem was most likely due to an issue of an tier-1 provider which black-holed parts of the reverse traffic towards the SWITCH network\citep{SchatzmannPAM2011}.
 
 Unfortunately, the operators were neither able to tell how many internal users were affected nor how many external networks were unreachable during this period of time. 
@@ -476,8 +481,9 @@ These new kind of attributes uncovered and triggered a bug in some Cisco router 
 In particular, the announcements with the new attributes were corrupted by the Cisco routers and send to their peers. 
 Consequently, their peers detected the corruption and dropped the entire peering session\citep{ripe_duke}.
 
-\subsubsection{Heuristic Approach} Figure \ref{fig:RIPE_FACT_REF} shows the unreachable prefixes over time from August 26 2010 and August 27 2010. 
-The RIPE / DUKE BGP experiment is well visible in the results of \gls{FACT} from August 27 2010 08:50 UTC until 09:10 UTC with up to 3 unreachable prefixes affecting more than 10 internal users. 
+\subsubsection{Heuristic Approach} 
+Figure \ref{fig:RIPE_FACT_REF} shows the unreachable prefixes over time from August 26 2010 and August 27 2010. 
+The RIPE / DUKE BGP experiment is visible in the results of \gls{FACT} from August 27 2010 08:50 UTC until 09:10 UTC with up to 3 unreachable prefixes affecting more than 10 internal users. 
 
 The port-based heuristic approach of \gls{FACT} does report a high number of unreachable \gls{bgp} prefixes as unreachable affecting only one or two internal clients and showing a strong diurnal pattern thereof. 
 \begin{figure}
@@ -488,18 +494,18 @@ The port-based heuristic approach of \gls{FACT} does report a high number of unr
 
 \subsubsection{Server Socket Approach} 
 
-By comparing figure \ref{fig:RIPE_FACT_REF} with figure \ref{fig:RIPE_FACT_allSES80} it becomes obvious that the \gls{server socket} based approach of figure \ref{fig:RIPE_FACT_allSES80} reduces the red and green area by an order of magnitude without restrain the visibility of the real event shown in pink from 08:50 to 09:10 UTC. 
+By comparing figure \ref{fig:RIPE_FACT_REF} with figure \ref{fig:RIPE_FACT_allSES80} it becomes obvious that the \gls{server socket} based approach of figure \ref{fig:RIPE_FACT_allSES80} reduces the red and green area by an order of magnitude without restrain the visibility of the actual event shown in pink from 08:50 to 09:10 UTC. 
 The adjusted traffic selection of \gls{FACT} yields exactly the same unreachable prefixes as the original port-based heuristic approach. 
 Constraining set \emph{C} by the visible days of the sockets does not improve the noise reduction as figure \ref{fig:RIPE_FACT_allSES80VTS2} shows. 
-However, the number of sockets of set \emph{D} is reduced by around a third, thus allowing a faster processing.
+However, the number of sockets of set \emph{D} is reduced by around a third compared to set \emph{C}, hence allowing a faster processing.
 
 If as in case of set \emph{E} also the stability is considered, the noise is again reduced, although also at the cost of the event visibility. 
-As figure \ref{fig:RIPE_FACT_allSES80VTS2STAB9}, \gls{FACT} is detecting only 2 unreachable prefixes affecting more than 10 internal users and hence, clearly missing one unreachable prefix. 
+As figure \ref{fig:RIPE_FACT_allSES80VTS2STAB9} illustrates, \gls{FACT} detects only 2 unreachable prefixes affecting more than 10 internal users and hence, clearly missing one unreachable prefix. 
 
 On the contrary, if \gls{FACT} is using set \emph{A}, it is able to reveal almost up to 20 unreachable prefixes affecting more than 10 internal users. 
 Though, this comes at the cost of a even bigger red area than in case of the original port 80 based approach as it can be seen in figure \ref{fig:RIPE_FACT_allSES}. 
 Luckily, as figure \ref{fig:RIPE_FACT_popularVTS2STAB9} shows \gls{FACT} is able to detect up to 14 distinct unreachable prefixes even with the smallest socket set. 
-Moreover, also the noise is considerably reduced compared to the port 80 based approach shown in figure \ref{fig:RIPE_FACT_REF}.
+Moreover, the noise is considerably reduced compared to the port 80 based approach shown in figure \ref{fig:RIPE_FACT_REF}.
 \begin{figure}
 	[p] \centering 
 	\includegraphics[width=0.75\linewidth]{images/events/2010_08_27/bgp_log_allPort80SES.eps} \caption{Event 3: Unreachable \gls{bgp} prefixes detected by the modified \gls{FACT} traffic preselection based on all port 80 \glspl{server socket}.} 
@@ -531,19 +537,19 @@ Moreover, also the noise is considerably reduced compared to the port 80 based a
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage 
 \section{Results\label{section:results}} 
-Generally, \gls{FACT}s results of the \gls{server socket} approach are better with almost all sets compared to the port 80 based heuristic. 
+Generally, \gls{FACT}'s results of the \gls{server socket} approach are better with almost all sets compared to the classic port-based heuristic. 
 Though, there are significant differences between the results of the different \gls{server socket} sets. 
 
-On the one side, constraining the sockets to be port 80 is good for comparing with the original approach, practically its too restrictive and as the comparison of the coverage from table \ref{tab:ses_sets_coverage} shows there is a better coverage with even less sockets possible. 
+On the one side, constraining the sockets to be port 80 is good for comparing with the original approach, practically its too restrictive and as the comparison of the coverage from table \ref{tab:ses_sets_coverage} shows there is a better coverage with even less sockets possible. Hence, providing even a slightly better performance as well. 
 Thus, it is possible to get either a greater network visibility as well as a more diverse observation space. Especially in case of the RIPE/DUKE event, this produces a much better view of the event. 
 
-On the other side, constraining the sockets by their characteristics of visibility, stability and popularity allows to minimize the number of sockets removing unsuitable sockets for connectivity tracking and thus, reducing the noise of the network outage event detection.
+On the other side, constraining the sockets by their characteristics of visibility, stability and popularity allows to minimize the number of sockets by removing unsuitable sockets for connectivity tracking and thus, reducing the noise of the network outage event detection.
 
-From the five evaluated \glspl{server socket} sets set \emph{D} have the least \glspl{server socket}, but provides a great visibility without generating to much noise.
+Sets set \emph{D} containts the least \glspl{server socket}, but provides a great visibility without generating to much noise.
 Therefore, from the five evaluated sets, set \emph{D} is the best with respect to detection performance. 
 However, as described previously the sets are chosen by manually comparing the network coverage and number of sockets, and thus, there may be other even better sets with respect to the detection performance. 
 To find these sets the approach of selecting the sockets must be formally defined, e.g., as an optimization problem, and then adequately solved.
 
 To sum up, the newly proposed approach of selecting the reflector traffic with the help of \glspl{server socket} actually decreases the detection noise and even provides a better event visibility and sensibility.
-The performance of the approach is heavily influenced by the number of \glspl{server socket} which have to be considered during the generating of a good \gls{server socket} set.
+The performance of the approach is heavily influenced by the number of \glspl{server socket} which have to be considered during the generation of a good \gls{server socket} set.
 Furthermore, this approach allows to better control the observation capabilities of \gls{FACT}, e.g., by completely excluding certain, uninteresting parts of the Internet from the observation scope.
