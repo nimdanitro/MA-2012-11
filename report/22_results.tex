@@ -200,17 +200,18 @@ By aggregating all sockets by their protocol and port, some statistical insights
 Nonetheless, some useful information can be gained by comparing individual sockets with these port/protocol aggregated statistics of the same protocol and port. 
 Hence, some statements about the characteristics relative to all other sockets can be made.
 
-Basically, figure \ref{fig:top20_ratio_box} shows a box-and-whisker plot of the stability ratio of the 20 most popular ports. 
-For most of the ports two box-plots are shown, one for \gls{UDP} in blue, and the other for \gls{TCP} in red. 
-A box-and-whisker plot indicated with a box the range from the first quartile to the third quartile, also denoted as hinges, thus indicating where 50\% of all sockets of this kind are located. 
-In the box, the median is illustrated by a black line. 
-The whisker is connecting the hinges to the fences which represents the upper and lower extreme value. 
-Moreover, some (statistical) outliners below or above the fences are shown by black dots. \todo{describe top 20 ports and reference table}
+Table \ref{tab:top20_ports} shows the top 20 of all port and protocol aggregated sockets sorted by the total number of flows. Not surprisingly, UDP port 53 has the highest number flows during the observation period with around 46.68\% of all flows. 
+However, in terms of sockets, UDP port 53 has only a share of 17.56\%. 
+Not only with a total share of 32.32\% of all sockets, TCP port 80 is also with respect to number of flows dominating after UDP port 53. Furthermore, table \ref{tab:top20_ports} shows also some surprising results from the aggregation. 
+%For example, there are 11 distinct sockets running on TCP port 555 which attract the almost 0.5\% of all flows. This is quite likely to be a result from malware, since port 555 is used by some trojans. 
+It is interesting that also UDP port 123, officially assigned for \gls{NTP}, has a high number of flows, but only 318 external server sockets. Moreover, table \ref{tab:top20_ports} shows that the detection approach also manages to detect a high share of TCP high ports with a share of 37.21\% of all sockets and UDP high ports which are important with respect to the number of flows accounting for a share of 4.69\%.
 
 \begin{table}
 	[ht] \centering 
-	\begin{tabular}
-		{|c|r|r|r|r|r|r|} \hline \textbf{Position} & \textbf{Port} & \textbf{Protocol} & \textbf{Flows} &\textbf{ Flows in \%} & \textbf{Sockets} & \textbf{Sockets in \%}\\
+	\begin{tabular}{|c|r|r|r|r|r|r|} 
+		\hline 
+		\multirow{2}{*}{\textbf{Position}} & \multirow{2}{*}{\textbf{Port}} & \multirow{2}{*}{\textbf{Protocol}} & \multicolumn{2}{|c|}{\textbf{Flows}} & \multicolumn{2}{|c|}{\textbf{Sockets}} \\
+		\cline{4-7} & & &absolute & relative & absolute & relative \\
 		\hline \hline 1 & 53 & 17 & 1026787508 & 46.6799 & 327099 & 17.5634 \\
 		\hline 2 & 80 & 6 & 845917736 & 38.4572 & 602008 & 32.3245 \\
 		\hline 3 & 443 & 6 & 91197155 & 4.1460 & 67869 & 3.6442 \\
@@ -240,6 +241,22 @@ Moreover, some (statistical) outliners below or above the fences are shown by bl
 	\caption{Top 20 port / protocol aggregated sockets by number flows} 
 	\label{tab:top20_ports} 
 \end{table}
+Basically, figure \ref{fig:top20_ratio_box} shows a box-and-whisker plot of the stability of the 20 most popular ports. 
+For most of the ports two box-plots are shown, one for \gls{UDP} in blue, and the other for \gls{TCP} in red. 
+A box-and-whisker plot indicated with a box the range from the first quartile to the third quartile, also denoted as hinges, thus indicating where 50\% of all sockets of this kind are located. 
+In the box, the median is illustrated by a black line. 
+The whisker is connecting the hinges to the fences which represents the upper and lower extreme value. 
+Moreover, some (statistical) outliners below or above the fences are shown by black dots.
+
+Generally, it is important to see that there are indeed a high number of UDP sockets which are very stable. This is for example visible in figure \ref{fig:top20_ratio_box} for UDP 123, and UDP 53 which are both in the top 8 with respect to the number of flows.
+On the other side, as for example TCP 6005 shows there are also TCP sockets which are very unstable and thus not suitable for connectivity tracking at all. 
+
+
+Figure \ref{fig:top20_visibledays_box} shows number of visible days of the sockets in a box-and-whisker plot for the same top 20 port and protocol aggregated sockets. Remarkable are that an overwhelming share of UDP 123 sockets are visible on at least 4 days. Combining this insight with the insight on their stability most of the UDP 123 sockets may be very suitable for connectivity tracking. On the other side, almost all TCP port 22 sockets are visible only on a single day of the observation period. Hence, these TCP port 22 sockets are not suitable for connectivity tracking, despite the fact, that they are very stable as it can be seen in figure \ref{fig:top20_ratio_box}.
+
+\todo{describe top 20 ports and reference table}
+
+
 
 \begin{landscape}
 	\begin{figure}

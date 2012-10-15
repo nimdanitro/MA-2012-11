@@ -5,30 +5,37 @@
 The end-to-end connectivity of hosts is one of the key services of the Internet. However, even after 40 years of intense engineering efforts, this connectivity is temporally broken for various reasons, such as link or hardware failure \citep{Markopoulou:2008}, mis-configurations \citep{Mahajan:2002}, or natural disasters \citep{Dainotti:2012:EBH,Schulman:2011}. 
 
 % (Centrality Claim) Why do we care: Requires Troubleshooting Tools (TST) to minimize costs
-This shows that there is a real need for methods to systematically detect and locate Internet outages of remote autonomous systems, subnets, and even single hosts. This is particularly true for \gls{isp}, because time intensive debugging sessions and the support of customers complaining at the \gls{isp} for unreachable networks are generating costs for the \gls{isp}. Occasionally, a \gls{isp} is even contractually liable for unreachable networks within the scope of a \gls{sla}. Therefore, an automated, ongoing detection and tracking of connectivity issues of the Internet may generate transparent outage information for customers and enables the \gls{isp} to react adequately on a detected reachability problems if possible, for example by changing routes in case of a failure of a transit provider. 
+This shows that there is a real need for methods to systematically detect and locate Internet outages of remote autonomous systems, subnets, and even single hosts. 
+This is particularly true for \gls{isp}, because time intensive debugging sessions and the support of customers complaining at the \gls{isp} for unreachable networks are generating costs for the \gls{isp}. Occasionally, a \gls{isp} is even contractually liable for unreachable networks within the scope of a \gls{sla}. 
+Therefore, an automated, ongoing detection and tracking of connectivity issues of the Internet may generate transparent outage information for customers and enables the \gls{isp} to react adequately on detected reachability problems if possible, for example by changing routes in case of a failure of a transit provider. 
 
 % (What is missing) Introduce the gap that we plan to close: 
 Researchers and industrial vendors have proposed various approaches to systematically detect, locate and troubleshoot Internet outages resulting from the loss of end-to-end reachability. 
 
 % State clearly what is missing
-However, most of these approaches rely on \gls{control-plane} information such as \gls{bgp} routing messages or \gls{data-plane} information achieved by active probing. Both approaches are not perfectly suitable for practical usage.
+However, most of these approaches rely either on \gls{control-plane} information such as \gls{bgp} routing messages or \gls{data-plane} information achieved by active probing. Both approaches are not perfectly suitable for practical usage.
 % bash: control plane approaches & active probing approaches
-As shown by \citet{Bush:Optometry}, packets in the Internet do not necessarily follow the \gls{control-plane} due to default routes or other secret peering policies. Moreover, connectivity issues imposed by packet filtering cannot be tracked by \gls{control-plane} approaches \citep{Dainotti:2011:ACI}. Besides legal issues, active probing requires the cumbersomeness of target selection and significantly increases the load on Internet infrastructure. Furthermore, there is still no active approach which scales well enough for the entire \gls{IPv6} address space. Moreover, both approaches are unable to track which part of the Internet is currently actively used by their internal clients. This is required to determine the amount of affected internal clients and therefore to assess the urgency of the outage event. For example, as long as a connectivity issue occurs within an unused remote network, the operator can handle this event with low priority and fix more urgent problems first.
-To fill this gap, \citet{SchatzmannPAM2011} proposed the fully passive approach called \gls{FACT} relying on flow-level information to identify remote connectivity problems. The basic idea of \gls{FACT} is to match the corresponding outgoing and incoming flow to a bidirectional connection. Then, the remaining unidirectional connections or unresponsive connections are extracted and investigated. 
+As shown by \citet{Bush:Optometry}, packets in the Internet do not necessarily follow the \gls{control-plane} due to default routes or other secret peering policies.
+Moreover, connectivity issues imposed by packet filtering cannot be tracked by \gls{control-plane} approaches \citep{Dainotti:2011:ACI}. Besides legal issues, active probing requires cumbersome target selection and significantly increases the load on Internet infrastructure. 
+Furthermore, there is still no active approach which scales well enough for the entire \gls{IPv6} address space. 
+Both kinds of approaches are unable to track which part of the Internet is currently actively used by their internal clients. This is required to determine the amount of affected internal clients and therefore to assess the urgency of the outage event. For example, as long as a connectivity issue occurs within an unused remote network, the operator can handle this event with low priority and fix more urgent problems first.
+To fill this gap, \citet{SchatzmannPAM2011} proposed the completely passive approach called \gls{FACT} which relys on flow-level information to identify remote connectivity problems. The basic idea of \gls{FACT} is to match the corresponding outgoing and incoming flow to a bidirectional connection. Then, the remaining unidirectional connections or unresponsive connections are extracted and investigated. 
 
 The detection of an outage is consolidated by aggregating these unresponsive connections to host, network and \gls{AS} level and rating the severity of the events by the number of affected internal users. This consolidation is required to reduce the noise of unresponsive connections caused by scanning or botnets and implies an implicit prioritization of events which affect many internal network users.
 
-\citet{SchatzmanThesis2012} proposed to treat certain types of Internet services differently, because they do not require constant reachability. For example, Skype or BitTorrent applications that are often executed on client machines such as Desktops, Laptops, or Smartphones are likely to be reachable only for a limited time during a day.
-This characteristic is caused by the fact that these machines are often disconnected from the network to save power or due to mobility effects. However, this temporal unreachability is not noticed as a problem by end-users. 
+\citet{SchatzmanThesis2012} proposed to treat certain types of Internet services differently, because not all of them require constant reachability. 
+For example, Skype or BitTorrent applications that are typically executed on client machines such as Desktops, Laptops, or Smartphones are likely to be reachable only for a limited time during a day.
+This characteristic is caused by the fact that these machines are often disconnected from the network to save power or due to mobility effects. 
+However, in these cases the temporal unreachability is not noticed as a problem by end-users. 
 Therefore, issues of such client machine based services should not be treated the same way as server machine based services.
 
 Currently, \gls{FACT} does not differentiate the kind of service for tracking connectivity issues. This leads to the problem that client based services which are designed to be temporarily unavailable are in the worst case incorrectly interpreted as network outage. At the moment, \gls{FACT} is dealing with this problem by three different approaches.
 
-In a first step, \gls{FACT} monitors only traffic towards stable services. At the moment, this is heuristically defined by the traffic going to a remote \gls{TCP} port 80 traffic from an internal client high port, representing the assumption that this kind of traffic is destined for a legitimate and stable web server socket. This approach can be viewed as preselecting only the traffic destined for stable services.  
+In a first step, \gls{FACT} monitors only traffic towards stable services. At the moment, this is heuristically defined by the traffic going to a remote \gls{TCP} port 80 from an internal client high port, representing the assumption that this kind of traffic is destined for a legitimate and stable web server socket. This approach can be viewed as preselecting only the traffic destined for stable services.  
 
 Then, a network is only declared as unreachable if and only if all connection endpoints located in this network are not responding resembling a kind of network based traffic aggregation. 
 
-In addition, a detected network outage is rated by the number of internal users which are affected by this specific outage and thus prioritizing relevant network outages.
+In addition, a detected network outage is rated by the number of internal users which are affected by this specific outage such that more relevant network outages are prioritized.
 
 \begin{figure}
 	[ht] \centering
@@ -37,7 +44,7 @@ In addition, a detected network outage is rated by the number of internal users 
 	\label{fig:tcp_port80}
 \end{figure}
 
-However, by performing deep packet inspection \citet{SchatzmanThesis2012} has shown that the heuristic port based traffic preselection is not ideal, since a handful other applications are running on \gls{TCP}  port 80, presumably for firewall avoidance purposes. As shown in figure \ref{fig:tcp_port80}, the most relevant application running on \gls{TCP} port 80 -- besides \gls{HTTP} -- is Skype with a share of $7.2\%$ of all \gls{TCP} port 80 traffic. 
+However, by performing deep packet inspection \citet{SchatzmanThesis2012} has shown that the heuristic port based traffic preselection is not ideal, since a handful of other applications are running on \gls{TCP}  port 80, presumably for firewall avoidance purposes. As shown in figure \ref{fig:tcp_port80}, the most relevant application running on \gls{TCP} port 80 -- besides \gls{HTTP} -- is Skype with a share of $7.2\%$ of all \gls{TCP} port 80 traffic. 
 
 This \gls{TCP} port 80 based Skype traffic yields a completely different reachability characteristic. As shown by \citet{SchatzmanThesis2012}, there is a significantly higher amount of Skype \gls{TCP} port 80 sockets not reachable compared to \emph{normal} web server sockets of \gls{cdn} which is illustrated by figure \ref{fig:skype_traffic}. This exacerbates the reliable detection of network outages. 
 
@@ -48,39 +55,39 @@ This \gls{TCP} port 80 based Skype traffic yields a completely different reachab
 	\label{fig:skype_traffic}
 \end{figure}
 
-To this end, this thesis proposes a new type of traffic preselection which includes only traffic towards stable and reliable services. This is achieved by selecting traffic based on the past stability and popularity characteristics of remote services instead of the current heuristic port-based traffic preselection.
+This thesis proposes a new type of traffic preselection which includes only traffic towards stable and reliable services. This is achieved by selecting traffic based on the past stability and popularity characteristics of remote services instead of the current heuristic port-based traffic preselection.
 
-In detail, remote services are monitored and analyzed on longer time scales so that the deduced statistical information enables the characterization of the services. Consequently, only traffic towards sockets which are characterized as stable are monitored by \gls{FACT}. For example, a remote web server used only by few users that is often unreachable, e.g., due to testing or resource scarcity, should not be monitored by \gls{FACT}. In contrast, a popular content distribution host that was always reachable in the past is more relevant. 
+In more detail, remote services are monitored and analyzed on longer time scales such that the deduced statistical information enables the characterization of the services. Consequently, only traffic towards sockets which are characterized as stable are monitored by \gls{FACT}. For example, a remote web server used only by few users that is often unreachable, e.g., due to testing or resource scarcity, should not be monitored by \gls{FACT}. In contrast, a popular content distribution host that was always reachable in the past is more relevant. 
 
-To sum up, the overall goal of this thesis is to extend \gls{FACT} with a service monitoring and classification functionality to enhance the current rudimentary traffic preselection. In fact, this functionality allows \gls{FACT} to focus even better on relevant connectivity issues which are related to stable and popular services.
+To sum up, the overall goal of this thesis is to extend \gls{FACT} with a service monitoring and classification functionality to enhance the current rudimentary traffic preselection. This functionality allows \gls{FACT} to focus even better on relevant connectivity issues which are related to stable and popular services.
 
 
 \section{Related Work 
 \label{sec:related_work}}
-Due to the special interest of research and industrial vendors in the problem, there is a great effort done in the past. 
+Due to the special interest of research and industrial vendors in the problem, there was a great effort done in the past. 
 Generally, the related work with impact on this thesis can be separated into two thematically different topics.
-On the one hand, there is a lot of research done in the area of reachability tracking. 
-On the other hand, the topic of detecting network services is not only of interest for research and industry, but also for cyber criminals. 
+On the one hand, there has been a lot of research done in the area of reachability tracking. 
+On the other hand, the topic of detecting network services has not only been of interest for research and industry, but also for cyber criminals. 
 In the following, both topics are briefly covered. 
 
 \subsection{Reachability Tracking}
 
 % Connection Tracking (Active & Passive)
-Severe disruptions of the Internet's end-to-end connectivity is not a new phenomenon, there have been connectivity outages since its beginning as research project. 
-Despite that the end-to-end connectivity is a very basic service of the Internet, the Internet community has not a deeply founded understanding of the problems that causes its disruption \citep{Bush:Optometry}.
-\citet{Bush:Optometry} stated that a dominant share of researchers focussed on "pathological behavior related to the address space, e.g., bogon advertisements \citep{Feamster:2005}, prefix hijacking \citep{Zhang:2010}, \gls{bgp} misconfigurations \citep{Mahajan:2002} or \gls{DDoS} attacks \citep{Chen:2001}".
+Severe disruptions of the Internet's end-to-end connectivity are not a new phenomenon, there have been connectivity outages since its beginning as research project. 
+Despite that the end-to-end connectivity is a very basic service of the Internet, the Internet community has not a deeply founded understanding of the problems that causes its disruptions \citep{Bush:Optometry}.
+\citet{Bush:Optometry} stated that a dominant share of research focuses on "pathological behavior related to the address space, e.g., bogon advertisements \citep{Feamster:2005}, prefix hijacking \citep{Zhang:2010}, \gls{bgp} misconfigurations \citep{Mahajan:2002} or \gls{DDoS} attacks \citep{Chen:2001}".
 
 Basically, reachability can be viewed from two perspectives: \gls{data-plane} and \gls{control-plane} measurements. \citep{Feamster:2005,Zhang:2010,Mahajan:2002,Chen:2001} are mainly based on \gls{control-plane} information such as publicly available BGP data for deducing knowledge about reachability. 
 \citet{Bush:Optometry} pointed out that tracking \gls{data-plane} reachability with \gls{control-plane} information is heavily inaccurate due to the effect of secret peering policies, e.g., default routing. 
-These allow packets to reach their destination even when a route failed to propagate through the \gls{bgp} system. 
+These allow packets to reach their destination even when a route failes to propagate through the \gls{bgp} system. 
 \citet{Bush:Optometry} stated that even very basic \gls{data-plane} measurements
 produce better views on reachability than \gls{bgp} observations. 
-However, \gls{control-plane} based measurements are not limited to \gls{bgp} data, \citet{Markopoulou:2008} classified failures in a IP backbone network with \gls{is-is} information and tried to characterize these failures by layers as router, optical/link and maintenance. 
+However, \gls{control-plane} based measurements are not limited to \gls{bgp} data. \citet{Markopoulou:2008} classified failures in a IP backbone network with \gls{is-is} information and tried to characterize these failures by layers as router, optical/link and maintenance. 
 To sum up, \gls{control-plane} measurements of reachability are indirect and thus of limited practical usage for systematical reachability tracking approaches.
 
 In contrast, measurements of the \gls{data-plane} are direct and can be more accurate regarding end-to-end connectivity. 
 \Gls{data-plane} measurements can be divided into active probes and passive monitoring. 
-Whereas active probes generates additional traffic towards the observed address space of the Internet, passive monitoring relies mainly on the traffic of servers and clients of the network or the traffic towards them. 
+Whereas active probes generate additional traffic towards the observed address space of the Internet, passive monitoring relies mainly on the traffic of servers and clients of the network or the traffic towards them. 
 
 Active probing is widely used for end-to-end reachability problem detection, ranging from rudimentary debugging tools as ping \citep{PING}, paris traceroute \citep{traceroute}, or nmap \citep{Nmap} to highly sophisticated, automated
 outage detection tools as Hubble \citep{Katz:2008} or PlanetSeer \citep{Zhang:2004}. 
@@ -96,23 +103,23 @@ The future scalability of this approach -- especially with respect to \gls{IPv6}
 
 %_--- PASSIVE --
 Besides the big amount of different approaches using active probing, only few approaches are using passive monitoring for reachability tracking. 
-\citet{Dainotti:2011:ACI} presented an approach for an in-depth analysis of connectivity outages caused by political censorship by combining observations from \gls{bgp} data, \gls{data-plane} information as backscatter measurements of the UCSD network telescope, and active probing measurements from the Archipelago Measurement Infrastructure. 
+\citet{Dainotti:2011:ACI} presented an approach for an in-depth analysis of connectivity outages resulting from political censorship by combining observations from \gls{bgp} data, \gls{data-plane} information as backscatter measurements of the UCSD\footnote{University of California, San Diego} network telescope, and active probing measurements from the Archipelago Measurement Infrastructure. 
 Remarkable is their approach of (passively) monitoring of the unsolicited \gls{data-plane} traffic that shed light on Libya's attempts on deploying packet filters for enforcing the Internet censorship. 
-They concluded that this unsolicited and unwanted traffic captured by network telescopes may "illuminate many different types of macroscopic events, including but not limited to broad-scale packet-filtering-based censorship, which is not observable by \gls{bgp} data."\citep{Dainotti:2011:ACI}.
+\citet {Dainotti:2011:ACI} concluded that this unsolicited and unwanted traffic captured by network telescopes may "illuminate many different types of macroscopic events, including but not limited to broad-scale packet-filtering-based censorship, which is not observable by \gls{bgp} data."
 
 % evtl iatmon noch..
 %\citet{SchatzmannPAM2011} aim to detect reachability problem by passively monitoring \gls{data-plane} measurement and aggregate unresponsive connection attempts on network- and AS-level.
 \subsection{Service Detection} 
 
 % Service Detection (Active & Passive, completeness vs. scalability / importance)
-The discovery and characterization of services in the Internet is most successfully done on a massive scale, ironically not by researchers but by worms and other malware\citep{Chen:2007}. 
-Generally, service detection methods can mainly be grouped into two approaches: passive monitoring and active probing. 
-As \citet{Bartlett07b} pointed out, active probing is able to detect all visible and scannable services, which is thus invasive and legally constrained. 
+The discovery and characterization of services in the Internet is most successfully done on a massive scale, ironically not by researchers but by worms and other malware \citep{Chen:2007}. 
+Generally, service detection methods can be grouped into two basic approaches: passive monitoring and active probing. 
+As \citet{Bartlett07b} pointed out, active probing is able to detect all visible and scannable services, and is thus invasive and legally constrained. 
 On the other hand, passive monitoring is able to find transient services, but fails to detect idle services. 
-In their work, they compared the "accuracy of passive and active approaches to service discovery and showed that they are complimentary"\citep{Bartlett07b}. 
-They concluded that best results are achieved by combining a long lasting passive monitoring with multiple active scans, thus forming a hybrid approach\citep{Bartlett07b}. 
+In their work, \citet{Bartlett07b} compared the "accuracy of passive and active approaches to service discovery and showed that they are complimentary". 
+They concluded that best results are achieved by combining a long lasting passive monitoring with multiple active scans, thus forming a hybrid approach \citep{Bartlett07b}. 
 
-\citet{Leonard:2010} developed an Internet-wide service scanner called IRLscanner. 
+Also remarkable is the Internet-wide service scanner called IRLscanner developed by \citet{Leonard:2010}. 
 They designed their scanner to maximize politeness to remote networks by smartly choosing adequate scanning rates. 
 
 % Webster active / passive
