@@ -15,9 +15,9 @@ Finally, section \ref{section:results} briefly summarizes the main findings of t
 \label{section:data}}
 
 This evaluation relies on data collected at \citet{switch}, the Swiss National Research and Education Network (NREN). 
-Mainly government institutions, universities, research labs are connected to the Internet by \citet{switch}\citep{Schatzmann:Mining}.
+Mainly government institutions, universities, and research labs are connected to the Internet by \citet{switch} \citep{Schatzmann:Mining}.
 
-The \citet{switch} network is with approximately 250'000 network users in 2010 comparable with a mid sized \gls{isp}. Currently, there are around 2.4 million \gls{IPv4} addresses, a /32 IPv6 and a /40 \gls{IPv6} network announced via \gls{bgp}\citep{Schatzmann:Tracing}.
+The \citet{switch} network is with approximately 250'000 network users in 2010 comparable with a mid sized \gls{isp}. Currently, there are around 2.4 million \gls{IPv4} addresses, a /32 IPv6 and a /40 \gls{IPv6} network announced via \gls{bgp} \citep{Schatzmann:Tracing}.
 \begin{figure}
 	[ht] \centering 
 	\includegraphics[width=12cm]{images/network_overview.eps} \caption{Overview of the SWITCH network \citep{SchatzmanThesis2012}} 
@@ -25,11 +25,11 @@ The \citet{switch} network is with approximately 250'000 network users in 2010 c
 \end{figure}
 
 Figure \ref{fig:switch_nework} provides an overview of the SWITCH network. 
-Currently, SWITCH has 15 upstream and peering links and is capturing flow level data at all external interfaces of their border routers. From 2003 to 2008 \gls{netflow} version 5 has been used, and \gls{netflow} version 9 after 2008\citep{Schatzmann:Tracing}.
+Currently, SWITCH has 15 upstream and peering links and is capturing flow level data at all external interfaces of their border routers. From 2003 to 2008 \gls{netflow} version 5 has been used, and \gls{netflow} version 9 after 2008 \citep{Schatzmann:Tracing}.
 
-High traffic peak rates of more than 80'000 flows per second, 3 million packets per second and more than 20Gbit/s require hardware-based flow collection cards\citep{Schatzmann:Tracing}. 
-\gls{TCP} flags are not available in the flow-level information because of limitations of the used hardware components\citep{Schatzmann:Tracing}. 
-The generated flow data are collected and stored in a central data repository.
+High traffic peak rates of more than 80'000 flows per second, 3 million packets per second and more than 20Gbit/s require hardware-based flow collection cards \citep{Schatzmann:Tracing}. 
+\gls{TCP} flags are not available in the flow-level information because of limitations of the used hardware components \citep{Schatzmann:Tracing}. 
+The generated flow data is collected and stored in a central data repository.
 
 % briefly describe the Switch network and its topology..
 % traffic volume and netflow data unsampled!
@@ -40,7 +40,7 @@ The generated flow data are collected and stored in a central data repository.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\newpage
 \section{Analysis of Server Sockets in the Wild\label{section:analysis_in_wild}}
 
-This section covers an analysis of \gls{server socket} found during a week long data trace from 2010/11/01 00:00:00 UTC until 2010/11/06 00:49:00 UTC, thus covering mainly the first 5 working days in November 2010.
+This section covers an analysis of \glspl{server socket} found during a week long data trace from 2010/11/01 00:00:00 UTC until 2010/11/06 00:49:00 UTC, thus covering mainly the first 5 working days in November 2010.
 
 \subsection{Detected Server Sockets}
 
@@ -52,9 +52,9 @@ In detail, the connection cache was configured with a cache interval of 600 seco
 %to summarize all related unidirectional flow records into a single bidirectional flow record during an aggregation interval of 600s.
 After this caching step, the bidirectional flows are filtered by a fan-out filter implementing the idea of \citet{Allman:2007} to mitigate the effects of scanning and \gls{p2p} churn. 
 This fan-out filter is configured to require at least 4 unidirectional connections with a certain host as source and at least 2 times more unidirectional connections than bidirectional connections for classifying this host as a scanning host. 
-Previous work\citep{Schatzmann:Mining,Schatzmann:Dissection, Schatzmann:Tracing} has shown that these parameters are a good choice for efficiently mitigating the scanning noise so that the scanning spikes of the total traffic volume are successfully reduced.
+Previous work \citep{Schatzmann:Mining,Schatzmann:Dissection, Schatzmann:Tracing} has shown that these parameters are a good choice for effectively mitigating the scanning noise so that the scanning spikes of the total traffic volume are successfully reduced.
 
-Moreover, the noise filter is configured to filter all bidirectional \gls{TCP} flows with less than 3 packets in a single direction and bidirectional \gls{UDP} flows which are actually unidirectional flows and have 0 packet in a single direction.
+The noise filter is configured to filter all bidirectional \gls{TCP} flows with less than 3 packets in a single direction and bidirectional \gls{UDP} flows which are actually unidirectional flows and have 0 packet in a single direction.
 
 Furthermore, the \emph{server socket detector} is configured to extract sockets with a degree of 2 or higher as concentrators, thus requiring two independent connections to a \gls{server socket} within 600 seconds.
 
@@ -73,7 +73,7 @@ Hence, in total there are six possible combinations for the type of connection, 
 For easier comparison of each type of connection, figure \ref{fig:monitored_flows_by_type} shows the ratio of monitored and unmonitored flows by the direction.
 
 In figures \ref{fig:flows_by_type} and \ref{fig:monitored_flows_by_type}, there are two gaps visible around 2010/11/01 10:00 UTC and 2010/11/04 06:05 UTC. 
-These gaps result from missing flow records resulting from router reboots, collector outages, and storage failures\citep{Schatzmann:Mining}.
+These gaps result from missing flow records resulting from router reboots, collector outages, and storage failures \citep{Schatzmann:Mining}.
 \begin{figure}
 	[ht] \centering 
 	\includegraphics[width=\linewidth]{images/Flows_by_type_area_all_SeS.pdf} \caption{Number of flows over time by the type of connection with all detected server sockets} 
@@ -85,21 +85,21 @@ These gaps result from missing flow records resulting from router reboots, colle
 	\label{fig:monitored_flows_by_type} 
 \end{figure}
 
-Clearly, the dominating kind of flows are the bidirectional monitored flows represented by the red area in figure \ref{fig:flows_by_type}. 
+Clearly, the dominating kind of flows are the bidirectional monitored ones represented by the red area in figure \ref{fig:flows_by_type}. 
 Comparing this share with the bidirectional unmonitored flows represented by the hardly visible black area between the red and the green area, yields that the detection approach successfully detects a majority of the \glspl{server socket} from the bidirectional traffic. 
 This finding is even better visible on the bidirectional ratio of figure \ref{fig:monitored_flows_by_type}. 
-Depending on the time of the day, the monitoring ratio of the bidirectional flows is mainly between 90\% and 97\%. 
-The smaller monitoring ratios during night indicates that there is a higher share of unknown \glspl{server socket} active at night than during day. 
-A possible reason for pattern is that there are some \glspl{server socket} which are regularly contacted, although, only by very few clients so that these sockets get never more than one connection within 600 seconds. 
+Depending on the time of the day, the monitoring ratio of the bidirectional flows is in general between 90\% and 97\%. 
+The smaller monitoring ratios during night indicate that there is a higher share of unknown \glspl{server socket} active at night than during day time. 
+A possible reason for this pattern is that there are some \glspl{server socket} which are regularly contacted, although, only by very few clients so that these sockets get never more than one connection within 600 seconds. 
 Thus, these sockets are never detected as concentrators.
 
 Similarly, if the unidirectional outgoing flows are examined by looking at figure \ref{fig:monitored_flows_by_type}, the monitored flows have predominantly a high share of around 80\% to 90\% of all unidirectional outgoing flows. 
-Figure \ref{fig:flows_by_type} also reveals some high peaks which are probably scanning or backscatter effects which are well visible at November 03 in the night and in the afternoon by the green spikes. 
+Figure \ref{fig:flows_by_type} also reveals some high peaks which are probably scanning or backscatter effects, for instance the green spikes visible at November 03 in the night and in the afternoon. 
 However, these green peaks are categorized as monitored unidirectional outgoing flows. 
 Thus, they must involve at least one known \gls{server socket} either located external or internal.
 
-Finally, the unidirectional incoming flows are predominately unmonitored with around 80-97\% of unmonitored flows as it can be seen in figure \ref{fig:monitored_flows_by_type}. 
-The main reason for this contrast may be that the main part of this unidirectional incoming traffic consists of Internet background radiation \citep{Wustrow10,Pang04} resulting from malware or misconfiguration for example. 
+Finally, around 80-97\% of the unidirectional incoming flows are unmonitored with as shown in figure \ref{fig:monitored_flows_by_type}. 
+Most likely this unmonitored unidirectional incoming traffic consists of Internet background radiation \citep{Wustrow10,Pang04} for example resulting from malware or misconfiguration. 
 Nevertheless, this unidirectional incoming traffic is unimportant with respect to the scope of this thesis.
 
 To sum up, \glspl{server socket} tend to attract a majority of the observed connections, especially the bidirectional connections and the unidirectional connections which are important to the connectivity tracking. 

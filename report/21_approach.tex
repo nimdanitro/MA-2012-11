@@ -266,14 +266,14 @@ Generally, this also holds for \gls{p2p} applications as for example BitTorrent.
 If a connection attempt to a \gls{server socket} is answered by the \gls{server socket}, the connection is bidirectional, otherwise it is an unidirectional flow destined towards the \gls{server socket}.
 
 Thus, the overall stability \gls{server socket} or availability of its service can be approximated by the ratio of the bidirectional flows to all flows destined to this \gls{server socket}, i.e., the bidirectional and the unidirectional incoming. 
-This ratio is referred as a \gls{server socket} \textbf{stability} and is mathematically defined by equation \ref{eq:ratio}.
+This ratio is denoted as a \gls{server socket} \textbf{stability} and is mathematically defined by equation \ref{eq:ratio}.
 \begin{equation}
 	\text{Stability}(\text{Socket}_i) = \frac{\text{bidirectional flows}(\text{Socket}_i)}{\text{bidirectional flows}(\text{Socket}_i) + \text{unidirectional flows}_{in}(\text{Socket}_i)}
 	\label{eq:ratio}
 \end{equation}
 
-Hence, a \gls{server socket} with a stability of 1 does only have bidirectional connections and thus, replies to all connection attempts. 
-On the other side, a stability of 0 indicates that there are only connections attempts by client sockets, but the \gls{server socket} has never replied upon these requests. 
+A \gls{server socket} with a stability of 1 does only have bidirectional connections and thus, replies to all connection attempts. 
+On the other hand, a stability of 0 indicates that there are only connections attempts by client sockets, but the \gls{server socket} has never replied upon these requests. 
 Unidirectional outgoing connections from the \glspl{server socket} are indicating a client error or scanning activities of clients with spoofed (internal) source address which are not observed by the monitoring system. 
 Therefore, these unidirectional outgoing connections are not considered for determining the stability ratio at all.
 
@@ -281,7 +281,7 @@ Therefore, these unidirectional outgoing connections are not considered for dete
 
 % discrete time slots activities of a socket, per day, per 5min slot?
 % distribution is heavy-tailed, alot of sockets only rarely connected => due to scanning? due to malware?
-The monitoring process of the \glspl{server socket} is done passively, thus if a \gls{server socket} is visible in the flow-level data of a certain time period, the \gls{server socket} is active during that time. Hence, the visibility of a \gls{server socket} during a certain time interval $[t,t+\Delta{t}]$ is a binary measure, either inactive in case it is not visible or active in case it is visible in the data set. Equation \ref{eq:visibility} defines the visibility of a socket during the time interval $[t,t+\Delta{t}]$:
+The monitoring process of the \glspl{server socket} is done passively. Thus, if a flow originating from a \gls{server socket} is visible in the flow-level data of a certain time period, the \gls{server socket} is active during a time interval. Hence, the visibility of a \gls{server socket} during a certain time interval $[t,t+\Delta{t}]$ is a binary measure, either inactive in case it is not visible or active in case it is visible in the data set. Equation \ref{eq:visibility} defines the visibility of a socket during the time interval $[t,t+\Delta{t}]$:
 \begin{equation}
 	\text{Visibility}_t(\text{Socket}_i,t+\Delta{t}) = \left\{
 	\begin{array}{l l}
@@ -292,8 +292,8 @@ The monitoring process of the \glspl{server socket} is done passively, thus if a
 	\label{eq:visibility}
 \end{equation}
 
-In consequence, there are different granularities $\Delta{t}$ to define the visibility of a \gls{server socket}. On the one hand, the most fine-grained resolution is just the flow-level data cache export period $T_{exp}$. In most of the cases, this flow-level data cache export period $T_{exp}$ is set to 300 seconds. This most fine-grained resolution is referred to as the \emph{time slot} resolution, since the entire processing is based on such discrete data chunks, containing all flows active during this time period. 
-On the other hand, there are several more coarse-grained resolutions of the visibility possible. An obvious is resolution of a day, i.e., $\Delta{t} = 86400$s.
+In consequence, there are different granularities $\Delta{t}$ to define the visibility of a \gls{server socket}. The most fine-grain resolution is the flow-level data cache export period $T_{exp}$. In most cases, this flow-level data cache export period $T_{exp}$ is set to 300 seconds. This most fine-grain resolution is referred to as the \emph{time slot} resolution, since the entire processing is based on such discrete data chunks, which contains all active flows during this time period. 
+Several more coarse-grain resolutions of the visibility might be of interest. For instance a resolution of a day, i.e., $\Delta{t} = 86400$s, is obvious.
 
 Furthermore, the visibility of a \gls{server socket} can be extended from a single time period to the overall observation time, i.e., a week long trace, by summing up the individual visibilities of each time slot as shown in equation \ref{eq:visibility_sum}.
 
@@ -302,10 +302,11 @@ Furthermore, the visibility of a \gls{server socket} can be extended from a sing
 	\label{eq:visibility_sum}
 \end{equation}
 
-However, this summing approach exacerbate the comparison between different observations since it represents the visibility in absolute terms. 
-Therefore, an even better metric for the visibility of a \gls{server socket} is to average the individual $\text{Visibility}_t(\text{Socket}_i,t+\Delta{t})$ as outlined by equation \ref{eq:visibility_avg}.
-This normalizes the visibility to a value in the range between 0 and 1, representing the ratio of its visibility to the maximum visibility possible. 
-Thus, a value of 1 means that the socket is visible in every single time slot and a value of 0 that the socket was never active.
+However, this naive approach exacerbates the comparison between different observations since it represents the visibility in absolute terms. 
+Therefore, a better metric for the visibility of a \gls{server socket} is to normalize the $\text{Visibility}_t(\text{Socket}_i,t+\Delta{t})$ as outlined by equation \ref{eq:visibility_avg}.
+This ratio represents the average visibility of this socket in percent.
+%This normalizes the visibility to a value in the range between 0 and 1, representing the ratio of its visibility to the maximum visibility possible. 
+Thus, a value of 1 means that the socket is visible in every single time slot and a value of 0 that the socket is never active.
 
 \begin{equation}
 	\overline{\text{Visibility}}(\text{Socket}_i) = \frac{\sum_{t} \text{Visibility}_t(\text{Socket}_i,t+\Delta{t})}{\sum_{t}1}
@@ -315,7 +316,7 @@ Thus, a value of 1 means that the socket is visible in every single time slot an
 \subsection{Popularity of a Server Socket}
 
 % number of flows / clients?.. degree of Server Socket
-Besides the visibility of a \gls{server socket}, its popularity is another major key characteristics. 
+Besides the visibility of a \gls{server socket}, its popularity is another major key characteristic. 
 Whereas the visibility of a \gls{server socket} defines how frequent a socket is contacted by at least one connection endpoint, the popularity of a \gls{server socket} is defined by the number of connection attempts of client sockets during a certain period of time. 
 The popularity of \gls{server socket} can be deduced by various metrics such as the number of flows, bytes, or clients.
 
@@ -328,9 +329,9 @@ The popularity of \gls{server socket} can be deduced by various metrics such as 
 
 % explain briefly the approach / adjustments to FACT
 Originally, \gls{FACT} applies a port-based heuristic for selecting the  examination traffic.  
-In detail, \gls{FACT} selects in a first step all traffic towards an external  \gls{TCP} port 80 originated from an internal client high port. 
+In detail, \gls{FACT} selects in a first step all traffic towards an external  \gls{TCP} port 80 originating from an internal client high port. 
 Generally, this kind of traffic is denoted as the reflector traffic. 
-Then, \gls{FACT} examines each connection from the reflector traffic if it is  bidirectional or unidirectional, thus creating an initial set of potential events. 
+Then, \gls{FACT} examines each connection from the reflector traffic to determine if it is  bidirectional or unidirectional, thus creating an initial set of potential events of a loss of the end-to-end connectivity. 
 
 \begin{figure}
 	[!b] \centering
@@ -340,21 +341,21 @@ Then, \gls{FACT} examines each connection from the reflector traffic if it is  b
 \end{figure}
 
 In a second step, all potential events inferred by the reflector traffic are  double-checked with the remaining traffic if a potential event is indeed a  event. 
-Only if there are no successful connections at all, i.e., all connections are unidirectioanl, a host, network, or prefix is declared as unreachable. 
+Only if there are no successful connections at all, i.e., all connections are unidirectional, a host, network, or prefix is declared as unreachable. 
 Otherwise, if there is other traffic towards these hosts, networks, and prefixes with bidirectional connections, the potential event is obviously not confirmed and thus removed from the event list. 
 
 Since the \gls{server socket} approach aims to replace the port-based heuristic,  only the generation of the reflector traffic set must be adjusted. 
 The further processing steps remain exactly the same. 
 Figure \ref{fig:fact_chain} illustrates the \gls{FACT} processing chain and makes clear that only the block of the traffic selection must be adjusted to examine traffic towards \glspl{server socket} as reflector traffic. 
 This is achieved by loading the \gls{server socket} registry with a set of \glspl{server socket}. 
-Then, the adjusted traffic selection is querying the server socket registry if the external socket is a known \gls{server socket}. 
+Then, the adjusted traffic selection is querying the server socket registry to determine if the external socket is a known \gls{server socket}. 
 If this is the case, the flow is added to the reflector traffic, otherwise to the remaining traffic. 
 
 \subsection{Selecting Suitable Server Sockets Sets\label{section:ses_selection}}
 % outline that this is a optimization problem which is approximated by several 
 % socket sets however not guaranteed to be optimal
 % coverage network space / problem space 
-By adjusting the traffic selection of \gls{FACT} with \gls{server socket} sets,  some essential properties of \gls{FACT} as the observed network coverage or the event sensibility are directly dependent on properties of the chosen \gls{server socket} set. 
+By replacing the original the traffic selection of \gls{FACT} with \gls{server socket} sets,  some essential properties of \gls{FACT}, like the observed network coverage or the event sensibility are directly dependent on properties of the chosen \gls{server socket} set. 
 
 Because \gls{FACT} detects only network outage events which are firstly detected  with the reflector traffic and then not whitelisted by the remaining traffic, it  is able to detect only network outages of prefixes which have at least one known  server socket that is located in this prefix. This means that FACTs observation  coverage of networks is completely defined by the network/prefix coverage of the  chosen \gls{server socket} set. 
 
