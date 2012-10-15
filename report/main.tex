@@ -30,7 +30,8 @@
 \pagestyle{body}
 
 % Title page
-\input{10_title} \cleardoublepage
+\input{10_title}
+\cleardoublepage
 
 \setcounter{page}{1} 
 \pagenumbering{roman}
@@ -41,14 +42,21 @@
 %
 % Preface
 \input{17_preface.tex}
+\cleardoublepage
+
 
 %%% GLOSSARY %%%%
 \input{glossar.tex}
 \makeglossaries
+
+\begingroup
+\let\clearpage\relax
 \printglossary
 \printglossary[type=\acronymtype,style=long3col]
+\endgroup
 
 \tableofcontents
+
 \cleardoublepage
 
 % Content
@@ -84,7 +92,7 @@
 \input{90_bib.tex}
 
 \input{99_eigsterkl.tex}
-
+\cleardoublepage
 \end{document}
 
 %%% Local Variables:

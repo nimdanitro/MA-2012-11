@@ -3,16 +3,16 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % GLOSSAR
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% control-plane
-\newglossaryentry{control-plane}{
-	name=control-plane,
-	description={}
-}
-
 % data-plane
 \newglossaryentry{data-plane}{
 	name=data-plane,
-	description={}
+	description={is the responsible part of a router which decides what to do with individual packets. Most commonly this is done by looking up a delivery rule with the most specific match of the packets destination address}
+}
+
+% control-plane
+\newglossaryentry{control-plane}{
+	name=control-plane,
+	description={is the part of a router responsible for participating in one or more routing systems and extracting information from these systems, such that data-plane delivery rules can be generated from these information}
 }
 
 
@@ -27,10 +27,21 @@
 	description={is a network protocol for collecting IP traffic information and was originally developed by Cisco Systems}
 }
 
+\newglossaryentry{socket}{
+	name={socket},
+	description={A socket is uniquely defined by the triple (\textbf{IP address}, \textbf{IP protocol number} and \textbf{protocol port number}). In this context, a socket is only defined for IP protocol TCP(6) and UDP(17)}
+	plural={sockets},
+}
+
 \newglossaryentry{server socket}{
 	name={server socket},
-	description={is a socket with a process listening to incoming connections and thus offering a network service.}
+	description={A server socket is a \gls{socket} with at least one process listening to incoming connections and thus offering a network service. The lifetime of a server socket is not restricted to individual connections, but by the lifetime of the network service}
 	plural={server sockets},
+}
+
+\newglossaryentry{fact_gls}{
+	name={Flow-based Approach for Connectivity Tracking},
+	description={is a passive approach for detecting remote network outages by accounting unresponsive outgoing connections, proposed by \citet{SchatzmannPAM2011}}
 }
 
 
@@ -55,7 +66,7 @@
 \newacronym{is-is}{IS-IS}{Intermediate System to Intermediate System Protocol}
 
 % FACT
-\newacronym{FACT}{FACT}{Flow-based Approach for Connectivity Tracking}
+\newacronym{FACT}{FACT}{\Gls{fact_gls}}
 
 % NAT
 \newacronym{nat}{NAT}{network address translation}

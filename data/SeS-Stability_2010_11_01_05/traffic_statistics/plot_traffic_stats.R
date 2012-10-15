@@ -14,8 +14,9 @@ flow_stats <- rbind(
 # add a human readable date for the plot
 flow_stats$Date <- as.POSIXct(flow_stats$time, origin="1970-1-1")
 
+cbPalette <- c("#FF3300", "#000000", "#20C22A" , "#007FFF", "#E54CFF", "#9100E5")
 #create the flow by Type plot
-p <- ggplot(flow_stats, aes(Date, Flows, fill=Type)) + geom_area()
+p <- ggplot(flow_stats, aes(Date, Flows, fill=Type)) + geom_area() + scale_fill_manual(values=cbPalette) + theme_update(legend.position="top")
 # For labeling the axis use scale_y_continuous(name="Flows by Type")
 ggsave(file="Flows_by_type_area.pdf",width=12, height=8,dpi=300)
 p <- ggplot(flow_stats, aes(Date, Flows, color=Type)) + geom_line()
