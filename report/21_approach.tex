@@ -5,7 +5,7 @@
 To achieve the goal of enhancing the traffic preselection of \gls{FACT} with knowledge about the past stability and popularity characteristics, the following three steps are planned for extending \gls{FACT} as illustrated in figure  \ref{fig:FACT}.
 
 In a first step, a network service detector (server socket detector) is  implemented. 
-The challenge of the network service detection lies in the fact that the flow-level data does not provide enough precise timing information to determine which flow is originated from the client abd thus making it impossible to deduce the server's socket \citep{Schatzmann:Tracing}. 
+The challenge of the network service detection lies in the fact that the flow-level data does not provide enough precise timing information to determine which flow is originated from the client and thus making it impossible to deduce the server's socket \citep{Schatzmann:Tracing}. 
 Therefore, the network service detection is achieved by the assumption that network services offered by servers act as concentrators in the sense that several clients have connections to this specific service. 
 This approach bases on the work shown in \cite{Schatzmann:Dissection, Schatzmann:Mining, Schatzmann:Tracing} and is discussed in more detail in section \ref{section:socket_detection}.
 
@@ -16,7 +16,8 @@ This approach bases on the work shown in \cite{Schatzmann:Dissection, Schatzmann
 	\label{fig:FACT} 
 \end{figure}
 
-In a second step, the previously detected network services are continuously  monitored. To provide information about the successful and unsuccessful connection attempts are recorded by a network service monitoring engine (server socket tracker). This is covered in depth in section \ref{section:socket_tracking}.
+In a second step, the previously detected network services are continuously  monitored. 
+To provide information about the successful and unsuccessful connection attempts, a network service monitoring engine (server socket tracker) inspects all traffic towards these network services. This is covered in depth in section \ref{section:socket_tracking}.
 Furthermore, these monitoring metrics are then used to statistically characterize the network services by their visibility, popularity and stability as further outlined in section \ref{section:characterization}.
 
 In a third step, FACT is extended to use these server sockets to smartly preselect the traffic which should be monitored. 
@@ -24,9 +25,9 @@ This adaption is explained in section \ref{section:ses_traffic_selection}.
 By choosing a set of suitable network services, \gls{FACT}'s sensibility to events and the observation coverage can be increased. 
 However due to performance reason, the number of network services which are observed by \gls{FACT} have to be reduced. 
 To this end, the properties of these observation sets are assessed, because they influence the observation capabilities of \gls{FACT}. 
-Particularly, the sets' Internet address space coverage is a crucial property. 
+Particularly, the set's Internet address space coverage is a crucial property. 
 With respect to FACT's goal of detecting remote network outages, it makes for example no sense to select only the most popular sockets if they are all located in the same network. 
-Section \ref{section:ses_selection} is briefly addressing this problem.
+Section \ref{section:ses_selection} is briefly discussing this problem.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % SERVER SOCKETS
@@ -72,14 +73,16 @@ Despite of the use of the term \emph{server}, definition \ref{def:serversocket} 
 \label{section:socket_detection}}
 
 % problem of detection with flow-level information (timing issue + flags)
-Basically, a \gls{server socket} can be identified due to the fact that a client opens a socket which initiates a connection to a \gls{server socket}. Usually, a \emph{client socket} port is chosen at random by its operating system and the \gls{server socket} port is statically allocated over the lifetime of network service process. Moreover, on each host a socket can only be assigned to one specific process per instance\footnote{Socket sharing techniques are not considered, because from a network point of view they are not of interest.}, i.e., can an application initialize a connection to a server socket and opens therefore a client socket, or a \glspl{server socket} network application is waiting for client connections on a specific socket. Otherwise, a socket-in-use-error is issued by the operating system \citep{Schatzmann:Dissection}.
+Basically, a \gls{server socket} can be identified due to the fact that a client opens a socket which initiates a connection to a \gls{server socket}. Usually, a \emph{client socket} port is chosen at random by its operating system and the \gls{server socket} port is statically allocated over the lifetime of network service process. Moreover, on each host a socket can only be assigned to one specific process per instance\footnote{Socket sharing techniques are not considered, because from a network point of view they are not of interest.}, i.e., an application can initialize a connection to a server socket and opens therefore a client socket, or a \glspl{server socket} network application is waiting for client connections on a specific socket. Otherwise, a socket-in-use-error is issued by the operating system \citep{Schatzmann:Dissection}.
 
-A straight-forward approach for detecting \glspl{server socket} is to infer the initiator of the connection by the timing information and determine its opposite as the \gls{server socket}. However, this approach requires a perfect time synchronization of all flow exporting devices across the network. In practice, this can be hardly achieved in a satisfactory and reliable way so that all occurring timing errors are corrected as shown by \citet{Trammell}.
+A straight-forward approach for detecting \glspl{server socket} is to infer the initiator of the connection by the flow timing information and determine its opposite as the \gls{server socket}. 
+However, this approach requires a perfect time synchronization of all flow exporting devices across the network. This is particularly true if there are asymmetric routes possible, such that packets can are recorded by several border routers.
+In practice, this can be hardly achieved in a satisfactory and reliable way so that all occurring timing errors are corrected as shown by \citet{Trammell}.
 
 % connection graph idea... +image
 Besides the classification method based on well known ports, \citet{Schatzmann:Mining,Schatzmann:Dissection,Schatzmann:Tracing} proposed a heuristic, greedy approach for detecting \glspl{server socket} with flow-level data. The central idea of this approach is to build a bipartite communication graph, assuming that server sockets act as concentrators, and then to greedily solve a minimum vertex cover problem for extracting concentrators.
 
-A bipartite connection graph as shown in figure \ref{fig:bipartite_graph}  consists of nodes, where each represents an unique socket. If a bidirectional connection between two sockets is observed, an undirected, unweighted edge between the corresponding two nodes is assigned. This means that neither the direction nor the weight in terms of packets or bytes are required to build the connection graph.
+A bipartite connection graph as shown in figure \ref{fig:bipartite_graph}  consists of nodes, where each node represents an unique socket. If a bidirectional connection between two sockets is observed, an undirected, unweighted edge between the corresponding two nodes is assigned. This means that neither the direction nor the weight in terms of packets or bytes are required to build the connection graph.
 
 \begin{figure}
 	[h] \centering
@@ -89,7 +92,12 @@ A bipartite connection graph as shown in figure \ref{fig:bipartite_graph}  cons
 
 Since \glspl{server socket} provide a network application or service, they are likely to be contacted by several clients depending on their popularity. To this end, a socket which is contacted by a certain amount of client sockets and thus has a high degree in the connection graph is defined to be a concentrator. These concentrators are likely to offer network services and are thus \glspl{server socket}. This approach is able to detect \glspl{server socket} which are offering not only classical client-server services running on well known ports, such as web, \gls{FTP}, or \gls{SSH}, but also \gls{p2p} applications such as for example Skype and Bit-torrent super-nodes.
 
-Extracting the concentrators form the bipartite connection graph is basically a minimum vertex cover problem which can be solved by the greedy algorithm outlined in algorithm \ref{alg:service_tracing_ss-detection}. Generally, this algorithm creates two lists for each side of the graph, one list for the internal sockets and the other for the external list. Both lists are sorted by the connection degree of the sockets. Then, the list higher degree is selected and the highest degree sockets are iteratively declared as concentrators and removed so that also all edges to other sockets are removed. Then, the lists are accordingly updated. This is done as long as there are sockets with higher degrees than $deg_{lim}$. 
+Extracting the concentrators form the bipartite connection graph is basically a minimum vertex cover problem which can be solved by the greedy algorithm outlined in algorithm \ref{alg:service_tracing_ss-detection}. 
+Generally, this algorithm creates two lists for each side of the graph, one list for the internal sockets and the other for the external. 
+Both lists are sorted by the connection degree of the sockets. 
+Then, the list with the higher degree is selected and their highest degree sockets are iteratively declared as concentrators and removed so that also all edges to other sockets are removed. 
+After this step, both lists and their nodes are accordingly updated, especially all degrees of the remaining nodes. 
+Then, the algorithm is repeated as long as there are nodes with higher degrees than $deg_{lim}$. 
 
 % introduce minimal vertex cover problem
 % greedy algorithm to solve mvcp
@@ -125,7 +133,7 @@ Extracting the concentrators form the bipartite connection graph is basically a 
 \end{figure}
 
 \subsection{Implementation}
-Figure \ref{fig:detection_chain} illustrates the processing steps of the complete detection chain. The data parser is responsible to read the netflow data either in NetFlow v5 or NetFlow v9 format. These unidirectional flow records are then preprocessed by different blocks. While the input validator is performing some basic sanity checks of the flow data, the preprocessing filters are reducing the number of flows to the required kind of flow data.The border filter is removing all flow records not generated by a border router interface to efficiently prevent duplicate flow records. Then, the In-Out filter is removing all non cross-border traffic, i.e., transit traffic (external to external) or entirely internal traffic (internal to internal). Finally, the IP blacklist filter is removing traffic towards blacklisted IP addresses or networks.
+Figure \ref{fig:detection_chain} illustrates the processing steps of the complete detection chain. The data parser is responsible to read the flow data either in the format of \gls{netflow} version 5 or \gls{netflow} version 9. These unidirectional flow records are then preprocessed by different blocks. While the input validator is performing some basic sanity checks of the flow data, the preprocessing filters are reducing the number of flows to the required kind of flow data.The border filter is removing all flow records not generated by a border router interface to efficiently prevent duplicate flow records. Then, the In-Out filter is removing all non cross-border traffic, i.e., transit traffic (external to external) or entirely internal traffic (internal to internal). Finally, the IP blacklist filter is removing traffic towards blacklisted IP addresses or networks.
 
 After the preprocessing, the unidirectional flows are handed to the connection cache. This connection cache is responsible for merging all related unidirectional flow record into a single bidirectional flow record during a certain caching interval. 
 Two unidirectional flows are related if the source socket of one flow record match the destination socket of another flow record and vice-versa\citep{Schatzmann:Tracing}. If there is for an unidirectional flow record no other related unidirectional flow, the flow is also transformed into a bidirectional flow. Although, this bidirectional flow consists only of a single direction. All the subsequent processing is done with bidirectional flow records which may be of unidirectional nature. 
@@ -134,7 +142,7 @@ Furthermore, since the subsequent data processing is clock-based, a caching peri
 After this caching step, the bidirectional flows are filtered by a fan-out filter which implements the idea of \citet{Allman:2007} to mitigate the negative effects of scanning and \gls{p2p} churn on the detection approach. This scanning filter is discussed in more detail by \citet{Schatzmann:Mining,Schatzmann:Dissection,Schatzmann:Tracing}.
 
 Afterwards, the remaining bidirectional flow records are again reduced by the noise filter. This last filtering module is responsible to filter bidirectional flow records which do not represent an actual bidirectional connection. A correct bidirectional connection is simply defined as either a correct \gls{TCP} handshake or a reply flow as in case of \gls{UDP}. Hence, the approach of deducing correct connections is to investigate the number of packets for each direction of the bidirectional flow record, i.e., the outgoing and the incoming flow record, since there are only cross-border flows remaining due to the In-Out filter. 
-If a bidirectional \gls{TCP} flow has in a single direction less than 3 packets, the filter assumes that this flow does not represent a correct connection and is removing this record. Accordingly, a bidirectional \gls{UDP} flow is required to consist of at least 1 packet for each direction. 
+If a bidirectional \gls{TCP} flow has in a single direction less than 3 packets, the filter assumes that this flow does not represent a correct bidirectional connection and is removing this record. Accordingly, a bidirectional \gls{UDP} flow is required to consist of at least 1 packet for each direction. 
 
 After these filtering steps, the remaining bidirectional flows are passed to the \emph{server socket detector} which is finally performing the \gls{server socket} detection approach previously discussed. 
 Generally, the \emph{server socket detector} is built from two main parts. On the one side, there is the \emph{server socket registry} which is containing all already known \glspl{server socket}. 
@@ -162,7 +170,7 @@ Generally, during the monitoring steps all required information for characterizi
 
 To this end, all flows originating from a \gls{server socket} or flows which are destined to \glspl{server socket} are monitored for compiling these \gls{server socket} statistics. In contrast to the detection approach, all flows towards a known \gls{server socket} have to be considered, since they must be accounted into the statistics.
 
-The flow-level data is usually discretely slotted by chunks of size of the export period $T_{exp}$. Therefore, \gls{server socket} statistics records can be accounted on a time slot basis as well. A \gls{server socket} statistics record contains the following information per time slot:
+The flow-level data is usually discretely slotted into data bins of size of the export period $T_{exp}$. Therefore, for each \gls{server socket} a time series statistics record can be created. In detail, such a \gls{server socket} time series statistics record contains the following information:
 \vbox{
 \begin{itemize}
 	\item number of bidirectional connections
@@ -171,7 +179,7 @@ The flow-level data is usually discretely slotted by chunks of size of the expor
 \end{itemize}
 }
 
-In a second step, the statistics records of each discrete time slot can be aggregated in such a way that the information about the activity within a certain time slot is kept. Thus, the overall \gls{server socket} statistics record contains the following entries:
+In a second step, these gls{server socket} time series statistics record can be aggregated in such a way that the information about the activity within a certain time slot is kept. Thus, such a aggregated gls{server socket} time series statistics record contains the following entries:
 
 \vbox{
 \begin{itemize}
@@ -186,7 +194,10 @@ In a second step, the statistics records of each discrete time slot can be aggre
 
 \subsection{Traffic Statistics}
 
-Besides the individual \gls{server socket} statistics report, overall traffic statistics are accounted as well. This allows to deduce knowledge of how good the monitoring capability of the \glspl{server socket} is. For this reason, each flow which belongs to a \gls{server socket} and is present in the \emph{server socket registry} is denoted as monitored. Hence, flows which do not belong to a \gls{server socket} are accounted as not monitored.
+Besides the individual \gls{server socket} statistics, overall traffic statistics are accounted as well. 
+This allows to deduce knowledge of how good the monitoring capability of the \glspl{server socket} is. 
+For this reason, each flow which belongs to a \gls{server socket} and is present in the \emph{server socket registry} is denoted as monitored. 
+Otherwise, flows which do not belong to a \gls{server socket} are accounted as not monitored.
 
 Moreover, all unmonitored flows can be further analyzed to gain a better understanding of the type of this unmonitored traffic. This can be done on one of the following three scopes:
 \begin{itemize}
@@ -197,11 +208,15 @@ Moreover, all unmonitored flows can be further analyzed to gain a better underst
 
 Since \glspl{server socket} are only defined for protocol \gls{TCP} and \gls{UDP}, all flows with another protocol are per definition unmonitored. The first scope captures statistics about these flows.
 
-In a second step, there are statistics generated for all unmonitored \gls{TCP} or \gls{UDP} flows. There are various reasons for unmonitored flows, mainly related to the detection approach outlined in section \ref{section:socket_detection}. 
-In most of the cases, the sockets are not contacted by enough clients, therefore, they are not detected as concentrators and in consequence of that not recognized as \glspl{server socket}. 
-Furthermore, scanning activity is also a major contributor to these unmonitored flows, since scanning traffic and other non-legitimate traffic is removed before the \gls{server socket} detection is performed. Consequently, these scanned sockets are not detected as \glspl{server socket}, in case there is no legitimate traffic towards these sockets. Nevertheless, scanning traffic is considered in this monitoring phase as well.
+In a second step, there are statistics generated for all unmonitored \gls{TCP} or \gls{UDP} flows. 
+There are various reasons for this kind of unmonitored flows, mainly related to the detection approach outlined in section \ref{section:socket_detection}. 
+In most cases, the sockets are not contacted by enough clients, therefore, they are not detected as concentrators and in consequence of that not recognized as \glspl{server socket}. 
+Furthermore, scanning activity is also a major contributor to these unmonitored flows, since scanning traffic and other non-legitimate traffic is removed before the \gls{server socket} detection is performed. 
+Consequently, these scanned sockets are not detected as \glspl{server socket}, in case there is no legitimate traffic towards these sockets. 
+Nevertheless, scanning traffic is considered in this monitoring phase as well.
 
-On the one hand, there is the possibility to account for each port of the unmonitored flows which leads to very detailed statistical information about missed sockets. However, this comes at the price of an inefficient processing and higher memory usage.
+On the one hand, there is the possibility to account for each port of the unmonitored flows which leads to very detailed statistical information.
+However, this comes at the price of an inefficient processing and higher memory usage.
 
 On the other hand, the flows can be categorized by port ranges. In the thesis at hand, there are just two ranges defined for this categorization:
 
@@ -221,13 +236,15 @@ These categories are further divided by the location of the socket (either inter
 \end{itemize}
 }
 
-All these general traffic statistics allow to deduce insights about the properties of the detection process by learning what is missed. Moreover, they are revealing information about the properties of the current \gls{server socket} set with respect to traffic representation and thus about some properties of this set.
+All these general traffic statistics allow to deduce insights about the properties of the detection process by learning what is missed. 
+Moreover, they reveal information about the properties of the current \gls{server socket} set with respect to traffic representation and thus about some properties of this set.
 
 \subsection{Implementation}
 
-Figure \ref{fig:monitoring_chain} shows the modular implementation of the \gls{server socket} monitoring chain. Comparing the monitoring chain to the detection chain from figure \ref{fig:detection_chain} it is clearly visible that the modules up to the bidirectional connection cache are shared. 
-However, in the monitoring chain there are no fan-out filter and noise filter applied. T
-his is because every traffic destined to a \gls{server socket} should be considered, therefore, no bidirectional flow records are filtered before accounting them. 
+Figure \ref{fig:monitoring_chain} shows the modular implementation of the \gls{server socket} monitoring chain. Comparing the monitoring chain with the detection chain from figure \ref{fig:detection_chain}, it is clearly visible that the modules up to the bidirectional connection cache are shared. 
+However, in the monitoring chain there are no fan-out filter and noise filter applied. 
+This is because every traffic destined to a \gls{server socket} should be considered.
+Therefore, no bidirectional flow records are filtered before accounting them. 
 The \emph{server socket monitor} is accounting the general traffic statistics as well as the individual \gls{server socket} statistics.
 
 First of all, the bidirectional flow records are separated into those belonging to a known \gls{server socket}, denoted as monitored traffic, and those not belonging to known \gls{server socket}, denoted as unmonitored traffic. To be more precise, this is done by querying the \emph{server socket registry} which is loaded with previously detected \glspl{server socket}. Then, the traffic monitor investigates the monitored and unmonitored traffic for generating the overall traffic statistics.
@@ -257,18 +274,18 @@ The main interest of this thesis is to characterize \glspl{server socket} by the
 \end{itemize}
 }
 
-These three characteristics are directly deducible from the statistics observed by the passive monitoring technique outlined in \ref{section:socket_tracking}. In the following, the three characteristics are briefly discussed.
+These three characteristics are directly deducible from the statistics observed by the passive monitoring technique outlined in section \ref{section:socket_tracking}. In the following, the three characteristics are briefly discussed.
 
 \subsection{Stability of a Server Socket}
 According to the definition and the detection approach of a \gls{server socket}, it is offering a bidirectional service, which means that the client and the \gls{server socket} are both sending packets. 
-Usually, a client socket is opening the connection to a \gls{server socket} which will reply then to this request. 
+Usually, a client socket is opening a connection to a \gls{server socket} which will reply then to this request. 
 Generally, this also holds for \gls{p2p} applications as for example BitTorrent. Therefore, a \gls{server socket} -- or the communication of it -- can be characterized as stable if it responds to all connection attempts. 
 If a connection attempt to a \gls{server socket} is answered by the \gls{server socket}, the connection is bidirectional, otherwise it is an unidirectional flow destined towards the \gls{server socket}.
 
-Thus, the overall stability \gls{server socket} or availability of its service can be approximated by the ratio of the bidirectional flows to all flows destined to this \gls{server socket}, i.e., the bidirectional and the unidirectional incoming. 
+Thus, the stability of a \gls{server socket} or availability of its service can be approximated by the ratio of the bidirectional flows to all flows destined to this \gls{server socket}, i.e., the bidirectional and the unidirectional incoming. 
 This ratio is denoted as a \gls{server socket} \textbf{stability} and is mathematically defined by equation \ref{eq:ratio}.
 \begin{equation}
-	\text{Stability}(\text{Socket}_i) = \frac{\text{bidirectional flows}(\text{Socket}_i)}{\text{bidirectional flows}(\text{Socket}_i) + \text{unidirectional flows}_{in}(\text{Socket}_i)}
+	\text{Stability}(\text{Socket}_i) = \frac{\text{\#bidirectional flows}(\text{Socket}_i)}{\text{\#bidirectional flows}(\text{Socket}_i) + \text{\#unidirectional flows}_{in}(\text{Socket}_i)}
 	\label{eq:ratio}
 \end{equation}
 
@@ -281,18 +298,24 @@ Therefore, these unidirectional outgoing connections are not considered for dete
 
 % discrete time slots activities of a socket, per day, per 5min slot?
 % distribution is heavy-tailed, alot of sockets only rarely connected => due to scanning? due to malware?
-The monitoring process of the \glspl{server socket} is done passively. Thus, if a flow originating from a \gls{server socket} is visible in the flow-level data of a certain time period, the \gls{server socket} is active during a time interval. Hence, the visibility of a \gls{server socket} during a certain time interval $[t,t+\Delta{t}]$ is a binary measure, either inactive in case it is not visible or active in case it is visible in the data set. Equation \ref{eq:visibility} defines the visibility of a socket during the time interval $[t,t+\Delta{t}]$:
+The monitoring process of the \glspl{server socket} is done passively. 
+Thus, if a flow originating from a \gls{server socket} is visible in the flow-level data of a certain time period, the \gls{server socket} is active during a time interval $[t,t+\Delta{t}]$. 
+Hence, the visibility of a \gls{server socket} is a binary measure, either inactive in case it is not visible or active in case it is visible in the data set. 
+Equation \ref{eq:visibility} defines the visibility of a socket during the time interval $[t,t+\Delta{t}]$:
 \begin{equation}
 	\text{Visibility}_t(\text{Socket}_i,t+\Delta{t}) = \left\{
 	\begin{array}{l l}
-		1 & \quad \text{if $\text{Socket}_i$ is active during $t+\Delta{t}$}\\
-		0 & \quad \text{if $\text{Socket}_i$ is not active during $t+\Delta{t}$}\\
+		1 & \quad \text{if $\text{Socket}_i$ is active during $[t,t+\Delta{t}]$}\\
+		0 & \quad \text{if $\text{Socket}_i$ is not active during $[t,t+\Delta{t}]$}\\
 	\end{array}
 	\right.
 	\label{eq:visibility}
 \end{equation}
 
-In consequence, there are different granularities $\Delta{t}$ to define the visibility of a \gls{server socket}. The most fine-grain resolution is the flow-level data cache export period $T_{exp}$. In most cases, this flow-level data cache export period $T_{exp}$ is set to 300 seconds. This most fine-grain resolution is referred to as the \emph{time slot} resolution, since the entire processing is based on such discrete data chunks, which contains all active flows during this time period. 
+In consequence, there are different granularities $\Delta{t}$ to define the visibility of a \gls{server socket}. 
+The most fine-grain resolution is the flow-level data cache export period $T_{exp}$. 
+In most cases, this flow-level data cache export period $T_{exp}$ is set to 300 seconds. 
+This most fine-grain resolution is referred to as the \emph{time slot} resolution, since the entire processing is based on such discrete data bins, which contains all active flows during this time period. 
 Several more coarse-grain resolutions of the visibility might be of interest. For instance a resolution of a day, i.e., $\Delta{t} = 86400$s, is obvious.
 
 Furthermore, the visibility of a \gls{server socket} can be extended from a single time period to the overall observation time, i.e., a week long trace, by summing up the individual visibilities of each time slot as shown in equation \ref{eq:visibility_sum}.
@@ -318,7 +341,7 @@ Thus, a value of 1 means that the socket is visible in every single time slot an
 % number of flows / clients?.. degree of Server Socket
 Besides the visibility of a \gls{server socket}, its popularity is another major key characteristic. 
 Whereas the visibility of a \gls{server socket} defines how frequent a socket is contacted by at least one connection endpoint, the popularity of a \gls{server socket} is defined by the number of connection attempts of client sockets during a certain period of time. 
-The popularity of \gls{server socket} can be deduced by various metrics such as the number of flows, bytes, or clients.
+The popularity of a \gls{server socket} can be deduced by various metrics such as the number of flows, bytes, or clients.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Smart Traffic Selection using Server Sockets Sets
@@ -331,7 +354,7 @@ The popularity of \gls{server socket} can be deduced by various metrics such as 
 Originally, \gls{FACT} applies a port-based heuristic for selecting the  examination traffic.  
 In detail, \gls{FACT} selects in a first step all traffic towards an external  \gls{TCP} port 80 originating from an internal client high port. 
 Generally, this kind of traffic is denoted as the reflector traffic. 
-Then, \gls{FACT} examines each connection from the reflector traffic to determine if it is  bidirectional or unidirectional, thus creating an initial set of potential events of a loss of the end-to-end connectivity. 
+Then, \gls{FACT} examines each connection from the reflector traffic to determine if it is  bidirectional or unidirectional, thus creating an initial set of potential events of a reachability problem. 
 
 \begin{figure}
 	[!b] \centering
