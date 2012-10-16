@@ -2,13 +2,12 @@
 \chapter{Conclusion\label{chapter:conclusion}}
 
 %\section{Conclusion}
-Adjusting the traffic preselection of \gls{FACT} from a port-based heuristic to a \gls{server socket} based approach is far more than just a generalization. 
+Adjusting the traffic preselection of \gls{FACT} from a port-based heuristic to a \gls{server socket} based approach is far more than a generalization. 
 
-On the one hand, the \glspl{server socket} approach is less affected by scanning and \gls{p2p}, acting as a kind of history based scanning filter. 
-Thus, reducing the negative effect of malware and \gls{p2p} churn on the network outage detection. 
+On the one hand, the \glspl{server socket} approach is less affected by scanning and \gls{p2p} churn, acting as a kind of history based scanning filter, because of the detection approach of \glspl{server socket}.
+Hence, the negative effects of malware and \gls{p2p} churn on the network outage detection is reduced. 
 
-On the other hand, a smart composition of the \gls{server socket} set used for the detection process may generally increase the observation coverage of \gls{FACT} without significantly increasing the noise ratio.
-Hence, the practical usability of \gls{FACT} is increased even more.
+On the other hand, a smart composition of the \gls{server socket} set used for the detection process may generally increase the observation coverage of \gls{FACT} without significantly increasing the noise ratio. In addition, also the different reachability characteristics of network services are considered, such that only traffic towards services relevant for connectivity tracking are observed. This enhances the reliability of the outage events detected by \gls{FACT} and increases its practical usability.
 
 The drawback of the approach is clearly that additional resources are required to store the \glspl{server socket} and the additional effort to detect, monitor and characterize the \glspl{server socket}. 
 Nevertheless, the good results from chapter \ref{chapter:results} indicates that server sockets are quite stable over time and that there are even good results possible for events in March, May and August 2010 with sockets detected in 
@@ -21,18 +20,19 @@ Though, even without any optimization the \gls{server socket} approach is clearl
 \section{Future Work}
 % characterize ses by time based activity (night / day, working week, weekend etc.)
 
-In the future, new characterization methods can be investigated, especially the visibility allows to define different metrics, as day / night periods, working week activity or weekend activity.
+In the future, new characterization methods can be investigated. 
+Different metric metrics may be interesting, in particular for the visibility, like day / night periods, working week activity or weekend activity.
 These new metrics would allow to characterize a \gls{server socket} even more detailed.
-Thus, getting a better view on the different properties of these sockets. 
+Thus, a better view of the different properties of these sockets can be achieved. 
 
 % smarter socket set selection => density of network by choosing only the popularst sockets of each network
-Furthermore, the \gls{server socket} set selection can be further enhanced by different techniques.
-On the one hand, the density of \glspl{server socket} per prefix/network should be considered and examined.
-By deducing the number of sockets required per network so that the probability of seeing traffic towards this network is maximized.
+Furthermore, the selection of the \gls{server socket} set can be further enhanced by different techniques.
+On the one hand, the density of \glspl{server socket} per prefix should be considered and examined.
+The required number of sockets per network should be assessed such that the probability of seeing traffic towards this network is maximized.
 This would be clearly dependent on the single visibility of the selected sockets within this network.
-Moreover, the general optimization problem can be mathematically expressed by defining an objective function.
+Moreover, a general optimization problem can be mathematically expressed by defining an objective function.
 This optimization problem may then be solved by different approaches as simulated annealing or integer linear programming.
-In addition, the effect of the number of sockets of a set should be considered. 
+In addition, the effect of restricting the number of sockets within a set should be considered. 
 
 % consider different selection methods as clustering analysis approaches, e.g. k-means etc => distance function include also network considerations.. etc. 
 On the other hand, different selection approaches can be examined as well.
@@ -40,9 +40,9 @@ Given the problem scope of the socket selection based on different characteristi
 
 % automatization of process => danger of excluding sockets affected by events
 % => consider full last week?  
-Up to now, the process of detecting, monitoring and characterizing \glspl{server socket} is entirely independent from \gls{FACT}, therefore, an integration of these processing chains into \gls{FACT} should be considered. 
-However, there is the danger of not selecting good sockets during potential events affecting these networks.
-Hence, good approaches should not considering the (network) event periods during the characterizing phase of \glspl{server socket}.
+Up to now, the process of detecting, monitoring and characterizing \glspl{server socket} is entirely independent from \gls{FACT}. Therefore, an integration of these processing chains into \gls{FACT} have to be considered. 
+However, there is the danger of not selecting good sockets during events which affect these sockets.
+Hence, good approaches should not consider the (network) event periods during the characterizing phase of \glspl{server socket}.
 
 % near future public release of FlowBox and FACT
-Finally, the FlowBox library and the \gls{FACT} source code are intended to be released to public in the very near future, licensed under the GNU General Public License.
+Finally, the FlowBox library and \gls{FACT}'s source code are intended to be released to public in the very near future, licensed under the GNU General Public License.
