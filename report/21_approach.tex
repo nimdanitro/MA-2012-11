@@ -344,10 +344,10 @@ Whereas the visibility of a \gls{server socket} defines how frequent a socket is
 The popularity of a \gls{server socket} can be deduced by various metrics such as the number of flows, bytes, or clients.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Smart Traffic Selection using Server Sockets Sets
+% Smart Traffic Selection using Server Socket Sets
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage
-\section{Smarter Traffic Selection using Server Sockets Sets 
+\section{Smarter Traffic Selection using Server Socket Sets 
 \label{section:ses_traffic_selection}}
 
 % explain briefly the approach / adjustments to FACT
@@ -374,7 +374,7 @@ This is achieved by loading the \gls{server socket} registry with a set of \glsp
 Then, the adjusted traffic selection is querying the server socket registry to determine if the external socket is a known \gls{server socket}. 
 If this is the case, the flow is added to the reflector traffic, otherwise to the remaining traffic. 
 
-\subsection{Selecting Suitable Server Sockets Sets\label{section:ses_selection}}
+\subsection{Selecting Suitable Server Socket Sets\label{section:ses_selection}}
 % outline that this is a optimization problem which is approximated by several 
 % socket sets however not guaranteed to be optimal
 % coverage network space / problem space 
