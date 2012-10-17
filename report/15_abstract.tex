@@ -54,20 +54,14 @@
 	\textbf{Abstract} 
 \end{center}
 
-Due to commonly occurring losses of the end-to-end reachability of the Internet, 
-many different approaches of detecting these outages have been proposed. 
-Although, most of them rely on control-plane information or active probing 
-measurements, and are thus not suitable for practical usage. In contrast, the 
-fully passive approach FACT is able to reliably track remote connectivity 
-issues. 
-However, network services have different reachability characteristics and are 
-partially designed to be temporary unreachable. This different reachability 
-characteristics of connection endpoints introduces some noise in the results of 
-FACT. By detecting, monitoring and characterizing network services by their 
-visibility, popularity and stability, an adjusted FACT mitigates those event 
-detection noise by an order of magnitude. Furthermore, the event visibility is 
-further improved by accounting only traffic towards these stable network 
-services, hence the outage detection is further enhanced. 
+Nowadays, the loss of the end-to-end reachability of the Internet is commonly occurring.
+Therefore, various approaches for detecting these outages have been proposed. 
+Although, most of them rely on control-plane information or active probing measurements which are not suitable for practical usage. 
+In contrast, the passive approach "Flow-based approach of Connectivity Tracking (FACT)" is able to track remote connectivity issues. 
+However, network services have different reachability characteristics and are partially designed to be temporary unreachable. 
+This different reachability characteristics of connection endpoints introduce some uncertainties in the results of FACT which can be viewed as kind of detection noise. 
+By detecting, monitoring, and characterizing network services by their past visibility, popularity, and stability, an adjusted version of FACT exploits these characteristics for tracking traffic towards the "good" endpoints. In this way, it mitigates the event detection noise by an order of magnitude. 
+To sum up, the observation and event detection capabilities of FACT are enhanced such that its results are more reliable and even more detailed.
 
 \vspace{10em} 
 \begin{center}
@@ -84,21 +78,13 @@ services, hence the outage detection is further enhanced.
 	\textbf{Abriss} 
 \end{center}
 
-Die häufig auftrettenden Unterbrüche der Internet End-zu-End-Erreichbarkeit 
-führten dazu, dass viele verschiedene Ansätze zur Detektion dieser Probleme 
-vorgeschlagen wurden. Jedoch verlassen sich die meisten dieser Ansätze auf 
-Informationen der Kontrollebene oder erfordern aktive Messungen, weshalb sie 
-nicht geeignet sind für den Praxiseinsatz. Im Gegensatz dazu ermöglicht der 
-völlig passive Ansatz FACT eine zuverlässige Überwachung und Detektion von 
-entfernten Verbinungsproblemen im Internet. Verschiedene Netzwerkdienste haben  
-unterschiedliche Erreichbarkeitscharakteristiken und sind zum Teil dafür 
-ausgelegt sind, temporär nicht erreichbar zu sein ohne den Netzwerkbenutzer zu 
-beinträchtigen. Dies führt dazu, dass FACT zum Teil Probleme erkennt, welche in 
-Wirklichkeit keine sind und als eine Art von Rauschen bezeichnet werden können. 
-Durch die Detektion, Überwachung und Charakterisierung der Netzwerkdiense kann 
-eine angepasste Version von FACT dieses Rauschen um eine Zehnerpotenz 
-verkleinern. Im Weiteren sind die Probleme besser sichtbar 
-und die Überwachungmöglichkeiten von FACT erweitert worden.
+Die häufig auftrettenden Unterbrüche der Internet End-zu-End-Erreichbarkeit führten dazu, dass viele verschiedene Ansätze zur Detektion dieser Probleme vorgeschlagen wurden.
+Jedoch verlassen sich die meisten dieser Ansätze auf Informationen der Kontrollebene oder erfordern aktive Messungen, weshalb sie für den Praxiseinsatz nicht geeignet sind.
+Im Gegensatz dazu ermöglicht der passive Ansatz "Flow-based approach of Connectivity Tracking (FACT)" die einfache Überwachung und Detektion von Verbinungsproblemen im Internet. 
+Jedoch haben Netzwerkdienste unterschiedliche Erreichbarkeitscharakteristiken und sind zum Teil dafür ausgelegt sind, temporär nicht erreichbar zu sein ohne den Benutzer zu beinträchtigen. 
+Dies führt dazu, dass FACT zum Teil Probleme erkennt, welche in Wirklichkeit keine sind und als eine Art von Rauschen bezeichnet werden können. 
+Durch die Detektion, Überwachung und Charakterisierung der Netzwerkdienste kann eine angepasste Version von FACT diese klassifizierten Netzwerkdienste benutzen um dieses unerwünschte Rauschen um eine Zehnerpotenz zu verkleinern, indem nur als gut klassifizierte Netzwerkdienste berücksichtigt werden.
+Dadurch sind die Überwachungs- und Detektionseigenschaften von FACT markant verbessert worden, so dass die Resultate einerseits verlässlicher sind und andererseits sogar detaillierter ausfallen. 
 
 \vspace{10em} 
 \begin{center}
